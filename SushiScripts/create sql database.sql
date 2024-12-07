@@ -1,0 +1,5 @@
+CREATE DATABASE SushiDB
+
+GO
+USE SushiDB
+GO
