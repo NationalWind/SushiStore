@@ -174,18 +174,6 @@ GO
 							WHERE I.TRANGTHAI = N'Chưa xác nhận')
 	END
 GO
-	CREATE TRIGGER TRG_DONDATMON_DELETE_XACNHAN
-	ON DONDATMON
-	AFTER UPDATE
-	AS
-	BEGIN
-		SET NOCOUNT ON;
-		
-		DELETE FROM CHITIETMONAN
-		WHERE MADONDATMON = (SELECT D.MADON
-							FROM DELETED D)
-	END
-GO
 
 -- •	Khi đơn đặt món có trạng thái thành công, thành tiền mới được cộng vào tổng tiền của hoá đơn.
 GO
@@ -405,5 +393,5 @@ BEGIN
         AND LSLV.MACHINHANH = BP.MACHINHANH
     WHERE LSLV.NGAYNGHIVIEC IS NULL; -- Chỉ cập nhật nếu nhân viên chưa nghỉ việc
 END;
-go
+GO
 
