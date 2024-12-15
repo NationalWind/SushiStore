@@ -322,3 +322,88 @@ GO
 GO
 
 GO
+
+-- MỘT BỘ PHẬN CHỈ CÓ 1 NHÂN VIÊN QUẢN LÝ VÀ MỘT NHÂN VIÊN CHỈ CÓ THỂ QUẢN LÝ MỘT BỘ PHẬN
+CREATE TRIGGER trg_EnsureUniqueManager
+ON BOPHAN
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    -- Kiểm tra xem bộ phận có nhiều hơn một nhân viên quản lý không?
+    IF EXISTS (
+        SELECT B.MABOPHAN
+        FROM INSERTED I
+        JOIN BOPHAN B ON I.MABOPHAN = B.MABOPHAN
+        GROUP BY B.MABOPHAN
+        HAVING COUNT(B.QUANLYBOPHAN) > 1
+    )
+    BEGIN
+        RAISERROR('Mỗi bộ phận chỉ có một nhân viên quản lý duy nhất!', 16, 1);
+        ROLLBACK TRANSACTION;
+        RETURN;
+    END;
+
+    -- Kiểm tra xem nhân viên có đang quản lý một bộ phận khác không?
+    IF EXISTS (
+        SELECT 1
+        FROM INSERTED I
+        WHERE EXISTS (
+            SELECT 1
+            FROM BOPHAN B
+            WHERE B.QUANLYBOPHAN = I.QUANLYBOPHAN AND B.MABOPHAN <> I.MABOPHAN
+        )
+    )
+    BEGIN
+        RAISERROR('Mỗi nhân viên chỉ có thể quản lý một bộ phận duy nhất!', 16, 1);
+        ROLLBACK TRANSACTION;
+        RETURN;
+    END;
+END;
+
+GO
+
+-- Lương hiện tại sẽ được tính bằng hệ số lương và lương
+/* 
+							I	D	U
+		NHANVIEN			+	-	+ (LUONGHIENTAI)
+		LICHSULAMVIEC		+	-	+ (HESOLUONG, MACHINHANH, MABOPHAN)
+		BOPHAN				-	+	- (LUONG)
+*/
+
+CREATE TRIGGER TRG_UPDATE_LUONGHIENTAI_ON_LICHSULAMVIEC
+ON LICHSULAMVIEC
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    -- Cập nhật lương hiện tại cho tất cả nhân viên liên quan đến các bản ghi mới hoặc đã cập nhật
+    UPDATE NV
+    SET NV.LUONGHIENTAI = LSLV.HESOLUONG * BP.LUONG
+    FROM NHANVIEN NV
+    INNER JOIN INSERTED LSLV
+        ON NV.MANHANVIEN = LSLV.MANHANVIEN
+    INNER JOIN BOPHAN BP
+        ON LSLV.MABOPHAN = BP.MABOPHAN
+        AND LSLV.MACHINHANH = BP.MACHINHANH
+    WHERE LSLV.NGAYNGHIVIEC IS NULL; -- Chỉ cập nhật nếu nhân viên chưa nghỉ việc
+END;
+
+GO
+
+CREATE TRIGGER TRG_UPDATE_LUONGHIENTAI_ON_BOPHAN
+ON BOPHAN
+AFTER UPDATE
+AS
+BEGIN
+    -- Cập nhật lương hiện tại cho nhân viên thuộc các bộ phận bị thay đổi lương
+    UPDATE NV
+    SET NV.LUONGHIENTAI = LSLV.HESOLUONG * BP.LUONG
+    FROM NHANVIEN NV
+    INNER JOIN LICHSULAMVIEC LSLV
+        ON NV.MANHANVIEN = LSLV.MANHANVIEN
+    INNER JOIN INSERTED BP
+        ON LSLV.MABOPHAN = BP.MABOPHAN
+        AND LSLV.MACHINHANH = BP.MACHINHANH
+    WHERE LSLV.NGAYNGHIVIEC IS NULL; -- Chỉ cập nhật nếu nhân viên chưa nghỉ việc
+END;
+go
+
