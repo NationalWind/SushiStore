@@ -231,3 +231,94 @@ GO
 		END
 	END
 GO
+
+-- Phải có số điện thoại hợp lệ và email để liên lạc hoặc xác nhận các đơn hàng trực tuyến. 
+GO
+	CREATE TRIGGER TRG_KHACHHANG_INSERT_UPDATE_CHECK_EMAIL_PHONENUM
+	ON KHACHHANG
+	AFTER INSERT, UPDATE
+	AS
+	BEGIN
+		IF EXISTS (SELECT 1 FROM INSERTED WHERE 
+				SDT NOT LIKE '[0-9]%' OR LEN(SDT) > 10 OR
+				EMAIL NOT LIKE '%@%.%')
+		BEGIN
+			RAISERROR ('Invalid contact information for online order.', 16, 1);
+			ROLLBACK;
+		END;
+	END;
+GO
+
+-- Khách phải cung cấp đủ thông tin cá nhân để đăng ký thẻ thành viên. 
+GO
+	CREATE TRIGGER TRG_CHITIETKHACHHANG_INSERT_UPDATE_FULL_INFO_NEEDED
+	ON CHITIETKHACHHANG
+	AFTER INSERT, UPDATE
+	AS
+	BEGIN
+		IF EXISTS (SELECT 1 FROM INSERTED 
+				WHERE MAKHACHHANG IS NULL OR 
+						MATHE IS NULL OR 
+						NHANVIENTAOLAP IS NULL)
+		BEGIN
+			RAISERROR ('Incomplete member card registration information.', 16, 1);
+			ROLLBACK;
+		END;
+	END;
+GO
+
+-- Khách hàng phải có thông tin liên lạc hợp lệ (tên, sđt, địa chỉ) để đặt hàng. 
+GO
+	-- Trigger kiểm tra thông tin liên lạc hợp lệ khi thêm hoặc sửa đơn đặt món
+	CREATE TRIGGER TRG_DONDATMON_INSERT_UPDATE_VALIDATE_CONTACT_INFO_KHACHHANG
+	ON DONDATMON
+	AFTER INSERT, UPDATE
+	AS
+	BEGIN
+		SET NOCOUNT ON;
+
+		-- Kiểm tra thông tin liên lạc từ bảng KHACHHANG
+		IF EXISTS (
+			SELECT 1
+			FROM INSERTED I
+			JOIN KHACHHANG K ON I.KHACHHANGDAT = K.MAKHACHHANG
+			WHERE LEN(K.HOTEN) = 0 
+			OR K.SDT NOT LIKE '[0-9]%' 
+			OR LEN(K.SDT) != 10
+			OR K.EMAIL NOT LIKE '%@%'
+		)
+		BEGIN
+			RAISERROR ('Thông tin khách hàng không hợp lệ! Vui lòng kiểm tra lại tên, số điện thoại hoặc email.', 16, 1);
+			ROLLBACK TRANSACTION;
+		END
+	END;
+	GO
+
+	-- Trigger kiểm tra thông tin liên lạc hợp lệ khi thêm hoặc sửa khách hàng
+	CREATE TRIGGER TRG_KHACHHANG_INSERT_UPDATE_VALIDATE_KHACHHANG_INFO
+	ON KHACHHANG
+	AFTER INSERT, UPDATE
+	AS
+	BEGIN
+		SET NOCOUNT ON;
+
+		-- Kiểm tra thông tin liên lạc từ bảng KHACHHANG
+		IF EXISTS (
+			SELECT 1
+			FROM INSERTED
+			WHERE LEN(HOTEN) = 0 
+			OR SDT NOT LIKE '[0-9]%' 
+			OR LEN(SDT) != 10
+			OR EMAIL NOT LIKE '%@%'
+		)
+		BEGIN
+			RAISERROR ('Thông tin khách hàng không hợp lệ! Vui lòng kiểm tra lại tên, số điện thoại hoặc email.', 16, 1);
+			ROLLBACK TRANSACTION;
+		END
+	END;
+	GO
+GO
+
+GO
+
+GO
