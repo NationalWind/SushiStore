@@ -133,14 +133,39 @@ GO
 		IF EXISTS (
 			SELECT 1
 			FROM INSERTED I
-			WHERE (I.MAMON IS NOT NULL AND NOT EXISTS (SELECT 1 FROM MONAN M WHERE M.MAMON = I.MAMON))
-			   OR (I.MACOMBO IS NOT NULL AND NOT EXISTS (SELECT 1 FROM COMBOMONAN CB WHERE CB.MACOMBO = I.MACOMBO))
+			WHERE 
+				(I.MAMON IS NOT NULL AND NOT EXISTS (SELECT 1 FROM MONAN M WHERE M.MAMON = I.MAMON))
+				OR 
+				(I.MACOMBO IS NOT NULL AND NOT EXISTS (SELECT 1 FROM COMBOMONAN CB WHERE CB.MACOMBO = I.MACOMBO))
 		)
 		BEGIN
-			RAISERROR (N'Khách hàng chỉ có thể chọn món từ thực đơn của nhà hàng.', 16, 1)
+			RAISERROR (N'Khách hàng chỉ có thể chọn món từ thực đơn của nhà hàng.', 16, 1);
 			ROLLBACK TRANSACTION;
-		END
-	END
+			RETURN;
+		END;
+
+		IF EXISTS (
+			SELECT 1
+			FROM INSERTED I
+			WHERE I.MAMON IS NOT NULL AND I.MACOMBO IS NOT NULL
+		)
+		BEGIN
+			RAISERROR (N'Mã món và mã combo không được tồn tại đồng thời.', 16, 1);
+			ROLLBACK TRANSACTION;
+			RETURN;
+		END;
+
+		IF EXISTS (
+			SELECT 1
+			FROM INSERTED I
+			WHERE I.MAMON IS NULL AND I.MACOMBO IS NULL
+		)
+		BEGIN
+			RAISERROR (N'Phải chọn ít nhất một trong mã món hoặc mã combo.', 16, 1);
+			ROLLBACK TRANSACTION;
+			RETURN;
+		END;
+	END;
 GO
 -- •	Đơn đặt món phải được xác nhận trước khi chuẩn bị.
 GO
@@ -222,256 +247,242 @@ GO
 
 -- Phải có số điện thoại hợp lệ và email để liên lạc hoặc xác nhận các đơn hàng trực tuyến. 
 GO
+	CREATE FUNCTION dbo.ChkValidEmail(@EMAIL varchar(100))RETURNS bit as
+	BEGIN     
+	  DECLARE @bitEmailVal as Bit
+	  DECLARE @EmailText varchar(100)
+
+	  SET @EmailText=ltrim(rtrim(isnull(@EMAIL,'')))
+
+	  SET @bitEmailVal = case when @EmailText = '' then 0
+							  when @EmailText like '% %' then 0
+							  when @EmailText like ('%["(),:;<>\]%') then 0
+							  when substring(@EmailText,charindex('@',@EmailText),len(@EmailText)) like ('%[!#$%&*+/=?^`_{|]%') then 0
+							  when (left(@EmailText,1) like ('[-_.+]') or right(@EmailText,1) like ('[-_.+]')) then 0                                                                                    
+							  when (@EmailText like '%[%' or @EmailText like '%]%') then 0
+							  when @EmailText LIKE '%@%@%' then 0
+							  when @EmailText NOT LIKE '_%@_%._%' then 0
+							  else 1 
+						  end
+	  RETURN @bitEmailVal
+	END
+GO
+	CREATE FUNCTION dbo.ChkValidPhone(@SDT varchar(10))RETURNS BIT AS
+	BEGIN
+		DECLARE @BITPHONEVAL AS BIT
+
+		IF LEN(@SDT)=10 AND @SDT NOT LIKE '%[^0-9]%'
+		BEGIN
+			IF @SDT LIKE '086%'
+			OR @SDT LIKE '096%'
+			OR @SDT LIKE '097%'
+			OR @SDT LIKE '098%'
+			OR @SDT LIKE '032%'
+			OR @SDT LIKE '033%'
+			OR @SDT LIKE '034%'
+			OR @SDT LIKE '035%'
+			OR @SDT LIKE '036%'
+			OR @SDT LIKE '037%'
+			OR @SDT LIKE '038%'
+			OR @SDT LIKE '039%'
+			OR @SDT LIKE '088%'
+			OR @SDT LIKE '091%'
+			OR @SDT LIKE '094%'
+			OR @SDT LIKE '083%'
+			OR @SDT LIKE '084%'
+			OR @SDT LIKE '085%'
+			OR @SDT LIKE '081%'
+			OR @SDT LIKE '082%'
+			OR @SDT LIKE '089%'
+			OR @SDT LIKE '090%'
+			OR @SDT LIKE '093%'
+			OR @SDT LIKE '070%'
+			OR @SDT LIKE '079%'
+			OR @SDT LIKE '078%'
+			OR @SDT LIKE '077%'
+			OR @SDT LIKE '076%'
+			OR @SDT LIKE '092%'
+			OR @SDT LIKE '056%'
+			OR @SDT LIKE '058%'
+			OR @SDT LIKE '099%'
+			OR @SDT LIKE '059%'
+				SET @BITPHONEVAL = 1
+			ELSE
+				SET @BITPHONEVAL = 0
+		END
+		ELSE
+			SET @BITPHONEVAL = 0
+
+		RETURN @BITPHONEVAL
+	END
+GO
 	CREATE TRIGGER TRG_KHACHHANG_INSERT_UPDATE_CHECK_EMAIL_PHONENUM
 	ON KHACHHANG
 	AFTER INSERT, UPDATE
 	AS
 	BEGIN
 		IF EXISTS (SELECT 1 FROM INSERTED WHERE 
-				SDT NOT LIKE '[0-9]%' OR LEN(SDT) > 10 OR
-				EMAIL NOT LIKE '%@%.%')
+				dbo.ChkValidPhone(SDT) = 0 OR
+				dbo.ChkValidEmail(Email) = 0)
 		BEGIN
-			RAISERROR ('Invalid contact information for online order.', 16, 1);
+			RAISERROR (N'Thông tin liên lạc khách hàng không hợp lệ.', 16, 1);
 			ROLLBACK;
 		END;
 	END;
 GO
-
--- Khách phải cung cấp đủ thông tin cá nhân để đăng ký thẻ thành viên. 
-GO
-	CREATE TRIGGER TRG_CHITIETKHACHHANG_INSERT_UPDATE_FULL_INFO_NEEDED
-	ON CHITIETKHACHHANG
+	CREATE TRIGGER TRG_CHINHANH_INSERT_UPDATE_CHECK_EMAIL_PHONENUM
+	ON CHINHANH
 	AFTER INSERT, UPDATE
 	AS
 	BEGIN
-		IF EXISTS (SELECT 1 FROM INSERTED 
-				WHERE MAKHACHHANG IS NULL OR 
-						MATHE IS NULL OR 
-						NHANVIENTAOLAP IS NULL)
+		IF EXISTS (SELECT 1 FROM INSERTED WHERE 
+				dbo.ChkValidPhone(SDT) = 0 OR
+				dbo.ChkValidEmail(EMAIL) = 0)
 		BEGIN
-			RAISERROR ('Incomplete member card registration information.', 16, 1);
+			RAISERROR (N'Thông tin liên lạc chi nhánh không hợp lệ.', 16, 1);
 			ROLLBACK;
 		END;
 	END;
 GO
-
--- Khách hàng phải có thông tin liên lạc hợp lệ (tên, sđt, địa chỉ) để đặt hàng. 
-GO
-	-- Trigger kiểm tra thông tin liên lạc hợp lệ khi thêm hoặc sửa đơn đặt món
-	CREATE TRIGGER TRG_DONDATMON_INSERT_UPDATE_VALIDATE_CONTACT_INFO_KHACHHANG
-	ON DONDATMON
+	CREATE TRIGGER TRG_NHANVIEN_INSERT_UPDATE_CHECK_EMAIL_PHONENUM
+	ON NHANVIEN
 	AFTER INSERT, UPDATE
 	AS
 	BEGIN
-		SET NOCOUNT ON;
-
-		-- Kiểm tra thông tin liên lạc từ bảng KHACHHANG
-		IF EXISTS (
-			SELECT 1
-			FROM INSERTED I
-			JOIN KHACHHANG K ON I.KHACHHANGDAT = K.MAKHACHHANG
-			WHERE LEN(K.HOTEN) = 0 
-			OR K.SDT NOT LIKE '[0-9]%' 
-			OR LEN(K.SDT) != 10
-			OR K.EMAIL NOT LIKE '%@%'
-		)
+		IF EXISTS (SELECT 1 FROM INSERTED WHERE 
+				dbo.ChkValidPhone(SDT) = 0 OR
+				dbo.ChkValidEmail(EMAIL) = 0)
 		BEGIN
-			RAISERROR ('Thông tin khách hàng không hợp lệ! Vui lòng kiểm tra lại tên, số điện thoại hoặc email.', 16, 1);
-			ROLLBACK TRANSACTION;
-		END
+			RAISERROR (N'Thông tin liên lạc nhân viên không hợp lệ.', 16, 1);
+			ROLLBACK;
+		END;
 	END;
-	GO
-
-	-- Trigger kiểm tra thông tin liên lạc hợp lệ khi thêm hoặc sửa khách hàng
-	CREATE TRIGGER TRG_KHACHHANG_INSERT_UPDATE_VALIDATE_KHACHHANG_INFO
-	ON KHACHHANG
-	AFTER INSERT, UPDATE
-	AS
-	BEGIN
-		SET NOCOUNT ON;
-
-		-- Kiểm tra thông tin liên lạc từ bảng KHACHHANG
-		IF EXISTS (
-			SELECT 1
-			FROM INSERTED
-			WHERE LEN(HOTEN) = 0 
-			OR SDT NOT LIKE '[0-9]%' 
-			OR LEN(SDT) != 10
-			OR EMAIL NOT LIKE '%@%'
-		)
-		BEGIN
-			RAISERROR ('Thông tin khách hàng không hợp lệ! Vui lòng kiểm tra lại tên, số điện thoại hoặc email.', 16, 1);
-			ROLLBACK TRANSACTION;
-		END
-	END;
-	GO
-GO
-
-GO
-
 GO
 
 -- MỘT BỘ PHẬN CHỈ CÓ 1 NHÂN VIÊN QUẢN LÝ VÀ MỘT NHÂN VIÊN CHỈ CÓ THỂ QUẢN LÝ MỘT BỘ PHẬN
-CREATE TRIGGER trg_EnsureUniqueManager
-ON BOPHAN
-AFTER INSERT, UPDATE
-AS
-BEGIN
-    -- Kiểm tra xem bộ phận có nhiều hơn một nhân viên quản lý không?
-    IF EXISTS (
-        SELECT B.MABOPHAN
-        FROM INSERTED I
-        JOIN BOPHAN B ON I.MABOPHAN = B.MABOPHAN
-        GROUP BY B.MABOPHAN
-        HAVING COUNT(B.QUANLYBOPHAN) > 1
-    )
-    BEGIN
-        RAISERROR('Mỗi bộ phận chỉ có một nhân viên quản lý duy nhất!', 16, 1);
-        ROLLBACK TRANSACTION;
-        RETURN;
-    END;
-
-    -- Kiểm tra xem nhân viên có đang quản lý một bộ phận khác không?
-    IF EXISTS (
-        SELECT 1
-        FROM INSERTED I
-        WHERE EXISTS (
-            SELECT 1
-            FROM BOPHAN B
-            WHERE B.QUANLYBOPHAN = I.QUANLYBOPHAN AND B.MABOPHAN <> I.MABOPHAN
-        )
-    )
-    BEGIN
-        RAISERROR('Mỗi nhân viên chỉ có thể quản lý một bộ phận duy nhất!', 16, 1);
-        ROLLBACK TRANSACTION;
-        RETURN;
-    END;
-END;
+ALTER TABLE BOPHAN
+ADD CONSTRAINT UQ_BOPHAN_QUANLYBOPHAN UNIQUE (QUANLYBOPHAN);
 
 GO
+
 
 -- Lương hiện tại sẽ được tính bằng hệ số lương và lương
 /* 
 							I	D	U
-		NHANVIEN			+	-	+ (LUONGHIENTAI)
-		LICHSULAMVIEC		+	-	+ (HESOLUONG, MACHINHANH, MABOPHAN)
-		BOPHAN				-	+	- (LUONG)
+		NHANVIEN			-	-	+ (LUONGHIENTAI)
+		LICHSULAMVIEC		+	-	+ (HESOLUONG)
+		BOPHAN				-	-	+ (LUONG)
 */
 
-CREATE TRIGGER TRG_UPDATE_LUONGHIENTAI_ON_LICHSULAMVIEC
-ON LICHSULAMVIEC
-AFTER INSERT, UPDATE
-AS
-BEGIN
-    -- Cập nhật lương hiện tại cho tất cả nhân viên liên quan đến các bản ghi mới hoặc đã cập nhật
-    UPDATE NV
-    SET NV.LUONGHIENTAI = LSLV.HESOLUONG * BP.LUONG
-    FROM NHANVIEN NV
-    INNER JOIN INSERTED LSLV
-        ON NV.MANHANVIEN = LSLV.MANHANVIEN
-    INNER JOIN BOPHAN BP
-        ON LSLV.MABOPHAN = BP.MABOPHAN
-        AND LSLV.MACHINHANH = BP.MACHINHANH
-    WHERE LSLV.NGAYNGHIVIEC IS NULL; -- Chỉ cập nhật nếu nhân viên chưa nghỉ việc
-END;
-
-GO
-
-CREATE TRIGGER TRG_UPDATE_LUONGHIENTAI_ON_BOPHAN
-ON BOPHAN
-AFTER UPDATE
-AS
-BEGIN
-    -- Cập nhật lương hiện tại cho nhân viên thuộc các bộ phận bị thay đổi lương
-    UPDATE NV
-    SET NV.LUONGHIENTAI = LSLV.HESOLUONG * BP.LUONG
-    FROM NHANVIEN NV
-    INNER JOIN LICHSULAMVIEC LSLV
-        ON NV.MANHANVIEN = LSLV.MANHANVIEN
-    INNER JOIN INSERTED BP
-        ON LSLV.MABOPHAN = BP.MABOPHAN
-        AND LSLV.MACHINHANH = BP.MACHINHANH
-    WHERE LSLV.NGAYNGHIVIEC IS NULL; -- Chỉ cập nhật nếu nhân viên chưa nghỉ việc
-END;
-GO
-
--- Khách hàng phải thanh toán trực tuyến trước khi nhận hàng
-
-CREATE TRIGGER TRG_KIEMTRA_THANHTOAN
-ON DATHANGTRUCTUYEN
-FOR UPDATE
-AS
-BEGIN
-	IF EXISTS(
-		SELECT 1
-		FROM INSERTED I
-		JOIN DONDATMON D ON D.MADON = I.MADHTRUCTUYEN
-		JOIN HOADON H ON H.MAHOADON = D.HOADONLIENQUAN
-		WHERE I.TRANGTHAIGIAO = N'Đang giao hàng'
-		AND H.PHUONGTHUC <> N'Thanh toán trực tuyến'
-	)
-	BEGIN --Ngăn chặn cập nhật giao hàng
-		RAISERROR(N'Khách hàng phải thanh toán trực tuyến trước khi nhận hàng.', 16, 1)
-		ROLLBACK TRANSACTION
-	END
-	ELSE
-	BEGIN --Cho phép cập nhật trạng thái giao hàng nếu đã thanh toán trực tuyến
-		UPDATE DATHANGTRUCTUYEN
-		SET TRANGTHAIGIAO = I.TRANGTHAIGIAO,
-		THOIGIANGIAO = I.THOIGIANGIAO
-		DIACHIGIAO = I.DIACHIGIAO
-		FROM INSERTED I
-		WHERE DATHANGTRUCTUYEN.MADHTRUCTUYEN = I.MADHTRUCTUYEN
-	END
-END
-GO
-
--- Sau 20h00 nhà hàng sẽ dừng nhận đặt hàng về nhà. 
-CREATE TRIGGER TRG_DUNGNHAN_DATHANG
-ON DATHANGTRUCTUYEN
-FOR INSERT
-AS
-BEGIN
-	IF EXISTS (
-		SELECT 1
-		FROM INSERTED I
-		JOIN DONDATMON D ON D.MADON = I.MADHTRUCTUYEN
-		WHERE D.GIODAT >= '20:00:00'
-	) 
+	CREATE TRIGGER TRG_UPDATE_LUONGHIENTAI_ON_LICHSULAMVIEC
+	ON LICHSULAMVIEC
+	AFTER INSERT, UPDATE
+	AS
 	BEGIN
-		RAISERROR(N'Nhà hàng dừng nhận đặt hàng trực tuyến sau 20h00', 16, 1)
-		ROLLBACK TRANSACTION
-		RETURN
-	END	
-		INSERT INTO DATHANGTRUCTUYEN (MADHTRUCTUYEN, THOIGIANGIAO, DIACHIGIAO, TRANGTHAIGIAO)
-		SELECT MADHTRUCTUYEN, THOIGIANGIAO, DIACHIGIAO, TRANGTHAIGIAO
-		FROM INSERTED	
-END
+		-- Cập nhật lương hiện tại cho tất cả nhân viên liên quan đến các bản ghi mới hoặc đã cập nhật
+		UPDATE NV
+		SET NV.LUONGHIENTAI = LSLV.HESOLUONG * BP.LUONG
+		FROM NHANVIEN NV
+		INNER JOIN INSERTED LSLV
+			ON NV.MANHANVIEN = LSLV.MANHANVIEN
+		INNER JOIN BOPHAN BP
+			ON LSLV.MABOPHAN = BP.MABOPHAN
+			AND LSLV.MACHINHANH = BP.MACHINHANH
+		WHERE LSLV.NGAYNGHIVIEC IS NULL; -- Chỉ cập nhật nếu nhân viên chưa nghỉ việc
+	END;
+GO
+	CREATE TRIGGER TRG_UPDATE_LUONGHIENTAI_ON_BOPHAN
+	ON BOPHAN
+	AFTER UPDATE
+	AS
+	BEGIN
+		-- Cập nhật lương hiện tại cho nhân viên thuộc các bộ phận bị thay đổi lương
+		UPDATE NV
+		SET NV.LUONGHIENTAI = LSLV.HESOLUONG * BP.LUONG
+		FROM NHANVIEN NV
+		INNER JOIN LICHSULAMVIEC LSLV
+			ON NV.MANHANVIEN = LSLV.MANHANVIEN
+		INNER JOIN INSERTED BP
+			ON LSLV.MABOPHAN = BP.MABOPHAN
+			AND LSLV.MACHINHANH = BP.MACHINHANH
+		WHERE LSLV.NGAYNGHIVIEC IS NULL; -- Chỉ cập nhật nếu nhân viên chưa nghỉ việc
+	END;
+GO
+	CREATE TRIGGER TRG_UPDATE_LUONGHIENTAI_ON_NHANVIEN
+	ON NHANVIEN
+	AFTER UPDATE
+	AS
+	BEGIN
+		-- Lương nhân viên là tự động cập nhật theo hệ số, không được phép cập nhật thủ công
+		IF UPDATE(LUONGHIENTAI)
+		BEGIN
+			RAISERROR (N'Lương nhân viên là tự động cập nhật theo hệ số, không được phép cập nhật thủ công', 16, 1)
+			ROLLBACK TRANSACTION;
+		END
+	END
+	;
+GO
+-- Khách hàng phải thanh toán trực tuyến trước khi nhận hàng
+GO
+	CREATE TRIGGER TRG_DATHANGTRUCTUYEN_KIEMTRA_THANHTOAN
+	ON DATHANGTRUCTUYEN
+	FOR UPDATE
+	AS
+	BEGIN
+		IF EXISTS(
+			SELECT 1
+			FROM INSERTED I
+			JOIN DONDATMON D ON D.MADON = I.MADHTRUCTUYEN
+			JOIN HOADON H ON H.MAHOADON = D.HOADONLIENQUAN
+			WHERE I.TRANGTHAIGIAO = N'Đang giao hàng'
+			AND H.PHUONGTHUC <> N'Thanh toán trực tuyến'
+		)
+		BEGIN --Ngăn chặn cập nhật giao hàng
+			RAISERROR(N'Khách hàng phải thanh toán trực tuyến trước khi nhận hàng.', 16, 1)
+			ROLLBACK TRANSACTION
+		END
+	END
+GO
+
+           
+GO
+	CREATE TRIGGER TRG_DATHANGTRUCTUYEN_INSERT_DUNGNHAN_DATHANG
+	ON DATHANGTRUCTUYEN
+	FOR INSERT
+	AS
+	BEGIN
+		IF EXISTS (
+			SELECT 1
+			FROM INSERTED I
+			JOIN DONDATMON D ON D.MADON = I.MADHTRUCTUYEN
+			WHERE D.GIODAT >= '20:00:00'
+		) 
+		BEGIN
+			RAISERROR(N'Nhà hàng dừng nhận đặt hàng trực tuyến sau 20h00', 16, 1)
+			ROLLBACK TRANSACTION
+			RETURN
+		END
+	END
 GO
 
 -- Đơn hàng chỉ được chấp nhận nếu món ăn trong đơn hàng có trạng thái "có phục vụ". 
-CREATE TRIGGER TRG_KIEMTRA_TRANGTHAI_MONAN
-ON DONDATMON
-FOR INSERTED
-AS
-BEGIN
-	IF EXISTS(
-		SELECT 1
-		FROM INSERTED I
-		JOIN CHITIETMONAN C ON C.MADONDATMON = I.MADON
-		JOIN MONAN M ON C.MAMON = M.MAMON
-		WHERE M.DANHMUC LIKE N'Có phục vụ'
-	)
+GO
+	CREATE TRIGGER TRG_DONDATMON_KIEMTRA_TRANGTHAI_MONAN
+	ON DONDATMON
+	FOR INSERT
+	AS
 	BEGIN
-		INSERTED INTO DONDATMON(MADON, GIODAT,NGAYDAT, TRANGTHAI, LOAIDONDATMON, HOADONLIENQUAN, KHACHHANGDAT, MADATCHO,CHINHANHDAT,NHANVIENTAOLAP)
-		SELECT MADON, GIODAT,NGAYDAT, TRANGTHAI, LOAIDONDATMON, HOADONLIENQUAN, KHACHHANGDAT, MADATCHO,CHINHANHDAT,NHANVIENTAOLAP
-		FROM INSERTED
+		IF NOT EXISTS(
+			SELECT 1
+			FROM INSERTED I
+			JOIN CHITIETMONAN C ON C.MADONDATMON = I.MADON
+			JOIN MONAN M ON C.MAMON = M.MAMON
+			WHERE M.TRANGTHAIPHUCVU LIKE N'Có phục vụ'
+		)
+		BEGIN
+			RAISERROR(N'Món ăn không có sẵn!', 16, 1)
+			ROLLBACK TRANSACTION
+			RETURN
+		END
 	END
-	ELSE
-	BEGIN
-		RAISERROR(N'Món ăn không có sẵn!', 16, 1)
-		ROLLBACK TRANSACTION
-		RETURN
-	END
-END
 GO
