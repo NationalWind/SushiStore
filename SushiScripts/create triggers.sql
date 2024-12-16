@@ -525,4 +525,21 @@ BEGIN
 END
 GO
 
---
+-- Món ăn khi đánh giá cần có đủ về đánh giá về chất lượng và số tiền. 
+CREATE TRIGGER TRG_KIEMTRA_DANHGIAMONAN
+ON DANHGIAMONAN
+FOR INSERT
+AS
+BEGIN
+	IF EXISTS(
+		SELECT 1
+		FROM INSERTED
+		WHERE DIEMGIACA IS NULL AND DIEMCHATLUONGMONAN IS NULL
+	)
+	BEGIN
+		RAISERROR(N'Mỗi đánh giá món ăn cần có đầy đủ đánh giá về chất lượng và số tiền!', 16, 1)
+        ROLLBACK TRANSACTION
+        RETURN
+	END
+END
+GO
