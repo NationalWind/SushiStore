@@ -562,3 +562,29 @@ BEGIN
 	END
 END
 GO
+
+--Một đánh giá sẽ đánh giá 1 chi nhánh(phục vụ, vị trí, không gian) mà khách hàng đặt món (tại bàn/trực tuyến). 
+CREATE TRIGGER TRG_KIEMTRA_DANHGIACHINHANH
+ON DANHGIA
+FOR INSERT
+AS
+BEGIN
+	DECLARE @CHI_NHANH CHAR(10), @MA_KH CHAR(10)
+
+	SELECT @CHI_NHANH = CHI_NHANH, @MA_KH = MAKHACHHANG
+	FROM INSERTED
+
+	--Kiểm tra xem chi nhánh đã tồn tại với đơn đặt hàng của khách hàng chưa
+	IF NOT EXISTS(
+		SELECT 1
+		FROM DONDATMON D
+		WHERE D.KHACHHANGDAT = @MA_KH
+		AND D.CHINHANHDAT = @CHI_NHANH
+	)
+	BEGIN
+		RAISERROR(N'Đánh giá chi nhánh yêu cầu khách hàng phải có đơn đặt hàng từ chi nhánh này.', 16, 1)
+        ROLLBACK TRANSACTION
+        RETURN
+	END
+END
+GO
