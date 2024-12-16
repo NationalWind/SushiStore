@@ -2,7 +2,7 @@
 USE SushiDB
 GO
 
--- •	Với mỗi chi nhánh, thời gian mở cửa phải trước thời gian đóng cửa.
+-- Với mỗi chi nhánh, thời gian mở cửa phải trước thời gian đóng cửa.
 GO
 	CREATE TRIGGER TRG_CHINHANH_INSERT_UPDATE_TGMOCUA
 	ON CHINHANH
@@ -23,7 +23,7 @@ GO
 	END
 GO
 
--- •	Địa chỉ và số điện thoại của chi nhánh phải là duy nhất để tránh trùng lặp thông tin.
+-- Địa chỉ và số điện thoại của chi nhánh phải là duy nhất để tránh trùng lặp thông tin.
 GO
 	ALTER TABLE CHINHANH
 	ADD CONSTRAINT UQ_CHINHANH_DIACHI UNIQUE (DIACHI);
@@ -32,7 +32,7 @@ GO
 	ADD CONSTRAINT UQ_CHINHANH_SDT UNIQUE (SDT);
 GO
 
--- •	Số lượng món hoặc combo phải lớn hơn 0 trong mỗi chi tiết món.
+-- Số lượng món hoặc combo phải lớn hơn 0 trong mỗi chi tiết món.
 GO
 	CREATE TRIGGER TRG_CHITIETMON_INSERT_UPDATE_SLMON
 	ON CHITIETMONAN
@@ -52,7 +52,7 @@ GO
 	END
 GO
 
--- •	Đơn giá tổng được tính theo số lượng món ăn hoặc combo và đơn giá.
+-- Đơn giá tổng được tính theo số lượng món ăn hoặc combo và đơn giá.
 /*
 				I	D	U
 CHITIETMONAN	+	-	+ (SOLUONG, DONGIATONG)
@@ -121,7 +121,7 @@ GO
 	END
 GO
 
--- •	Khách hàng chỉ có thể chọn món từ thực đơn của nhà hàng.
+-- Khách hàng chỉ có thể chọn món từ thực đơn của nhà hàng.
 GO
 	CREATE TRIGGER TRG_CHITIETMONAN_VALIDATE_CHONMON
 	ON CHITIETMONAN
@@ -167,7 +167,8 @@ GO
 		END;
 	END;
 GO
--- •	Đơn đặt món phải được xác nhận trước khi chuẩn bị.
+
+-- Đơn đặt món phải được xác nhận trước khi chuẩn bị.
 GO
 	CREATE TRIGGER TRG_CHITIETMONAN_INSERT_XACNHAN
 	ON CHITIETMONAN
@@ -233,7 +234,7 @@ GO
 	END;
 GO
 
--- •	Khi đơn đặt món có trạng thái thành công, thành tiền mới được cộng vào tổng tiền của hoá đơn.
+-- Khi đơn đặt món có trạng thái thành công, thành tiền mới được cộng vào tổng tiền của hoá đơn.
 GO
 	CREATE TRIGGER TRG_DONDATMON_INSERT_UPDATE_TINHHOADON
 	ON DONDATMON
@@ -254,7 +255,6 @@ GO
 		LEFT JOIN KHUYENMAI KM
 		ON HD.MAKHUYENMAI = KM.MAKHUYENMAI;
 	END;
-
 GO
 	CREATE TRIGGER TRG_DONDATMON_DELETE_TINHHOADON
 	ON DONDATMON
@@ -405,7 +405,6 @@ ADD CONSTRAINT UQ_BOPHAN_QUANLYBOPHAN UNIQUE (QUANLYBOPHAN);
 
 GO
 
-
 -- Lương hiện tại sẽ được tính bằng hệ số lương và lương
 /* 
 							I	D	U
@@ -459,9 +458,9 @@ GO
 			RAISERROR (N'Lương nhân viên là tự động cập nhật theo hệ số, không được phép cập nhật thủ công', 16, 1)
 			ROLLBACK TRANSACTION;
 		END
-	END
-	;
+	END;
 GO
+
 -- Khách hàng phải thanh toán trực tuyến trước khi nhận hàng
 GO
 	CREATE TRIGGER TRG_DATHANGTRUCTUYEN_KIEMTRA_THANHTOAN
@@ -482,9 +481,6 @@ GO
 			ROLLBACK TRANSACTION
 		END
 	END
-GO
-
-           
 GO
 	CREATE TRIGGER TRG_DATHANGTRUCTUYEN_INSERT_DUNGNHAN_DATHANG
 	ON DATHANGTRUCTUYEN
@@ -608,7 +604,7 @@ BEGIN
 END
 GO
 
---Một đánh giá sẽ đánh giá 1 chi nhánh(phục vụ, vị trí, không gian) mà khách hàng đặt món (tại bàn/trực tuyến). 
+-- Một đánh giá sẽ đánh giá 1 chi nhánh(phục vụ, vị trí, không gian) mà khách hàng đặt món (tại bàn/trực tuyến). 
 CREATE TRIGGER TRG_KIEMTRA_DANHGIACHINHANH
 ON DANHGIA
 FOR INSERT
@@ -632,4 +628,26 @@ BEGIN
         RETURN
 	END
 END
+GO
+
+-- Mỗi hóa đơn chỉ được thanh toán 1 lần, không chỉnh sửa sau khi đã thanh toán.
+GO
+CREATE TRIGGER TRG_THANHTOAN_HOADON_MOTLAN
+ON HOADON
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    IF EXISTS (
+        SELECT 1 
+        FROM inserted i
+        JOIN deleted d ON i.MAHOADON = d.MAHOADON
+        WHERE d.TRANGTHAI = N'Đã thanh toán'
+    )
+    BEGIN
+        RAISERROR(N'Không thể chỉnh sửa hóa đơn đã thanh toán!', 16, 1);
+        ROLLBACK TRANSACTION;
+        RETURN;
+    END
+END;
 GO
