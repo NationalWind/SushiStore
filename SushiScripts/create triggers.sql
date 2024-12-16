@@ -13,7 +13,7 @@ GO
 
 		IF EXISTS	(SELECT 1
 					FROM INSERTED
-					WHERE THOIGIANDONGCUA >= THOIGIANMOCUA
+					WHERE THOIGIANDONGCUA <= THOIGIANMOCUA
 					)
 		BEGIN
 			RAISERROR (N'Với mỗi chi nhánh, thời gian mở cửa phải trước thời gian đóng cửa.', 16, 1)
