@@ -486,3 +486,116 @@ GO
 		END
 	END
 GO
+
+
+-- Thời gian đặt món phải được ghi chú rõ ràng
+GO
+	CREATE TRIGGER TRG_DONDATMON_INSERT_UPDATE_TIME_DATE_CHECK
+	ON DONDATMON
+	FOR INSERT, UPDATE
+	AS
+	BEGIN
+		IF  (EXISTS(SELECT 1 
+					FROM INSERTED I
+					WHERE I.NGAYLAP IS NULL OR I.GIODAT IS NULL ))
+			BEGIN
+				RAISERROR(N'Thời gian đặt món phải được ghi chú rõ ràng!', 16, 1)
+				ROLLBACK TRANSACTION
+				RETURN
+			END
+	END
+GO
+
+-- Thời gian giao hàng dự kiến phải nằm trong khung giờ hoạt động của chi nhánh. 
+CREATE TRIGGER TRG_KIEMTRA_THOIGIANGIAO
+ON DATHANGTRUCTUYEN
+FOR INSERT
+AS
+BEGIN
+	IF EXISTS(
+		SELECT 1
+		FROM INSERTED I
+		JOIN DONDATMON D ON D.MADON = I.MADHTRUCTUYEN
+		JOIN CHINHANH C ON C.MACHINHANH = D.CHINHANHDAT
+		WHERE I.THOIGIANGIAO BETWEEN C.THOIGIANMOCUA AND C.THOIGIANDONGCUA
+	)
+	BEGIN
+		INSERT INTO DATHANGTRUCTUYEN (MADHTRUCTUYEN, THOIGIANGIAO, DIACHIGIAO, TRANGTHAIGIAO)
+        SELECT MADHTRUCTUYEN, THOIGIANGIAO, DIACHIGIAO, TRANGTHAIGIAO
+        FROM INSERTED
+	END
+	ELSE
+	BEGIN
+		RAISERROR(N'Thời gian giao hàng dự kiến phải nằm trong khung giờ hoạt động của chi nhánh.', 16, 1)
+        ROLLBACK TRANSACTION
+	END
+END
+GO
+
+-- Kiểm tra đơn đặt phải được thực hiện trước khi bắt đầu chế biến
+CREATE TRIGGER TRG_KIEMTRA_TRUOCCHEBIEN
+ON DONDATMON
+FOR UPDATE
+AS
+BEGIN
+	DECLARE @ORDERID CHAR(10)
+
+	SET @ORDERID = (SELECT MADON FROM INSERTED)
+
+	IF NOT EXISTS(
+		SELECT 1
+		FROM DONDATMON
+		WHERE MADON = @ORDERID
+		AND TRANGTHAI = N'Đã xác nhận'
+	)
+	BEGIN
+		RAISERROR(N'Đơn hàng chưa được xác nhận. Không thể bắt đầu chế biến!', 16, 1)
+        ROLLBACK TRANSACTION
+	END
+END
+GO
+
+-- Món ăn khi đánh giá cần có đủ về đánh giá về chất lượng và số tiền. 
+CREATE TRIGGER TRG_KIEMTRA_DANHGIAMONAN
+ON DANHGIAMONAN
+FOR INSERT
+AS
+BEGIN
+	IF EXISTS(
+		SELECT 1
+		FROM INSERTED
+		WHERE DIEMGIACA IS NULL AND DIEMCHATLUONGMONAN IS NULL
+	)
+	BEGIN
+		RAISERROR(N'Mỗi đánh giá món ăn cần có đầy đủ đánh giá về chất lượng và số tiền!', 16, 1)
+        ROLLBACK TRANSACTION
+        RETURN
+	END
+END
+GO
+
+--Một đánh giá sẽ đánh giá 1 chi nhánh(phục vụ, vị trí, không gian) mà khách hàng đặt món (tại bàn/trực tuyến). 
+CREATE TRIGGER TRG_KIEMTRA_DANHGIACHINHANH
+ON DANHGIA
+FOR INSERT
+AS
+BEGIN
+	DECLARE @CHI_NHANH CHAR(10), @MA_KH CHAR(10)
+
+	SELECT @CHI_NHANH = CHINHANH, @MA_KH = KHACHHANGDANHGIA
+	FROM INSERTED
+
+	--Kiểm tra xem chi nhánh đã tồn tại với đơn đặt hàng của khách hàng chưa
+	IF NOT EXISTS(
+		SELECT 1
+		FROM DONDATMON D
+		WHERE D.KHACHHANGDAT = @MA_KH
+		AND D.CHINHANHDAT = @CHI_NHANH
+	)
+	BEGIN
+		RAISERROR(N'Đánh giá chi nhánh yêu cầu khách hàng phải có đơn đặt hàng từ chi nhánh này.', 16, 1)
+        ROLLBACK TRANSACTION
+        RETURN
+	END
+END
+GO
