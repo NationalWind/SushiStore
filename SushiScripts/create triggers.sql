@@ -607,3 +607,25 @@ BEGIN
 	END
 END
 GO
+
+-- Mỗi hóa đơn chỉ được thanh toán 1 lần, không chỉnh sửa sau khi đã thanh toán.
+GO
+CREATE TRIGGER TRG_THANHTOAN_HOADON_MOTLAN
+ON HOADON
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    IF EXISTS (
+        SELECT 1 
+        FROM inserted i
+        JOIN deleted d ON i.MAHOADON = d.MAHOADON
+        WHERE d.TRANGTHAI = N'Đã thanh toán'
+    )
+    BEGIN
+        RAISERROR(N'Không thể chỉnh sửa hóa đơn đã thanh toán!', 16, 1);
+        ROLLBACK TRANSACTION;
+        RETURN;
+    END
+END;
+GO
