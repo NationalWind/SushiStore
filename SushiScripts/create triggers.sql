@@ -571,7 +571,7 @@ AS
 BEGIN
 	DECLARE @CHI_NHANH CHAR(10), @MA_KH CHAR(10)
 
-	SELECT @CHI_NHANH = CHI_NHANH, @MA_KH = MAKHACHHANG
+	SELECT @CHI_NHANH = CHINHANH, @MA_KH = KHACHHANGDANHGIA
 	FROM INSERTED
 
 	--Kiểm tra xem chi nhánh đã tồn tại với đơn đặt hàng của khách hàng chưa
