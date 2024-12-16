@@ -544,7 +544,6 @@ BEGIN
 END
 GO
 
-<<<<<<< HEAD
 -- Món ăn khi đánh giá cần có đủ về đánh giá về chất lượng và số tiền. 
 CREATE TRIGGER TRG_KIEMTRA_DANHGIAMONAN
 ON DANHGIAMONAN
@@ -562,24 +561,4 @@ BEGIN
         RETURN
 	END
 END
-=======
--- Nhân viên phải ghi nhận đầy đủ thông tin đặt món (món, số lượng).
-GO
-	CREATE TRIGGER TRG_DONDATMON_INSERT_SOLUONG_MAMON_CHECK
-	ON DONDATMON
-	FOR INSERT, UPDATE
-	AS
-	BEGIN
-		IF  (EXISTS(SELECT CTMA.MACTMON
-					FROM INSERTED I, CHITIETMONAN CTMA
-					WHERE I.MADON = CTMA.MADONDATMON
-						AND (CTMA.MAMON IS NULL
-							OR CTMA.SOLUONG IS NULL)))
-			BEGIN
-				RAISERROR(N'Nhân viên phải ghi nhận đầy đủ thông tin đặt món (món, số lượng)!', 16, 1)
-				ROLLBACK TRANSACTION
-				RETURN
-			END
-	END
->>>>>>> 1792e3c75cb94a19e5a94fa39f7c17377141e240
 GO
