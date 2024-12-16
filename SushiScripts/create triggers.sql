@@ -560,5 +560,30 @@ BEGIN
         ROLLBACK TRANSACTION
         RETURN
 	END
-END
+GO
+-- Tổng tiền trước khuyến mãi bao gồm tổng các chi tiết món từ các đơn đặt món.
+GO
+	CREATE TRIGGER TRG_HOADON_INSERT_UPDATE_TongTienTruocKhuyenMai
+	ON HOADON
+	FOR INSERT, UPDATE
+	AS
+	BEGIN
+		-- Declare a variable to hold the sum of THANHTIEN from DONDATMON
+		DECLARE @TotalBeforeDiscount FLOAT;
+
+		-- Tính toán số tiền
+		SELECT @TotalBeforeDiscount = SUM(CTMA.DONGIATONG)
+		FROM DONDATMON DDM
+			JOIN CHITIETMONAN CTMA ON CTMA.MADONDATMON = DDM.MADON
+		WHERE DONDATMON.HOADONLIENQUAN = (SELECT MAHOADON FROM INSERTED);
+
+		IF (@TotalBeforeDiscount <> (SELECT THANHTIEN
+									FROM INSERTED I))
+			BEGIN
+				RAISERROR(N'Tổng tiền trước khuyến mãi bao gồm tổng các chi tiết món từ các đơn đặt món.! Check lại đi', 16, 1)
+				ROLLBACK TRANSACTION
+				RETURN
+			END
+
+	END;
 GO
