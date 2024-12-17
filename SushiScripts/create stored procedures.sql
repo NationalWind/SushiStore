@@ -235,3 +235,90 @@ BEGIN
 END;
 
 EXEC THONGKE_CHATLUONG_MONAN @NGAYBATDAU = '2024-01-01';
+
+-- Thống kê danh sách các đơn hàng và hóa đơn theo ngày đặt cụ thể
+CREATE PROCEDURE DS_DONDATMON_HOADON_THEONGAY
+    @ngaydat DATE -- Tham số đầu vào để lọc theo ngày đặt
+AS
+BEGIN
+    SELECT 
+        DD.MADON AS MaDonHang,
+        DD.GIODAT AS GioDatHang,
+        KH.HOTEN AS TenKhachHang,
+        KH.SDT AS SoDienThoai,
+        HD.MAHOADON AS MaHoaDon,
+        HD.TONGTIENSAUKM AS ThanhTien,
+        HD.TRANGTHAI AS TrangThaiHoaDon,
+        CASE 
+            WHEN DHTT.MADHTRUCTUYEN IS NOT NULL THEN N'Đặt hàng trực tuyến'
+            WHEN DHTC.MADHTAICHO IS NOT NULL THEN N'Đặt hàng tại chỗ'
+        END AS LoaiDonHang,
+        -- Chỉ hiển thị thông tin giao hàng trực tuyến nếu là đặt hàng trực tuyến
+        CASE 
+            WHEN DHTT.MADHTRUCTUYEN IS NOT NULL THEN DHTT.THOIGIANGIAO 
+            ELSE NULL 
+        END AS ThoiGianGiaoHang,
+        CASE 
+            WHEN DHTT.MADHTRUCTUYEN IS NOT NULL THEN DHTT.DIACHIGIAO 
+            ELSE NULL 
+        END AS DiaChiGiaoHang,
+        -- Chỉ hiển thị thông tin tại chỗ nếu là đặt hàng tại chỗ
+        CASE 
+            WHEN DHTC.MADHTAICHO IS NOT NULL THEN DHTC.SOBAN 
+            ELSE NULL 
+        END AS SoBanTaiCho,
+        CASE 
+            WHEN DHTC.MADHTAICHO IS NOT NULL THEN DHTC.MACHINHANH 
+            ELSE NULL 
+        END AS ChiNhanhTaiCho
+    FROM 
+        DONDATMON DD
+    LEFT JOIN 
+        HOADON HD ON DD.HOADONLIENQUAN = HD.MAHOADON
+    LEFT JOIN 
+        DATHANGTRUCTUYEN DHTT ON DD.MADON = DHTT.MADHTRUCTUYEN
+    LEFT JOIN 
+        DATHANGTAICHO DHTC ON DD.MADON = DHTC.MADHTAICHO
+    LEFT JOIN 
+        KHACHHANG KH ON DD.KHACHHANGDAT = KH.MAKHACHHANG
+    WHERE 
+        DD.NGAYDAT = @ngaydat 
+    ORDER BY 
+        DD.GIODAT ASC
+END
+
+EXEC DS_DONDATMON_HOADON_THEONGAY @ngaydat = '2024-12-17'
+
+-- Danh sách theo dõi xu hướng của các khách hàng khi lựa chọn loại đặt hàng tại một chi nhánh trong một khoảng thời gian
+CREATE PROCEDURE THONGKE_XUHUONG_KHACHHANG
+    @ngayBatDau DATE,
+    @ngayKetThuc DATE,
+    @maChiNhanh CHAR(10)
+AS
+BEGIN
+    SELECT 
+        KH.MAKHACHHANG,
+        KH.HOTEN,
+        KH.SDT,
+        DH.MACHINHANH,
+        COUNT(DH.MADHTAICHO) AS SO_LUONG_DH_TAI_CHO,
+        COUNT(DT.MADHTRUCTUYEN) AS SO_LUONG_DH_TRUC_TUYEN
+    FROM 
+        KHACHHANG KH
+    LEFT JOIN 
+        DONDATMON D ON KH.MAKHACHHANG = D.KHACHHANGDAT
+    LEFT JOIN 
+        DATHANGTAICHO DH ON D.MADON = DH.MADHTAICHO
+    LEFT JOIN 
+        DATHANGTRUCTUYEN DT ON D.MADON = DT.MADHTRUCTUYEN
+    WHERE 
+        D.NGAYDAT BETWEEN @ngayBatDau AND @ngayKetThuc
+        AND DH.MACHINHANH = @maChiNhanh 
+    GROUP BY 
+        KH.MAKHACHHANG,
+        KH.HOTEN,
+        KH.SDT,
+        DH.MACHINHANH;
+END
+
+EXEC THONGKE_XUHUONG_KHACHHANG @ngayBatDau = '2024-12-12', @ngayKetThuc = '2025-1-12', @maChiNhanh = 'CN0001'
