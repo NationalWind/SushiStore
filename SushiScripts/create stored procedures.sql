@@ -205,11 +205,13 @@ GO
 
 -- Thống kê chất lượng món ăn và đánh giá của khách hàng
 CREATE PROCEDURE THONGKE_CHATLUONG_MONAN
+    @NGAYBATDAU DATE 
 AS
 BEGIN
-    -- Truy vấn thống kê chất lượng món ăn
+    -- Truy vấn thống kê chất lượng món ăn từ ngày bắt đầu đến ngày hiện tại
     SELECT
         M.TENMON,
+        CONVERT(DATE, DD.NGAYDAT) AS NGAY_DG,
         AVG(DGM.DIEMCHATLUONGMONAN) AS DIEMCHATLUONG_TB, 
         AVG(DGM.DIEMGIACA) AS DIEMGIACA_TB, 
         COUNT(DG.MADANHGIA) AS SO_LUONG_DANHGIA 
@@ -219,13 +221,17 @@ BEGIN
         DANHGIAMONAN DGM ON M.MAMON = DGM.MAMON
     JOIN
         DANHGIA DG ON DGM.MADANHGIA = DG.MADANHGIA
+    JOIN
+        DONDATMON DD ON DG.MADON = DD.MADON -- Liên kết với bảng Đơn đặt món để lấy ngày đánh giá
+    WHERE
+        DD.NGAYDAT >= @NGAYBATDAU 
+        AND DD.NGAYDAT <= GETDATE() 
     GROUP BY
-        M.TENMON
+        M.TENMON, CONVERT(DATE, DD.NGAYDAT) -- Nhóm theo tên món và ngày đánh giá
     ORDER BY
-        DIEMCHATLUONG_TB DESC;
+        NGAY_DG DESC, DIEMCHATLUONG_TB DESC; -- Sắp xếp theo ngày đánh giá và điểm chất lượng món ăn
 
-    -- Thực hiện các hành động khác nếu cần (như gửi thông báo đến đầu bếp, ghi log, v.v.)
     PRINT 'Thống kê chất lượng món ăn đã được thực hiện thành công';
 END;
 
-EXEC THONGKE_CHATLUONG_MONAN;
+EXEC THONGKE_CHATLUONG_MONAN @NGAYBATDAU = '2024-01-01';
