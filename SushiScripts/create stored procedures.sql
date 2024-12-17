@@ -105,3 +105,63 @@ BEGIN
     CLOSE CardCursor;
     DEALLOCATE CardCursor;
 END;
+
+GO
+
+CREATE PROCEDURE SP_TaoVaCapThe
+(
+    @MAKHACHHANG CHAR(10),           -- Mã khách hàng
+    @HOTEN NVARCHAR(50),             -- Họ tên khách hàng
+    @SDT CHAR(10),                   -- Số điện thoại
+    @EMAIL VARCHAR(50),              -- Email khách hàng
+    @CCCD VARCHAR(20),               -- CCCD khách hàng
+    @MATHE CHAR(10),                 -- Mã thẻ thành viên
+    @NHANVIENTAOLAP CHAR(10)         -- Nhân viên tạo lập thẻ
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Kiểm tra xem khách hàng đã tồn tại trong bảng KHACHHANG hay chưa
+    IF NOT EXISTS (SELECT 1 FROM KHACHHANG WHERE MAKHACHHANG = @MAKHACHHANG)
+    BEGIN
+        -- Thêm thông tin khách hàng mới
+        INSERT INTO KHACHHANG (MAKHACHHANG, HOTEN, SDT, EMAIL, CCCD)
+        VALUES (@MAKHACHHANG, @HOTEN, @SDT, @EMAIL, @CCCD);
+
+        PRINT 'Khách hàng mới đã được thêm vào hệ thống.';
+    END
+    ELSE
+    BEGIN
+        PRINT 'Khách hàng đã tồn tại.';
+    END
+
+    -- Kiểm tra xem thẻ đã tồn tại trong bảng CHITIETKHACHHANG hay chưa
+    IF NOT EXISTS (SELECT 1 FROM CHITIETKHACHHANG WHERE MAKHACHHANG = @MAKHACHHANG AND MATHE = @MATHE)
+    BEGIN
+        -- Cấp thẻ mới với loại thẻ Membership và trạng thái Active
+        INSERT INTO CHITIETKHACHHANG (MAKHACHHANG, MATHE, NGAYDK, DIEMTICHLUY, NGAYNANGHANG, TRANGTHAITAIKHOAN, NHANVIENTAOLAP)
+        VALUES (@MAKHACHHANG, @MATHE, GETDATE(), 0, NULL, N'Active', @NHANVIENTAOLAP);
+
+        -- Đặt loại thẻ mặc định là Membership trong bảng THETHANHVIEN nếu chưa có
+        IF NOT EXISTS (SELECT 1 FROM THETHANHVIEN WHERE MATHE = @MATHE)
+        BEGIN
+            INSERT INTO THETHANHVIEN (MATHE, LOAITHE)
+            VALUES (@MATHE, N'Membership');
+        END
+
+        PRINT 'Thẻ mới đã được cấp cho khách hàng.';
+    END
+    ELSE
+    BEGIN
+        -- Cập nhật thông tin thẻ nếu khách hàng đã có thẻ
+        UPDATE CHITIETKHACHHANG
+        SET NGAYDK = GETDATE(),
+            TRANGTHAITAIKHOAN = N'Active',
+            NHANVIENTAOLAP = @NHANVIENTAOLAP
+        WHERE MAKHACHHANG = @MAKHACHHANG AND MATHE = @MATHE;
+
+        PRINT 'Thông tin thẻ đã được cập nhật.';
+    END
+END;
+
