@@ -234,57 +234,6 @@ GO
 	END;
 GO
 
--- Khi đơn đặt món có trạng thái thành công, thành tiền mới được cộng vào tổng tiền của hoá đơn.
-GO
-	CREATE TRIGGER TRG_DONDATMON_INSERT_UPDATE_TINHHOADON
-	ON DONDATMON
-	AFTER INSERT, UPDATE
-	AS
-	BEGIN
-		SET NOCOUNT ON;
-
-		UPDATE HD
-		SET HD.TONGTIEN = ISNULL(SUM_TONG.THANHTIEN_TOTAL, 0) * (1 + HD.VAT) * (1 - ISNULL(KM.LUONGKMPHANTRAM, 0))
-		FROM HOADON HD
-		LEFT JOIN (
-			SELECT I.HOADONLIENQUAN, SUM(I.THANHTIEN) AS THANHTIEN_TOTAL
-			FROM DONDATMON I
-			GROUP BY I.HOADONLIENQUAN
-		) AS SUM_TONG
-		ON HD.MAHOADON = SUM_TONG.HOADONLIENQUAN
-		LEFT JOIN KHUYENMAI KM
-		ON HD.MAKHUYENMAI = KM.MAKHUYENMAI;
-	END;
-GO
-	CREATE TRIGGER TRG_DONDATMON_DELETE_TINHHOADON
-	ON DONDATMON
-	AFTER DELETE
-	AS
-	BEGIN
-		SET NOCOUNT ON;
-
-		UPDATE HD
-		SET HD.TONGTIEN = HD.TONGTIEN - I.THANHTIEN * (1 + HD.VAT) * (1 - KM.LUONGKMPHANTRAM)
-		FROM HOADON HD
-		INNER JOIN INSERTED I ON HD.MAHOADON = I.HOADONLIENQUAN
-		INNER JOIN KHUYENMAI KM ON HD.MAKHUYENMAI = KM.MAKHUYENMAI
-	END
-GO
-	CREATE TRIGGER TRG_HOADON_UPDATE_TINHHOADON
-	ON HOADON
-	AFTER UPDATE
-	AS
-	BEGIN
-		SET NOCOUNT ON;
-
-		IF UPDATE(TONGTIEN)
-		BEGIN
-			RAISERROR ('Không thể cập nhật tổng tiền hóa đơn', 16, 1)
-			ROLLBACK TRANSACTION;
-		END
-	END
-GO
-
 -- Phải có số điện thoại hợp lệ và email để liên lạc hoặc xác nhận các đơn hàng trực tuyến. 
 GO
 	CREATE FUNCTION dbo.ChkValidEmail(@EMAIL varchar(100))RETURNS bit as
@@ -394,6 +343,19 @@ GO
 				dbo.ChkValidEmail(EMAIL) = 0)
 		BEGIN
 			RAISERROR (N'Thông tin liên lạc nhân viên không hợp lệ.', 16, 1);
+			ROLLBACK;
+		END;
+	END;
+GO
+	CREATE TRIGGER TRG_DATCHO_INSERT_UPDATE_CHECK_PHONENUM
+	ON DATCHO
+	AFTER INSERT, UPDATE
+	AS
+	BEGIN
+		IF EXISTS (SELECT 1 FROM INSERTED WHERE 
+				dbo.ChkValidPhone(SDT) = 0)
+		BEGIN
+			RAISERROR (N'Thông tin đặt chỗ không hợp lệ.', 16, 1);
 			ROLLBACK;
 		END;
 	END;
@@ -523,131 +485,94 @@ GO
 	END
 GO
 
-
--- Thời gian đặt món phải được ghi chú rõ ràng
+-- Thời gian giao hàng dự kiến phải nằm trong khung giờ hoạt động của chi nhánh. 
 GO
-	CREATE TRIGGER TRG_DONDATMON_INSERT_UPDATE_TIME_DATE_CHECK
-	ON DONDATMON
-	FOR INSERT, UPDATE
+	CREATE TRIGGER TRG_KIEMTRA_THOIGIANGIAO
+	ON DATHANGTRUCTUYEN
+	FOR INSERT
 	AS
 	BEGIN
-		IF  (EXISTS(SELECT 1 
-					FROM INSERTED I
-					WHERE I.NGAYDAT IS NULL OR I.GIODAT IS NULL ))
-			BEGIN
-				RAISERROR(N'Thời gian đặt món phải được ghi chú rõ ràng!', 16, 1)
-				ROLLBACK TRANSACTION
-				RETURN
-			END
+		IF NOT EXISTS(
+			SELECT 1
+			FROM INSERTED I
+			JOIN DONDATMON D ON D.MADON = I.MADHTRUCTUYEN
+			JOIN CHINHANH C ON C.MACHINHANH = D.CHINHANHDAT
+			WHERE I.THOIGIANGIAO BETWEEN C.THOIGIANMOCUA AND C.THOIGIANDONGCUA
+		)
+		BEGIN
+			RAISERROR(N'Thời gian giao hàng dự kiến phải nằm trong khung giờ hoạt động của chi nhánh.', 16, 1)
+			ROLLBACK TRANSACTION
+		END
 	END
-GO
-
--- Thời gian giao hàng dự kiến phải nằm trong khung giờ hoạt động của chi nhánh. 
-CREATE TRIGGER TRG_KIEMTRA_THOIGIANGIAO
-ON DATHANGTRUCTUYEN
-FOR INSERT
-AS
-BEGIN
-	IF NOT EXISTS(
-		SELECT 1
-		FROM INSERTED I
-		JOIN DONDATMON D ON D.MADON = I.MADHTRUCTUYEN
-		JOIN CHINHANH C ON C.MACHINHANH = D.CHINHANHDAT
-		WHERE I.THOIGIANGIAO BETWEEN C.THOIGIANMOCUA AND C.THOIGIANDONGCUA
-	)
-	BEGIN
-		RAISERROR(N'Thời gian giao hàng dự kiến phải nằm trong khung giờ hoạt động của chi nhánh.', 16, 1)
-        ROLLBACK TRANSACTION
-	END
-END
 GO
 
 -- Kiểm tra đơn đặt phải được thực hiện trước khi bắt đầu chế biến
-CREATE TRIGGER TRG_KIEMTRA_TRUOCCHEBIEN
-ON DONDATMON
-FOR UPDATE
-AS
-BEGIN
-	DECLARE @ORDERID CHAR(10)
-
-	SET @ORDERID = (SELECT MADON FROM INSERTED)
-
-	IF NOT EXISTS(
-		SELECT 1
-		FROM DONDATMON
-		WHERE MADON = @ORDERID
-		AND TRANGTHAI = N'Đã xác nhận'
-	)
+GO
+	CREATE TRIGGER TRG_KIEMTRA_TRUOCCHEBIEN
+	ON DONDATMON
+	FOR UPDATE
+	AS
 	BEGIN
-		RAISERROR(N'Đơn hàng chưa được xác nhận. Không thể bắt đầu chế biến!', 16, 1)
-        ROLLBACK TRANSACTION
+		DECLARE @ORDERID CHAR(10)
+
+		SET @ORDERID = (SELECT MADON FROM INSERTED)
+
+		IF NOT EXISTS(
+			SELECT 1
+			FROM DONDATMON
+			WHERE MADON = @ORDERID
+			AND TRANGTHAI = N'Đã xác nhận'
+		)
+		BEGIN
+			RAISERROR(N'Đơn hàng chưa được xác nhận. Không thể bắt đầu chế biến!', 16, 1)
+			ROLLBACK TRANSACTION
+		END
 	END
-END
 GO
 
 -- Món ăn khi đánh giá cần có đủ về đánh giá về chất lượng và số tiền. 
-CREATE TRIGGER TRG_KIEMTRA_DANHGIAMONAN
-ON DANHGIAMONAN
-FOR INSERT
-AS
-BEGIN
-	IF EXISTS(
-		SELECT 1
+GO
+	CREATE TRIGGER TRG_KIEMTRA_DANHGIAMONAN
+	ON DANHGIAMONAN
+	FOR INSERT
+	AS
+	BEGIN
+		IF EXISTS(
+			SELECT 1
+			FROM INSERTED
+			WHERE DIEMGIACA IS NULL AND DIEMCHATLUONGMONAN IS NULL
+		)
+		BEGIN
+			RAISERROR(N'Mỗi đánh giá món ăn cần có đầy đủ đánh giá về chất lượng và số tiền!', 16, 1)
+			ROLLBACK TRANSACTION
+			RETURN
+		END
+	END
+GO
+
+-- Một đánh giá sẽ đánh giá 1 chi nhánh(phục vụ, vị trí, không gian) mà khách hàng đặt món (tại bàn/trực tuyến).
+GO
+	CREATE TRIGGER TRG_KIEMTRA_DANHGIACHINHANH
+	ON DANHGIA
+	FOR INSERT
+	AS
+	BEGIN
+		DECLARE @CHI_NHANH CHAR(10), @MA_KH CHAR(10)
+
+		SELECT @CHI_NHANH = CHINHANH, @MA_KH = KHACHHANGDANHGIA
 		FROM INSERTED
-		WHERE DIEMGIACA IS NULL AND DIEMCHATLUONGMONAN IS NULL
-	)
-	BEGIN
-		RAISERROR(N'Mỗi đánh giá món ăn cần có đầy đủ đánh giá về chất lượng và số tiền!', 16, 1)
-        ROLLBACK TRANSACTION
-        RETURN
+
+		--Kiểm tra xem chi nhánh đã tồn tại với đơn đặt hàng của khách hàng chưa
+		IF NOT EXISTS(
+			SELECT 1
+			FROM DONDATMON D
+			WHERE D.KHACHHANGDAT = @MA_KH
+			AND D.CHINHANHDAT = @CHI_NHANH
+		)
+		BEGIN
+			RAISERROR(N'Đánh giá chi nhánh yêu cầu khách hàng phải có đơn đặt hàng từ chi nhánh này.', 16, 1)
+			ROLLBACK TRANSACTION
+			RETURN
+		END
 	END
-END
-GO
-
--- Một đánh giá sẽ đánh giá 1 chi nhánh(phục vụ, vị trí, không gian) mà khách hàng đặt món (tại bàn/trực tuyến). 
-CREATE TRIGGER TRG_KIEMTRA_DANHGIACHINHANH
-ON DANHGIA
-FOR INSERT
-AS
-BEGIN
-	DECLARE @CHI_NHANH CHAR(10), @MA_KH CHAR(10)
-
-	SELECT @CHI_NHANH = CHINHANH, @MA_KH = KHACHHANGDANHGIA
-	FROM INSERTED
-
-	--Kiểm tra xem chi nhánh đã tồn tại với đơn đặt hàng của khách hàng chưa
-	IF NOT EXISTS(
-		SELECT 1
-		FROM DONDATMON D
-		WHERE D.KHACHHANGDAT = @MA_KH
-		AND D.CHINHANHDAT = @CHI_NHANH
-	)
-	BEGIN
-		RAISERROR(N'Đánh giá chi nhánh yêu cầu khách hàng phải có đơn đặt hàng từ chi nhánh này.', 16, 1)
-        ROLLBACK TRANSACTION
-        RETURN
-	END
-END
-GO
-
--- Mỗi hóa đơn chỉ được thanh toán 1 lần, không chỉnh sửa sau khi đã thanh toán.
-GO
-CREATE TRIGGER TRG_THANHTOAN_HOADON_MOTLAN
-ON HOADON
-AFTER UPDATE
-AS
-BEGIN
-    SET NOCOUNT ON;
-    IF EXISTS (
-        SELECT 1 
-        FROM inserted i
-        JOIN deleted d ON i.MAHOADON = d.MAHOADON
-        WHERE d.TRANGTHAI = N'Đã thanh toán'
-    )
-    BEGIN
-        RAISERROR(N'Không thể chỉnh sửa hóa đơn đã thanh toán!', 16, 1);
-        ROLLBACK TRANSACTION;
-        RETURN;
-    END
-END;
 GO
