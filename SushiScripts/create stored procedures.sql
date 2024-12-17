@@ -1,3 +1,8 @@
+
+GO
+USE SushiDB
+GO
+
 CREATE PROCEDURE SP_CapNhatHangThe
 AS
 BEGIN
@@ -164,4 +169,63 @@ BEGIN
         PRINT 'Thông tin thẻ đã được cập nhật.';
     END
 END;
+GO
 
+-- Xem danh sách nhân viên và đánh giá tương ứng với mỗi nhân viên đó
+CREATE PROCEDURE XemDanhSachDanhGiaNhanVien
+AS
+BEGIN
+    -- Hiển thị danh sách nhân viên kèm theo thông tin đánh giá
+    SELECT 
+        NV.MANHANVIEN AS MaNhanVien,
+        NV.HOTEN AS HoTen,
+        NV.CHINHANHLAMVIEC AS MaChiNhanh,
+        CN.TENCHINHANH AS TenChiNhanh,
+        ISNULL(AVG(DG.DIEMPHUCVU), 0) AS DiemPhucVuTB,
+        ISNULL(AVG(DG.DIEMVITRICHINHANH), 0) AS DiemViTriChiNhanhTB,
+        ISNULL(AVG(DG.DIEMKHONGGIAN), 0) AS DiemKhongGianTB,
+        COUNT(DG.MADANHGIA) AS SoLuotDanhGia,
+        STRING_AGG(DG.BINHLUAN, '; ') AS BinhLuan
+    FROM 
+        NHANVIEN NV
+    LEFT JOIN 
+        DANHGIA DG ON NV.MANHANVIEN = DG.NHANVIEN
+    LEFT JOIN 
+        CHINHANH CN ON NV.CHINHANHLAMVIEC = CN.MACHINHANH
+    GROUP BY 
+        NV.MANHANVIEN, NV.HOTEN, NV.CHINHANHLAMVIEC, CN.TENCHINHANH
+    ORDER BY 
+        NV.MANHANVIEN;
+END;
+
+EXEC XemDanhSachDanhGiaNhanVien;
+
+--
+GO
+
+-- Thống kê chất lượng món ăn và đánh giá của khách hàng
+CREATE PROCEDURE THONGKE_CHATLUONG_MONAN
+AS
+BEGIN
+    -- Truy vấn thống kê chất lượng món ăn
+    SELECT
+        M.TENMON,
+        AVG(DGM.DIEMCHATLUONGMONAN) AS DIEMCHATLUONG_TB, 
+        AVG(DGM.DIEMGIACA) AS DIEMGIACA_TB, 
+        COUNT(DG.MADANHGIA) AS SO_LUONG_DANHGIA 
+    FROM
+        MONAN M
+    JOIN
+        DANHGIAMONAN DGM ON M.MAMON = DGM.MAMON
+    JOIN
+        DANHGIA DG ON DGM.MADANHGIA = DG.MADANHGIA
+    GROUP BY
+        M.TENMON
+    ORDER BY
+        DIEMCHATLUONG_TB DESC;
+
+    -- Thực hiện các hành động khác nếu cần (như gửi thông báo đến đầu bếp, ghi log, v.v.)
+    PRINT 'Thống kê chất lượng món ăn đã được thực hiện thành công';
+END;
+
+EXEC THONGKE_CHATLUONG_MONAN;
