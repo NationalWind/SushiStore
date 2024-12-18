@@ -212,7 +212,7 @@ CREATE TABLE DANHGIA
 )
 
 -- Thẻ thành viên định danh bởi mã thẻ
--- Thẻ thành viên liên quan đến khách hàng đó và loại phân hạng
+-- Thẻ thành viên chỉ có 3 bản ghi tương ứng với thông tin của 3 phân hạng là Membership, Silver, Gold.
 CREATE TABLE THETHANHVIEN
 (
 	MATHE CHAR(10),
@@ -347,11 +347,11 @@ CREATE TABLE KHUYENMAIKHACHHANG
 
 -- Khuyến mãi thẻ thành viên định danh bởi mã khuyến mãi
 -- Khuyến mãi thẻ thành viên là con của khuyến mãi
--- Khuyến mãi thẻ thành viên tự động áp dụng cho các khách hàng thuộc loại thẻ SILVER, GOLD theo %
+-- Khuyến mãi thẻ thành viên tự động áp dụng cho các khách hàng thuộc mã thẻ loại SILVER, GOLD theo %
 CREATE TABLE KHUYENMAITHETHANHVIEN
 (
 	MAKHUYENMAI CHAR(10),
-	LOAITHE NVARCHAR(50) NOT NULL CHECK (LOAITHE IN (N'Membership', N'Silver', N'Gold')),
+	MATHE CHAR(10),
 	LUONGKMPHANTRAM FLOAT NOT NULL,
 
 	CONSTRAINT PK_KHUYENMAITHETHANHVIEN
@@ -577,12 +577,17 @@ ADD
 	REFERENCES KHACHHANG(MAKHACHHANG)
 	ON DELETE CASCADE
 
--- Khuyến mãi thẻ thành viên có khoá ngoại đến mã khuyến mãi
+-- Khuyến mãi thẻ thành viên có khoá ngoại đến mã khuyến mãi và mã thẻ phân hạng liên quan
 ALTER TABLE KHUYENMAITHETHANHVIEN
 ADD
 	CONSTRAINT FK_KHUYENMAITHETHANHVIEN_MAKHUYENMAI
 	FOREIGN KEY (MAKHUYENMAI)
 	REFERENCES KHUYENMAI(MAKHUYENMAI)
+	ON DELETE CASCADE,
+
+	CONSTRAINT FK_KHUYENMAITHETHANHVIEN_MATHE
+	FOREIGN KEY (MATHE)
+	REFERENCES THETHANHVIEN(MATHE)
 	ON DELETE CASCADE
 
 -- Truy cập có khoá ngoại đến mã đánh giá liên quan
