@@ -409,7 +409,7 @@ GO
 -- Thống kê những món ăn đắt hàng nhất về số lượng trong khoảng thời gian nhất định
 -- Bảng sấp theo số lượng món được đặt cao nhất và có cột tổng doanh thu
 -- Không tính những món được đặt theo combo
-CREATE PROCEDURE THONGKE_TOP_MONAN
+CREATE PROCEDURE SP_ThongKe_Top_MonAn
     @NgayBatDau DATE,
     @NgayKetThuc DATE,
     @TopBaoNhieu INT
@@ -443,7 +443,7 @@ GO
 
 
 -- Thống kê những khách hàng mang lại doanh thu cao nhất trong khoảng thời gian nhất định
-CREATE PROCEDURE THONGKE_TOP_KHACHHANG
+CREATE PROCEDURE SP_ThongKe_Top_KhachHang
     @NgayBatDau DATE,
     @NgayKetThuc DATE,
     @TopBaoNhieu INT
