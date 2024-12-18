@@ -1,0 +1,61 @@
+import csv
+from faker import Faker
+import random
+from datetime import datetime, timedelta
+
+# Initialize faker
+fake = Faker()
+
+# File paths
+dondatmon_csv_file = "4_DONDATMON_data.csv"
+hoadon_csv_file = "5_HOADON_data.csv"
+
+# Load HOADONLIENQUAN from DONDATMON
+with open(dondatmon_csv_file, mode="r", encoding="utf-8") as file:
+    dondatmon_data = [row for row in csv.reader(file)][1:]  # Skip the header row
+
+# Extract unique HOADONLIENQUAN values (which will be used as MAHOADON in HOADON)
+mahoadon_values = [row[5] for row in dondatmon_data]  # HOADONLIENQUAN is at index 5 in DONDATMON
+
+# Function to generate a random time within a specific range (e.g., between 8 AM and 8 PM)
+def generate_random_time(start_hour=8, end_hour=20):
+    start_time = datetime.strptime(f"{start_hour}:00", "%H:%M")
+    end_time = datetime.strptime(f"{end_hour}:00", "%H:%M")
+    random_time = start_time + timedelta(minutes=random.randint(0, int((end_time - start_time).total_seconds() / 60)))
+    return random_time.strftime("%H:%M:%S")
+
+# Generate data for HOADON
+hoadon_data = []
+
+# Iterative approach for deterministic data generation
+for index, mahoadon in enumerate(mahoadon_values, 1):
+    giolap = generate_random_time()  # Use the generate_random_time function
+    ngaylap = fake.date_this_year()  # Random date in the current year
+    vat = 0.05 * (index % 2 + 1)  # Alternating VAT: 5% or 10%
+    tienkhachdua = 100000 + (index * 10000)  # Deterministic customer payment, increasing with index
+    trangthai = "Đã thanh toán" if index % 2 == 0 else "Chưa thanh toán"  # Alternating status
+    phuongthuc = "Tiền mặt" if index % 3 == 0 else "Chuyển khoản"  # Alternating payment method
+    batchethanhlienvien = f"NV{index:05d}"  # Sequential employee ID
+    makhuyenmai = f"KM{index:05d}"  # Sequential discount code
+
+    # Calculate TONGTIEN based on DONGIATONG and other related fields
+    thanhtien_sum = sum(float(row[10]) for row in dondatmon_data if row[5] == mahoadon)  # THANHTIEN from DONDATMON
+    tongtien = round(thanhtien_sum * (1 + vat), 2)  # TONGTIEN = SUM(THANHTIEN) * (1 + VAT)
+
+    hoadon_data.append([
+        mahoadon, giolap, ngaylap, vat, tienkhachdua, trangthai, phuongthuc, batchethanhlienvien,
+        makhuyenmai, tongtien
+    ])
+
+# Write to CSV
+with open(hoadon_csv_file, mode="w", encoding="utf-8", newline="") as file:
+    writer = csv.writer(file)
+    # Write header
+    writer.writerow([
+        "MAHOADON", "GIOLAP", "NGAYLAP", "VAT", "TIENKHACHDUA", "TRANGTHAI", "PHUONGTHUC", 
+        "BACTHETHANHVIEN", "MAKHUYENMAI", "TONGTIEN"
+    ])
+    # Write rows
+    writer.writerows(hoadon_data)
+
+print(f"HOADON data has been generated into the file: {hoadon_csv_file}")
