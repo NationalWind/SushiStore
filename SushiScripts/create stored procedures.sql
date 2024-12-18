@@ -3,6 +3,7 @@ GO
 USE SushiDB
 GO
 
+-- Kiểm tra và cập nhật hạng thẻ 
 CREATE PROCEDURE SP_CapNhatHangThe
 AS
 BEGIN
@@ -31,48 +32,36 @@ BEGIN
         SET @DIEMTRONGNAM = @DIEMTICHLUY;
 
         -- Logic to process Membership
-        IF @LOAITHE = N'Membership'
+        IF @MATHE = 'M'
         BEGIN
             IF @DIEMTRONGNAM >= 100
             BEGIN
                 -- Upgrade to SILVER
-                UPDATE THETHANHVIEN
-                SET LOAITHE = N'Silver'
-                WHERE MATHE = @MATHE;
-
                 UPDATE CHITIETKHACHHANG
-                SET NGAYNANGHANG = GETDATE(), DIEMTICHLUY = 0
-                WHERE MAKHACHHANG = @MAKHACHHANG AND MATHE = @MATHE;
+                SET MATHE = 'S', NGAYNANGHANG = GETDATE(), DIEMTICHLUY = 0
+                WHERE MAKHACHHANG = @MAKHACHHANG;
 
                 PRINT 'Khách hàng đã được nâng cấp lên hạng thẻ SILVER.';
             END
         END
 
-        ELSE IF @LOAITHE = N'Silver'
+        ELSE IF @MATHE = 'S'
         BEGIN
             IF @DIEMTRONGNAM >= 100
             BEGIN
                 -- Upgrade to GOLD
-                UPDATE THETHANHVIEN
-                SET LOAITHE = N'Gold'
-                WHERE MATHE = @MATHE;
-
                 UPDATE CHITIETKHACHHANG
-                SET NGAYNANGHANG = GETDATE(), DIEMTICHLUY = 0
-                WHERE MAKHACHHANG = @MAKHACHHANG AND MATHE = @MATHE;
+                SET MATHE = 'G', NGAYNANGHANG = GETDATE(), DIEMTICHLUY = 0
+                WHERE MAKHACHHANG = @MAKHACHHANG;
 
                 PRINT 'Khách hàng đã được nâng cấp lên hạng thẻ GOLD.';
             END
             ELSE IF @DIEMTRONGNAM < 50
             BEGIN
                 -- Downgrade to Membership
-                UPDATE THETHANHVIEN
-                SET LOAITHE = N'Membership'
-                WHERE MATHE = @MATHE;
-
                 UPDATE CHITIETKHACHHANG
-                SET NGAYNANGHANG = GETDATE(), DIEMTICHLUY = 0
-                WHERE MAKHACHHANG = @MAKHACHHANG AND MATHE = @MATHE;
+                SET MATHE = 'M', NGAYNANGHANG = GETDATE(), DIEMTICHLUY = 0
+                WHERE MAKHACHHANG = @MAKHACHHANG;
 
                 PRINT 'Khách hàng đã bị hạ cấp xuống hạng thẻ MEMBERSHIP.';
             END
@@ -82,18 +71,14 @@ BEGIN
             END
         END
 
-        ELSE IF @LOAITHE = N'Gold'
+        ELSE IF @MATHE = 'G'
         BEGIN
             IF @DIEMTRONGNAM < 100
             BEGIN
                 -- Downgrade to SILVER
-                UPDATE THETHANHVIEN
-                SET LOAITHE = N'Silver'
-                WHERE MATHE = @MATHE;
-
                 UPDATE CHITIETKHACHHANG
-                SET NGAYNANGHANG = GETDATE(), DIEMTICHLUY = 0
-                WHERE MAKHACHHANG = @MAKHACHHANG AND MATHE = @MATHE;
+                SET MATHE = 'S', NGAYNANGHANG = GETDATE(), DIEMTICHLUY = 0
+                WHERE MAKHACHHANG = @MAKHACHHANG;
 
                 PRINT 'Khách hàng đã bị hạ cấp xuống hạng thẻ SILVER.';
             END
@@ -114,6 +99,7 @@ END;
 GO
 
 
+-- Cấp và cập nhật thông tin thẻ cho khách hàng 
 CREATE PROCEDURE SP_TaoVaCapThe
 (
     @MAKHACHHANG CHAR(10),           -- Mã khách hàng
@@ -121,7 +107,6 @@ CREATE PROCEDURE SP_TaoVaCapThe
     @SDT CHAR(10),                   -- Số điện thoại
     @EMAIL VARCHAR(50),              -- Email khách hàng
     @CCCD VARCHAR(20),               -- CCCD khách hàng
-    @MATHE CHAR(10),                 -- Mã thẻ thành viên
     @NHANVIENTAOLAP CHAR(10)         -- Nhân viên tạo lập thẻ
 )
 AS
@@ -139,24 +124,17 @@ BEGIN
     END
     ELSE
     BEGIN
-        PRINT 'Khách hàng đã tồn tại.';
+        PRINT 'Khách hàng đã tồn tại trong hệ thống.';
     END
 
     -- Kiểm tra xem thẻ đã tồn tại trong bảng CHITIETKHACHHANG hay chưa
-    IF NOT EXISTS (SELECT 1 FROM CHITIETKHACHHANG WHERE MAKHACHHANG = @MAKHACHHANG AND MATHE = @MATHE)
+    IF NOT EXISTS (SELECT 1 FROM CHITIETKHACHHANG WHERE MAKHACHHANG = @MAKHACHHANG)
     BEGIN
         -- Cấp thẻ mới với loại thẻ Membership và trạng thái Active
         INSERT INTO CHITIETKHACHHANG (MAKHACHHANG, MATHE, NGAYDK, DIEMTICHLUY, NGAYNANGHANG, TRANGTHAITAIKHOAN, NHANVIENTAOLAP)
-        VALUES (@MAKHACHHANG, @MATHE, GETDATE(), 0, NULL, N'Active', @NHANVIENTAOLAP);
+        VALUES (@MAKHACHHANG, 'M', GETDATE(), 0, GETDATE(), N'Active', @NHANVIENTAOLAP);
 
-        -- Đặt loại thẻ mặc định là Membership trong bảng THETHANHVIEN nếu chưa có
-        IF NOT EXISTS (SELECT 1 FROM THETHANHVIEN WHERE MATHE = @MATHE)
-        BEGIN
-            INSERT INTO THETHANHVIEN (MATHE, LOAITHE)
-            VALUES (@MATHE, N'Membership');
-        END
-
-        PRINT 'Thẻ mới đã được cấp cho khách hàng.';
+        PRINT 'Thẻ mới (Membership) đã được cấp cho khách hàng.';
     END
     ELSE
     BEGIN
@@ -165,9 +143,9 @@ BEGIN
         SET NGAYDK = GETDATE(),
             TRANGTHAITAIKHOAN = N'Active',
             NHANVIENTAOLAP = @NHANVIENTAOLAP
-        WHERE MAKHACHHANG = @MAKHACHHANG AND MATHE = @MATHE;
+        WHERE MAKHACHHANG = @MAKHACHHANG;
 
-        PRINT 'Thông tin thẻ đã được cập nhật.';
+        PRINT 'Thông tin thẻ của khách hàng đã được cập nhật.';
     END
 END;
 GO
@@ -239,6 +217,7 @@ END;
 
 EXEC THONGKE_CHATLUONG_MONAN @NGAYBATDAU = '2024-01-01';
 
+go
 
 -- Thống kê danh sách các đơn hàng và hóa đơn theo ngày đặt cụ thể
 CREATE PROCEDURE SP_DS_DONDATMON_HOADON_THEONGAY
@@ -293,6 +272,7 @@ END
 
 EXEC SP_DS_DONDATMON_HOADON_THEONGAY @ngaydat = '2024-12-17'
 
+go
 
 -- Danh sách theo dõi xu hướng của các khách hàng khi lựa chọn loại đặt hàng tại một chi nhánh trong một khoảng thời gian
 CREATE PROCEDURE SP_THONGKE_XUHUONG_KHACHHANG
@@ -329,8 +309,10 @@ END
 EXEC THONGKE_XUHUONG_KHACHHANG @ngayBatDau = '2024-12-12', @ngayKetThuc = '2025-1-12', @maChiNhanh = 'CN0001'
 
 
-CREATE PROCEDURE 
+-- CREATE PROCEDURE 
 EXEC SP_THONGKE_XUHUONG_KHACHHANG @ngayBatDau = '2024-12-12', @ngayKetThuc = '2025-1-12', @maChiNhanh = 'CN0001'
+
+go
 
 -- Tính toán tổng tiền trước và sau khuyến mãi, sau đó cập nhật theo mã hóa đơn.
 
