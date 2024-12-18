@@ -237,7 +237,7 @@ END;
 EXEC THONGKE_CHATLUONG_MONAN @NGAYBATDAU = '2024-01-01';
 
 -- Thống kê danh sách các đơn hàng và hóa đơn theo ngày đặt cụ thể
-CREATE PROCEDURE DS_DONDATMON_HOADON_THEONGAY
+CREATE PROCEDURE SP_DS_DONDATMON_HOADON_THEONGAY
     @ngaydat DATE -- Tham số đầu vào để lọc theo ngày đặt
 AS
 BEGIN
@@ -290,7 +290,7 @@ END
 EXEC DS_DONDATMON_HOADON_THEONGAY @ngaydat = '2024-12-17'
 
 -- Danh sách theo dõi xu hướng của các khách hàng khi lựa chọn loại đặt hàng tại một chi nhánh trong một khoảng thời gian
-CREATE PROCEDURE THONGKE_XUHUONG_KHACHHANG
+CREATE PROCEDURE SP_THONGKE_XUHUONG_KHACHHANG
     @ngayBatDau DATE,
     @ngayKetThuc DATE,
     @maChiNhanh CHAR(10)
