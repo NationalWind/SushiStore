@@ -113,6 +113,7 @@ END;
 
 GO
 
+
 CREATE PROCEDURE SP_TaoVaCapThe
 (
     @MAKHACHHANG CHAR(10),           -- Mã khách hàng
@@ -171,6 +172,7 @@ BEGIN
 END;
 GO
 
+
 -- Xem danh sách nhân viên và đánh giá tương ứng với mỗi nhân viên đó
 CREATE PROCEDURE XemDanhSachDanhGiaNhanVien
 AS
@@ -202,6 +204,7 @@ EXEC XemDanhSachDanhGiaNhanVien;
 
 --
 GO
+
 
 -- Thống kê chất lượng món ăn và đánh giá của khách hàng
 CREATE PROCEDURE THONGKE_CHATLUONG_MONAN
@@ -235,6 +238,7 @@ BEGIN
 END;
 
 EXEC THONGKE_CHATLUONG_MONAN @NGAYBATDAU = '2024-01-01';
+
 
 -- Thống kê danh sách các đơn hàng và hóa đơn theo ngày đặt cụ thể
 CREATE PROCEDURE DS_DONDATMON_HOADON_THEONGAY
@@ -289,6 +293,7 @@ END
 
 EXEC DS_DONDATMON_HOADON_THEONGAY @ngaydat = '2024-12-17'
 
+
 -- Danh sách theo dõi xu hướng của các khách hàng khi lựa chọn loại đặt hàng tại một chi nhánh trong một khoảng thời gian
 CREATE PROCEDURE THONGKE_XUHUONG_KHACHHANG
     @ngayBatDau DATE,
@@ -322,3 +327,6 @@ BEGIN
 END
 
 EXEC THONGKE_XUHUONG_KHACHHANG @ngayBatDau = '2024-12-12', @ngayKetThuc = '2025-1-12', @maChiNhanh = 'CN0001'
+
+
+CREATE PROCEDURE 

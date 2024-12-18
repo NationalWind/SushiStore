@@ -5,6 +5,7 @@ GO
 USE SushiDB
 GO
 
+-- Hoá đơn định danh bởi mã hoá đơn
 CREATE TABLE HOADON
 (
     MAHOADON CHAR(10),
@@ -25,6 +26,8 @@ CREATE TABLE HOADON
     PRIMARY KEY (MAHOADON)
 )
 
+-- Đơn đặt món định danh bởi mã đơn
+-- Đơn đặt món chứa các món được đặt và có thể có nhiều đơn đặt món trong hoá đơn
 CREATE TABLE DONDATMON
 (
     MADON CHAR(10),
@@ -44,6 +47,8 @@ CREATE TABLE DONDATMON
     PRIMARY KEY (MADON)
 )
 
+-- Đặt hàng trực tuyến định danh bởi mã đơn hàng trực tuyến
+-- Đặt hàng trực tuyến là con của đơn đặt món
 CREATE TABLE DATHANGTRUCTUYEN
 (
     MADHTRUCTUYEN CHAR(10),
@@ -55,6 +60,8 @@ CREATE TABLE DATHANGTRUCTUYEN
     PRIMARY KEY (MADHTRUCTUYEN)
 )
 
+-- Đặt hàng tại chỗ định danh bởi mã đơn hàng tại chỗ
+-- Đặt hàng tại chỗ là con của đơn đặt món
 CREATE TABLE DATHANGTAICHO
 (
     MADHTAICHO CHAR(10),
@@ -65,12 +72,17 @@ CREATE TABLE DATHANGTAICHO
     PRIMARY KEY (MADHTAICHO)
 )
 
+-- Chi nhánh định danh bởi mã chi nhánh
 CREATE TABLE CHINHANH
 (
 	MACHINHANH CHAR(10),
 	TENCHINHANH NVARCHAR(50) NOT NULL,
 	DIACHI NVARCHAR(100) NOT NULL,
-	KHUVUC NVARCHAR(50) NOT NULL CHECK (KHUVUC IN (N'Quận 1', N'Quận 2', N'Quận 3', N'Quận 4', N'Quận 5', N'Quận 6', N'Quận 7', N'Quận 8', N'Quận 9', N'Quận 10', N'Quận 11', N'Quận 12', N'Quận Gò Vấp', N'Quận Phú Nhuận', N'Quận Bình Thạnh', N'Quận Tân Bình', N'Quận Tân Phú', N'Quận Bình Tân', N'Huyện Bình Chánh', N'Huyện Củ Chi', N'Huyện Hóc Môn', N'Huyện Nhà Bè', N'Huyện Cần Giờ')),
+	KHUVUC NVARCHAR(50) NOT NULL CHECK (KHUVUC IN (N'Quận 1', N'Quận 2', N'Quận 3', N'Quận 4',
+										N'Quận 5', N'Quận 6', N'Quận 7', N'Quận 8', N'Quận 9',
+										N'Quận 10', N'Quận 11', N'Quận 12', N'Quận Gò Vấp', N'Quận Phú Nhuận',
+										N'Quận Bình Thạnh', N'Quận Tân Bình', N'Quận Tân Phú', N'Quận Bình Tân',
+										N'Huyện Bình Chánh', N'Huyện Củ Chi', N'Huyện Hóc Môn', N'Huyện Nhà Bè', N'Huyện Cần Giờ')),
 	THOIGIANMOCUA TIME NOT NULL,
 	THOIGIANDONGCUA TIME NOT NULL,
 	SDT CHAR(10),
@@ -82,6 +94,7 @@ CREATE TABLE CHINHANH
 	PRIMARY KEY (MACHINHANH)
 )
 
+-- Bàn ăn được định danh bởi số bàn và mã chi nhánh bàn ăn đặt ở
 CREATE TABLE BANAN
 (
 	SOBAN VARCHAR(3) CHECK (SOBAN NOT LIKE '%[^0-9]%'),
@@ -94,6 +107,7 @@ CREATE TABLE BANAN
 	PRIMARY KEY (SOBAN, MACHINHANH)
 )
 
+-- Đặt chỗ định danh bởi mã đặt chỗ
 CREATE TABLE DATCHO
 (
 	MADATCHO CHAR(10),
@@ -108,6 +122,7 @@ CREATE TABLE DATCHO
 	PRIMARY KEY (MADATCHO)
 )
 
+-- Chi tiết đặt chỗ định danh bởi số bàn, mã chi nhánh liên quan, và mã đặt chỗ
 CREATE TABLE CHITIETDATCHO
 (
 	SOBAN VARCHAR(3),
@@ -119,6 +134,7 @@ CREATE TABLE CHITIETDATCHO
 	PRIMARY KEY (SOBAN, MACHINHANH, MADATCHO)
 )
 
+-- Nhân viên định danh bởi mã nhân viên
 CREATE TABLE NHANVIEN
 (
 	MANHANVIEN CHAR(10),
@@ -136,6 +152,8 @@ CREATE TABLE NHANVIEN
 	PRIMARY KEY (MANHANVIEN)
 )
 
+-- Bộ phận định danh bởi mã bộ phận và có thể có nhiều nhân viên
+-- lương nhân viên cùng bộ phận tương đối giống nhau
 CREATE TABLE BOPHAN
 (
 	MABOPHAN CHAR(10),
@@ -148,6 +166,8 @@ CREATE TABLE BOPHAN
 	PRIMARY KEY (MABOPHAN, MACHINHANH)
 )
 
+-- Lịch sử làm việc định danh bởi mã nhân viên, mã bộ phận, và mã chi nhánh làm việc
+-- Lịch sử làm việc lưu lại ngày làm, ngày nghỉ, hệ số lương trong khoảng đó của nhân viên
 CREATE TABLE LICHSULAMVIEC
 (
 	MANHANVIEN CHAR(10),
@@ -161,6 +181,7 @@ CREATE TABLE LICHSULAMVIEC
 	PRIMARY KEY (MANHANVIEN, MABOPHAN, MACHINHANH)
 )
 
+-- Khách hàng định danh bởi mã khách hàng
 CREATE TABLE KHACHHANG
 (
 	MAKHACHHANG CHAR(10),
@@ -173,6 +194,7 @@ CREATE TABLE KHACHHANG
 	PRIMARY KEY (MAKHACHHANG)
 )
 
+-- Đánh giá định danh bởi mã đánh giá
 CREATE TABLE DANHGIA
 (
 	MADANHGIA CHAR(10),
@@ -189,6 +211,8 @@ CREATE TABLE DANHGIA
 	PRIMARY KEY (MADANHGIA)
 )
 
+-- Thẻ thành viên định danh bởi mã thẻ
+-- Thẻ thành viên liên quan đến khách hàng đó và loại phân hạng
 CREATE TABLE THETHANHVIEN
 (
 	MATHE CHAR(10),
@@ -198,6 +222,8 @@ CREATE TABLE THETHANHVIEN
 	PRIMARY KEY (MATHE)
 )
 
+-- Chi tiết khách hàng định danh bởi mã khách hàng và mã thẻ
+-- Chi tiết khách hàng chứa những thông tin khách hàng liên quan
 CREATE TABLE CHITIETKHACHHANG
 (
 	MAKHACHHANG CHAR(10),
@@ -205,13 +231,14 @@ CREATE TABLE CHITIETKHACHHANG
 	NGAYDK DATE NOT NULL,
 	DIEMTICHLUY INT NOT NULL CHECK (DIEMTICHLUY >= 0),
 	NGAYNANGHANG DATE NOT NULL,
-	TRANGTHAITAIKHOAN NVARCHAR(50) NOT NULL CHECK (TRANGTHAITAIKHOAN IN (N'Hoạt động', N'Đã xóa', N'Tạm dừng')),
+	TRANGTHAITAIKHOAN NVARCHAR(50) NOT NULL CHECK (TRANGTHAITAIKHOAN IN (N'Hoạt động', N'Đã xoá', N'Tạm dừng')),
 	NHANVIENTAOLAP CHAR(10) NOT NULL,
 
 	CONSTRAINT PK_CHITIETKHACHHAHG
 	PRIMARY KEY (MAKHACHHANG, MATHE)
 )
 
+-- Đánh giá món ăn định danh bởi mã đánh giá liên quan và mã món ăn đó
 CREATE TABLE DANHGIAMONAN
 (
 	MADANHGIA CHAR(10),
@@ -223,6 +250,7 @@ CREATE TABLE DANHGIAMONAN
 	PRIMARY KEY (MADANHGIA, MAMON)
 )
 
+-- Truy cập định danh bởi mã truy cập và mã đánh giá liên quan
 CREATE TABLE TRUYCAP
 (
 	MATRUYCAP CHAR(10),
@@ -234,6 +262,7 @@ CREATE TABLE TRUYCAP
 	PRIMARY KEY (MATRUYCAP, MADANHGIA)
 )
 
+-- Món ăn định nghĩa bởi mã món
 CREATE TABLE MONAN
 (
 	MAMON CHAR(10),
@@ -246,6 +275,8 @@ CREATE TABLE MONAN
 	PRIMARY KEY (MAMON)
 )
 
+-- Combo món ăn định danh bởi mã combo
+-- Combo món ăn có thể chứa nhiều món ăn
 CREATE TABLE COMBOMONAN
 (
 	MACOMBO CHAR(10),
@@ -257,6 +288,8 @@ CREATE TABLE COMBOMONAN
 	PRIMARY KEY (MACOMBO)
 )
 
+-- Chi tiết món ăn định danh bởi mã chi tiết món
+-- Chi tiết món ăn định nghĩa rõ ràng một order trong một đơn đặt món
 CREATE TABLE CHITIETMONAN
 (
 	MACTMON CHAR(10),
@@ -272,6 +305,8 @@ CREATE TABLE CHITIETMONAN
 	PRIMARY KEY (MACTMON)
 )
 
+-- Món ăn - Combo món ăn định danh bởi mã combo và mã món ăn liên quan
+-- Món ăn - Combo món ăn đề ra một combo có những món ăn nào
 CREATE TABLE MONAN_COMBOMONAN
 (
 	MACOMBO CHAR(10),
@@ -282,6 +317,7 @@ CREATE TABLE MONAN_COMBOMONAN
 	PRIMARY KEY (MACOMBO, MAMON)
 )
 
+-- Khuyến mãi định danh bởi mã khuyến mãi
 CREATE TABLE KHUYENMAI
 (
 	MAKHUYENMAI CHAR(10),
@@ -292,6 +328,9 @@ CREATE TABLE KHUYENMAI
 	PRIMARY KEY (MAKHUYENMAI)
 )
 
+-- Khuyến mãi khách hàng định danh bởi mã khuyến mãi
+-- Khuyến mãi khách hàng là con của khuyến mãi
+-- Khuyến mãi khách hàng dành riêng cho mỗi khách hàng và tính bằng tiền
 CREATE TABLE KHUYENMAIKHACHHANG
 (
 	MAKHUYENMAI CHAR(10),
@@ -306,19 +345,23 @@ CREATE TABLE KHUYENMAIKHACHHANG
 	PRIMARY KEY (MAKHUYENMAI)
 )
 
+-- Khuyến mãi thẻ thành viên định danh bởi mã khuyến mãi
+-- Khuyến mãi thẻ thành viên là con của khuyến mãi
+-- Khuyến mãi thẻ thành viên tự động áp dụng cho các khách hàng thuộc loại thẻ SILVER, GOLD theo %
 CREATE TABLE KHUYENMAITHETHANHVIEN
 (
 	MAKHUYENMAI CHAR(10),
-	MATHE CHAR(10),
+	LOAITHE NVARCHAR(50) NOT NULL CHECK (LOAITHE IN (N'Membership', N'Silver', N'Gold')),
 	LUONGKMPHANTRAM FLOAT NOT NULL,
 
 	CONSTRAINT PK_KHUYENMAITHETHANHVIEN
 	PRIMARY KEY (MAKHUYENMAI)
 )
 
+-- Hoá đơn có khoá ngoại đến mã khách hàng và mã chi nhánh liên quan
 ALTER TABLE HOADON
 ADD
-	CONSTRAINT FK_HOADON_THE
+	CONSTRAINT FK_HOADON_KHACHHANG
 	FOREIGN KEY (MAKHACHHANG)
 	REFERENCES KHACHHANG(MAKHACHHANG)
 	ON DELETE SET NULL,
@@ -328,6 +371,8 @@ ADD
 	REFERENCES CHINHANH(MACHINHANH)
 	ON DELETE SET NULL
 
+-- Đơn đặt món có khoá ngoại đến hoá đơn liên quan, khách hàng đặt đơn đó,
+-- mã đặt chỗ nếu có, chi nhánh ăn, và nhân viên hỗ trợ
 ALTER TABLE DONDATMON
 ADD
 	CONSTRAINT FK_DONDATMON_HOADON
@@ -355,12 +400,14 @@ ADD
 	REFERENCES NHANVIEN(MANHANVIEN)
 	ON DELETE SET NULL
 
+-- Đặt hàng trực tuyến có khoá ngoại đến mã đơn đặt món
 ALTER TABLE DATHANGTRUCTUYEN
 ADD
     CONSTRAINT FK_DATHANGTRUCTUYEN_DONDATMON
     FOREIGN KEY (MADHTRUCTUYEN)
     REFERENCES DONDATMON(MADON)
 
+-- Đặt hàng tại chỗ có khoá ngoại đến mã đơn đặt món, số bàn ăn và mã chi nhánh đặt
 ALTER TABLE DATHANGTAICHO
 ADD
     CONSTRAINT FK_DATHANGTAICHO_DONDATMON
@@ -371,6 +418,7 @@ ADD
     FOREIGN KEY (SOBAN, MACHINHANH)
     REFERENCES BANAN(SOBAN, MACHINHANH)
 
+-- Chi tiết khách hàng khoá ngoại đến mã khách hàng, mã thẻ liên quan, nhân viên tạo lập khách hàng
 ALTER TABLE CHITIETKHACHHANG
 ADD
 	CONSTRAINT FK_CHITIETKHACHHANG_KHACHHANG
@@ -385,16 +433,20 @@ ADD
 	FOREIGN KEY (NHANVIENTAOLAP)
 	REFERENCES NHANVIEN(MANHANVIEN)
 
+-- Đánh giá món ăn có khoá ngoại đến mã đánh giá liên quan và mã món ăn được đánh giá
 ALTER TABLE DANHGIAMONAN
 ADD
 	CONSTRAINT FK_DANHGIAMONAN_DANHGIA
 	FOREIGN KEY (MADANHGIA)
-	REFERENCES DANHGIA(MADANHGIA),
+	REFERENCES DANHGIA(MADANHGIA)
+	ON DELETE CASCADE,
 
 	CONSTRAINT FK_DANHGIAMONAN_MONAN
 	FOREIGN KEY (MAMON)
 	REFERENCES MONAN(MAMON)
+	ON DELETE CASCADE
 
+-- Chi nhánh có khoá ngoại đến nhân viên quản lý chi nhánh
 ALTER TABLE CHINHANH
 ADD
 	CONSTRAINT FK_CHINHANH_NHANVIENQUANLY
@@ -402,6 +454,7 @@ ADD
 	REFERENCES NHANVIEN(MANHANVIEN)
 	ON DELETE SET NULL
 
+-- Bàn ăn có khoá ngoại đến mã chi nhánh
 ALTER TABLE BANAN
 ADD
 	CONSTRAINT FK_BANAN_MACHINHANH
@@ -409,6 +462,7 @@ ADD
 	REFERENCES CHINHANH(MACHINHANH)
 	ON DELETE CASCADE
 
+-- Chi tiết đặt chỗ có khoá ngoại đến số bàn, mã chi nhánh, và mã đặt chỗ liên quan
 ALTER TABLE CHITIETDATCHO
 ADD
 	CONSTRAINT FK_CHITIETDATCHO_SOBAN_MACHINHANH
@@ -421,6 +475,7 @@ ADD
 	REFERENCES DATCHO(MADATCHO)
 	ON DELETE CASCADE
 
+-- Nhân viên khoá ngoại tới mã chi nhánh làm việc
 ALTER TABLE NHANVIEN
 ADD
 	CONSTRAINT FK_NHANVIEN_CHINHANH
@@ -428,6 +483,7 @@ ADD
 	REFERENCES CHINHANH(MACHINHANH)
 	ON DELETE NO ACTION
 
+-- Bộ phận khoá ngoại tới mã chi nhánh liên quan, và mã nhân viên quản lý bộ phận liên quan
 ALTER TABLE BOPHAN
 ADD
 	CONSTRAINT FK_BOPHAN_CHINHANH
@@ -440,6 +496,7 @@ ADD
 	REFERENCES NHANVIEN(MANHANVIEN)
 	ON DELETE SET NULL
 
+-- Lịch sử làm việc khoá ngoại tới mã chi nhánh, mã bộ phận và nhân viên liên quan
 ALTER TABLE LICHSULAMVIEC
 ADD
 	CONSTRAINT FK_LICHSULAMVIEC_BOPHAN
@@ -452,6 +509,8 @@ ADD
 	REFERENCES NHANVIEN(MANHANVIEN)
 	ON DELETE CASCADE
 
+-- Đánh giá khoá ngoại tới khách hàng đã đánh giá, chi nhánh khách hàng sử dụng,
+-- nhân viên liên quan, và mã đơn đặt món có liên quan
 ALTER TABLE DANHGIA
 ADD
 	CONSTRAINT FK_DANHGIA_KHACHHANG
@@ -474,18 +533,7 @@ ADD
 	REFERENCES DONDATMON(MADON)
 	ON DELETE NO ACTION
 
-ALTER TABLE DANHGIAMONAN
-ADD
-	CONSTRAINT FK_DANHGIAMONAN_MADANHGIA
-	FOREIGN KEY (MADANHGIA)
-	REFERENCES DANHGIA(MADANHGIA)
-	ON DELETE CASCADE,
-
-	CONSTRAINT FK_DANHGIAMONAN_MAMON
-	FOREIGN KEY (MAMON)
-	REFERENCES MONAN(MAMON)
-	ON DELETE CASCADE
-
+-- Chi tiết món ăn có khoá ngoại đến món ăn, combo món ăn, và đơn đặt món liên quan
 ALTER TABLE CHITIETMONAN
 ADD
 	CONSTRAINT FK_CHITIETMONAN_MAMON
@@ -496,8 +544,14 @@ ADD
 	CONSTRAINT FK_CHITIETMONAN_MACOMBO
 	FOREIGN KEY (MACOMBO)
 	REFERENCES COMBOMONAN(MACOMBO)
+	ON DELETE CASCADE,
+
+	CONSTRAINT FK_CHITIETMONAN_DONDATMON
+	FOREIGN KEY (MADONDATMON)
+	REFERENCES DONDATMON(MADON)
 	ON DELETE CASCADE
 
+-- Món ăn - Combo món ăn có khoá ngoại đến mã combo và mã món ăn liên quan combo đó
 ALTER TABLE MONAN_COMBOMONAN
 ADD
 	CONSTRAINT FK_MONAN_COMBOMONAN_MACOMBO
@@ -510,6 +564,7 @@ ADD
 	REFERENCES MONAN(MAMON)
 	ON DELETE CASCADE
 
+-- Khuyến mãi khách hàng có khoá ngoại đến mã khuyến mãi và mã khách hàng nhận khuyến mãi
 ALTER TABLE KHUYENMAIKHACHHANG
 ADD
 	CONSTRAINT FK_KHUYENMAIKHACHHANG_MAKHUYENMAI
@@ -522,18 +577,15 @@ ADD
 	REFERENCES KHACHHANG(MAKHACHHANG)
 	ON DELETE CASCADE
 
+-- Khuyến mãi thẻ thành viên có khoá ngoại đến mã khuyến mãi
 ALTER TABLE KHUYENMAITHETHANHVIEN
 ADD
 	CONSTRAINT FK_KHUYENMAITHETHANHVIEN_MAKHUYENMAI
 	FOREIGN KEY (MAKHUYENMAI)
 	REFERENCES KHUYENMAI(MAKHUYENMAI)
-	ON DELETE CASCADE,
-
-	CONSTRAINT FK_KHUYENMAITHETHANHVIEN_MATHE
-	FOREIGN KEY (MATHE)
-	REFERENCES THETHANHVIEN(MATHE)
 	ON DELETE CASCADE
 
+-- Truy cập có khoá ngoại đến mã đánh giá liên quan
 ALTER TABLE TRUYCAP
 ADD 
 	CONSTRAINT FK_TRUYCAP_MADANHGIA
