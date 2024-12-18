@@ -102,20 +102,6 @@ BEGIN
 	INNER JOIN INSERTED I ON CT.MAMON = I.MACOMBO
 END
 GO
-CREATE TRIGGER TRG_CHITIETMONAN_UPDATE_DONGIATONG
-ON CHITIETMONAN
-AFTER UPDATE
-AS
-BEGIN
-	SET NOCOUNT ON;
-
-	IF UPDATE(DONGIATONG)
-	BEGIN
-		RAISERROR ('Không thể cập nhật tổng tiền hóa đơn', 16, 1)
-		ROLLBACK TRANSACTION;
-	END
-END
-GO
 
 -- Khách hàng chỉ có thể chọn món từ thực đơn của nhà hàng.
 CREATE TRIGGER TRG_CHITIETMONAN_VALIDATE_CHONMON
@@ -196,18 +182,6 @@ END
 GO
 
 -- Thành tiền trong đơn đặt món bằng tổng các chi tiết món ăn thuộc về hóa đơn
-CREATE TRIGGER TRG_DONDATMON_INSERT_UPDATE_THANHTIEN
-ON DONDATMON
-AFTER UPDATE
-AS
-BEGIN
-	IF UPDATE(THANHTIEN)
-	BEGIN
-		RAISERROR (N'Thành tiền được cập nhật tự động, không thể cập nhật thủ công', 16, 1)
-		ROLLBACK TRANSACTION;
-	END
-END
-GO
 CREATE TRIGGER TRG_CHITIETMONAN_INSERT_UPDATE_THANHTIEN
 ON CHITIETMONAN
 AFTER INSERT, UPDATE, DELETE
@@ -397,19 +371,6 @@ BEGIN
 		ON LSLV.MABOPHAN = BP.MABOPHAN
 		AND LSLV.MACHINHANH = BP.MACHINHANH
 	WHERE LSLV.NGAYNGHIVIEC IS NULL; -- Chỉ cập nhật nếu nhân viên chưa nghỉ việc
-END;
-GO
-CREATE TRIGGER TRG_UPDATE_LUONGHIENTAI_ON_NHANVIEN
-ON NHANVIEN
-AFTER UPDATE
-AS
-BEGIN
-	-- Lương nhân viên là tự động cập nhật theo hệ số, không được phép cập nhật thủ công
-	IF UPDATE(LUONGHIENTAI)
-	BEGIN
-		RAISERROR (N'Lương nhân viên là tự động cập nhật theo hệ số, không được phép cập nhật thủ công', 16, 1)
-		ROLLBACK TRANSACTION;
-	END
 END;
 GO
 
