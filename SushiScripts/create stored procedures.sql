@@ -287,7 +287,7 @@ BEGIN
         DD.GIODAT ASC
 END
 
-EXEC DS_DONDATMON_HOADON_THEONGAY @ngaydat = '2024-12-17'
+EXEC SP_DS_DONDATMON_HOADON_THEONGAY @ngaydat = '2024-12-17'
 
 -- Danh sách theo dõi xu hướng của các khách hàng khi lựa chọn loại đặt hàng tại một chi nhánh trong một khoảng thời gian
 CREATE PROCEDURE SP_THONGKE_XUHUONG_KHACHHANG
@@ -321,7 +321,7 @@ BEGIN
         DH.MACHINHANH;
 END
 
-EXEC THONGKE_XUHUONG_KHACHHANG @ngayBatDau = '2024-12-12', @ngayKetThuc = '2025-1-12', @maChiNhanh = 'CN0001'
+EXEC SP_THONGKE_XUHUONG_KHACHHANG @ngayBatDau = '2024-12-12', @ngayKetThuc = '2025-1-12', @maChiNhanh = 'CN0001'
 
 -- Tính toán tổng tiền trước và sau khuyến mãi, sau đó cập nhật theo mã hóa đơn.
 
