@@ -175,9 +175,9 @@ BEGIN
     ORDER BY 
         NV.MANHANVIEN;
 END;
+GO
 
 EXEC XemDanhSachDanhGiaNhanVien;
---
 GO
 
 
@@ -211,9 +211,10 @@ BEGIN
 
     PRINT 'Thống kê chất lượng món ăn đã được thực hiện thành công';
 END;
+GO
 
 EXEC THONGKE_CHATLUONG_MONAN @NGAYBATDAU = '2024-01-01';
-go
+GO
 
 
 -- Thống kê danh sách các đơn hàng và hóa đơn theo ngày đặt cụ thể
@@ -266,9 +267,10 @@ BEGIN
     ORDER BY 
         DD.GIODAT ASC
 END
+GO
 
 EXEC SP_DS_DONDATMON_HOADON_THEONGAY @ngaydat = '2024-12-17'
-go
+GO
 
 -- Danh sách theo dõi xu hướng của các khách hàng khi lựa chọn loại đặt hàng tại một chi nhánh trong một khoảng thời gian
 CREATE PROCEDURE SP_THONGKE_XUHUONG_KHACHHANG
@@ -304,7 +306,7 @@ END
 
 -- CREATE PROCEDURE 
 EXEC SP_THONGKE_XUHUONG_KHACHHANG @ngayBatDau = '2024-12-12', @ngayKetThuc = '2025-1-12', @maChiNhanh = 'CN0001'
-go
+GO
 
 
 -- Tính toán tổng tiền trước và sau khuyến mãi, sau đó cập nhật theo mã hóa đơn.
@@ -403,3 +405,74 @@ BEGIN
 END;
 GO
 
+
+-- Thống kê những món ăn đắt hàng nhất về số lượng trong khoảng thời gian nhất định
+-- Bảng sấp theo số lượng món được đặt cao nhất và có cột tổng doanh thu
+-- Không tính những món được đặt theo combo
+CREATE PROCEDURE THONGKE_TOP_MONAN
+    @NgayBatDau DATE,
+    @NgayKetThuc DATE,
+    @TopBaoNhieu INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Truy vấn để tính tổng số lượng và doanh thu của mỗi món ăn
+    SELECT TOP (@TopBaoNhieu)
+        MA.MaMon,
+        MA.TenMon,
+        SUM(CTMA.SOLUONG) AS TongSoLuong,
+        SUM(CTMA.DONGIATONG) AS TongDoanhThu
+    FROM
+        CHITIETMONAN CTMA
+    JOIN
+        MONAN MA ON CTMA.MaMon = MA.MaMon
+    JOIN
+        DONDATMON DDM ON DDM.MaDon = CTMA.MaDonDatMon
+    WHERE
+        DDM.NgayDat BETWEEN @NgayBatDau AND @NgayKetThuc
+    GROUP BY
+        MA.MaMon, MA.TenMon
+    ORDER BY
+        TongSoLuong DESC;
+END;
+GO
+
+EXEC THONGKE_TOP_MONAN '2000-01-01', '2024-12-31', 3;
+GO
+
+
+-- Thống kê những khách hàng mang lại doanh thu cao nhất trong khoảng thời gian nhất định
+CREATE PROCEDURE THONGKE_TOP_KHACHHANG
+    @NgayBatDau DATE,
+    @NgayKetThuc DATE,
+    @TopBaoNhieu INT
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	-- Truy vấn để tính tổng doanh thu của mỗi khách hàng
+	SELECT TOP (@TopBaoNhieu)
+        KH.MaKhachHang,
+        KH.HoTen,
+        TTV.LoaiThe,
+        SUM(HD.TongTienSauKM) AS TongTienTichLuy
+    FROM
+		KHACHHANG KH
+    JOIN
+		HOADON HD ON HD.MaKhachHang = KH.MaKhachHang
+    JOIN
+		CHITIETKHACHHANG CTKH ON CTKH.MaKhachHang = KH.MaKhachHang
+    JOIN
+		THETHANHVIEN TTV ON CTKH.MaThe = TTV.MaThe
+    WHERE
+		HD.NgayLap BETWEEN @NgayBatDau AND @NgayKetThuc
+    GROUP BY
+		KH.MaKhachHang, KH.HoTen, TTV.LoaiThe
+    ORDER BY
+		TongTienTichLuy DESC;
+END;
+GO
+
+EXEC THONGKE_TOP_KHACHHANG '2000-01-01', '2024-12-31', 5;
+GO

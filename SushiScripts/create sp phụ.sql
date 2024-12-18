@@ -87,12 +87,13 @@ CREATE PROCEDURE sp_TaoComboMonAn
     @MaCombo NVARCHAR(50),
     @TenCombo NVARCHAR(100),
     @MoTaCombo NVARCHAR(MAX),
+    @PhanTramGiamGia FLOAT,
     @DanhSachMon DanhSachMonAn READONLY  -- Bảng tạm chứa danh sách món
 AS
 BEGIN
     DECLARE @DonGiaCombo FLOAT;
 
-    SELECT @DonGiaCombo = SUM(MA.GIAHIENTAI * DM.SOLUONG)
+    SELECT @DonGiaCombo = SUM(MA.GIAHIENTAI * DM.SOLUONG) * (1 - @PhanTramGiamGia)
     FROM @DanhSachMon DM
     JOIN MONAN MA ON DM.MaMon = MA.MAMON;
 
@@ -117,4 +118,5 @@ EXEC sp_TaoComboMonAn
     @MaCombo = 'COMBO00001', 
     @TenCombo = N'Combo nigiri',
     @MoTaCombo = N'Combo bao gồm nigiri cá hồi và nigiri cá ngừ.',
+    @PhanTramGiamGia = 0.1,
     @DanhSachMon = @DanhSachMon;
