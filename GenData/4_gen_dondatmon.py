@@ -24,8 +24,8 @@ dondatmon_data = []
 for index, madon in enumerate(madon_values, 1):
     giodat = (datetime.now() - timedelta(hours=index % 24, minutes=index % 60)).time()  # Deterministic time
     ngaydat = fake.date_this_year()  # Random date in the current year
-    trangthai = "Đang xử lý" if index % 3 == 0 else "Hoàn thành"  # Alternating status
-    loaidondatmon = "Tại chỗ" if index % 2 == 0 else "Mang về"  # Alternating order type
+    trangthai = "Processing" if index % 3 == 0 else "Successful"  # Alternating status
+    loaidondatmon = "Online order" if index % 2 == 0 else "In-store order"  # Alternating order type
     hoadonlienquan = f"HD{index:08d}"  # Sequential HOADONLIENQUAN
     khachhangdat = f"KH{index:08d}"  # Sequential customer ID
     madatcho = f"DC{index:08d}"  # Sequential reservation ID

@@ -1,0 +1,201 @@
+MAMON,TENMON,GIAHIENTAI,DANHMUC,TRANGTHAIPHUCVU
+MON0000001,Wind Drinks,128799.55,Sushi,Đã ngưng bán
+MON0000002,Thus Sashimi,493246.22,Drinks,Đã ngưng bán
+MON0000003,Blood Drinks,293908.9,Sushi,Có phục vụ
+MON0000004,Almost Dessert,399703.06,Ramen,Có phục vụ
+MON0000005,Run Ramen,417128.17,Tempura,Đã ngưng bán
+MON0000006,Per Drinks,178743.7,Drinks,Đã ngưng bán
+MON0000007,Upon Ramen,442507.81,Dessert,Có phục vụ
+MON0000008,Meeting Drinks,171345.46,Tempura,Tạm hết
+MON0000009,Drive Tempura,146583.43,Dessert,Đã ngưng bán
+MON0000010,Republican Dessert,327584.14,Sushi,Tạm hết
+MON0000011,Child Tempura,401565.61,Drinks,Có phục vụ
+MON0000012,Direction Dessert,186184.97,Sushi,Tạm hết
+MON0000013,Over Dessert,140196.16,Dessert,Có phục vụ
+MON0000014,Street Sashimi,234180.18,Dessert,Đã ngưng bán
+MON0000015,Share Tempura,77999.06,Dessert,Có phục vụ
+MON0000016,These Tempura,226512.29,Sushi,Tạm hết
+MON0000017,Recognize Tempura,384052.25,Tempura,Đã ngưng bán
+MON0000018,Station Dessert,375703.53,Sushi,Đã ngưng bán
+MON0000019,Process Sushi,429144.81,Ramen,Đã ngưng bán
+MON0000020,Student Dessert,366385.12,Ramen,Có phục vụ
+MON0000021,Week Ramen,282654.03,Ramen,Đã ngưng bán
+MON0000022,Unit Ramen,306786.05,Sashimi,Đã ngưng bán
+MON0000023,Expect Tempura,204242.91,Sushi,Tạm hết
+MON0000024,Painting Tempura,250798.59,Tempura,Có phục vụ
+MON0000025,Project Sushi,136704.04,Ramen,Tạm hết
+MON0000026,Still Dessert,276323.77,Tempura,Có phục vụ
+MON0000027,Window Sashimi,310195.19,Sushi,Có phục vụ
+MON0000028,Change Dessert,444714.23,Sushi,Tạm hết
+MON0000029,Dark Ramen,499393.79,Ramen,Đã ngưng bán
+MON0000030,Until Sushi,324531.19,Ramen,Tạm hết
+MON0000031,Through Sushi,216177.58,Tempura,Tạm hết
+MON0000032,Huge Sushi,385851.23,Tempura,Tạm hết
+MON0000033,Thousand Tempura,492204.41,Ramen,Có phục vụ
+MON0000034,Particular Tempura,340807.13,Dessert,Tạm hết
+MON0000035,Item Sushi,400994.64,Sushi,Đã ngưng bán
+MON0000036,Someone Sushi,424185.35,Tempura,Có phục vụ
+MON0000037,Account Dessert,294652.87,Sashimi,Đã ngưng bán
+MON0000038,Recent Sashimi,411892.0,Sashimi,Tạm hết
+MON0000039,Explain Sashimi,124581.47,Sushi,Đã ngưng bán
+MON0000040,Company Dessert,277940.0,Tempura,Có phục vụ
+MON0000041,Star Tempura,291129.29,Sashimi,Tạm hết
+MON0000042,Road Sashimi,191555.7,Ramen,Đã ngưng bán
+MON0000043,Plan Ramen,341020.59,Sashimi,Đã ngưng bán
+MON0000044,Set Drinks,88791.42,Sashimi,Tạm hết
+MON0000045,Firm Sushi,185132.73,Tempura,Có phục vụ
+MON0000046,Interesting Dessert,192397.44,Drinks,Có phục vụ
+MON0000047,Finish Sashimi,421690.83,Sashimi,Đã ngưng bán
+MON0000048,Way Tempura,328501.74,Drinks,Có phục vụ
+MON0000049,First Ramen,208380.44,Sushi,Đã ngưng bán
+MON0000050,Establish Sashimi,176726.43,Sashimi,Đã ngưng bán
+MON0000051,Remember Dessert,158719.56,Sashimi,Có phục vụ
+MON0000052,Language Drinks,80881.75,Dessert,Đã ngưng bán
+MON0000053,Middle Ramen,380950.25,Sashimi,Có phục vụ
+MON0000054,Create Sashimi,422030.09,Dessert,Tạm hết
+MON0000055,Magazine Sushi,332266.94,Sushi,Có phục vụ
+MON0000056,Before Sashimi,182570.75,Tempura,Đã ngưng bán
+MON0000057,Bag Tempura,427348.37,Dessert,Đã ngưng bán
+MON0000058,Age Drinks,487035.14,Drinks,Đã ngưng bán
+MON0000059,Them Drinks,395571.77,Sashimi,Đã ngưng bán
+MON0000060,Nearly Ramen,436478.78,Tempura,Có phục vụ
+MON0000061,Discover Sushi,274770.44,Ramen,Có phục vụ
+MON0000062,Lead Sushi,329942.41,Sushi,Tạm hết
+MON0000063,Local Drinks,123288.9,Dessert,Đã ngưng bán
+MON0000064,Ever Dessert,370148.44,Drinks,Có phục vụ
+MON0000065,Party Tempura,410033.34,Dessert,Tạm hết
+MON0000066,Head Sushi,311672.85,Drinks,Có phục vụ
+MON0000067,Wide Drinks,260419.49,Ramen,Đã ngưng bán
+MON0000068,Effort Tempura,165428.02,Sashimi,Đã ngưng bán
+MON0000069,Receive Sushi,65595.34,Sushi,Đã ngưng bán
+MON0000070,Child Tempura,302481.02,Ramen,Có phục vụ
+MON0000071,People Sashimi,194357.37,Tempura,Tạm hết
+MON0000072,Suggest Dessert,58831.73,Tempura,Đã ngưng bán
+MON0000073,Position Sushi,245203.41,Drinks,Đã ngưng bán
+MON0000074,Particular Drinks,123338.62,Sushi,Đã ngưng bán
+MON0000075,Window Sashimi,201476.41,Ramen,Đã ngưng bán
+MON0000076,Up Ramen,241064.1,Ramen,Đã ngưng bán
+MON0000077,Ground Ramen,321826.02,Drinks,Tạm hết
+MON0000078,Wide Tempura,238754.15,Sushi,Có phục vụ
+MON0000079,Office Ramen,275033.27,Sushi,Tạm hết
+MON0000080,Hit Dessert,294807.94,Dessert,Đã ngưng bán
+MON0000081,Surface Ramen,244132.41,Ramen,Đã ngưng bán
+MON0000082,Each Sushi,347309.5,Dessert,Đã ngưng bán
+MON0000083,Somebody Sashimi,319291.19,Ramen,Tạm hết
+MON0000084,Moment Sushi,412710.53,Sashimi,Đã ngưng bán
+MON0000085,Common Ramen,452590.0,Tempura,Tạm hết
+MON0000086,Much Dessert,413409.13,Sashimi,Tạm hết
+MON0000087,Eye Dessert,481655.45,Sushi,Tạm hết
+MON0000088,Four Ramen,228051.83,Drinks,Đã ngưng bán
+MON0000089,Condition Ramen,53947.01,Tempura,Tạm hết
+MON0000090,Large Sushi,280097.03,Tempura,Có phục vụ
+MON0000091,Herself Sushi,439673.52,Ramen,Tạm hết
+MON0000092,People Drinks,440551.42,Sushi,Đã ngưng bán
+MON0000093,Way Dessert,99899.8,Tempura,Tạm hết
+MON0000094,General Sushi,232968.39,Ramen,Đã ngưng bán
+MON0000095,Sure Tempura,395554.72,Sashimi,Tạm hết
+MON0000096,Develop Sashimi,464176.62,Tempura,Có phục vụ
+MON0000097,Visit Drinks,443720.57,Sushi,Có phục vụ
+MON0000098,Change Dessert,142406.78,Ramen,Có phục vụ
+MON0000099,Clearly Sushi,243765.93,Dessert,Tạm hết
+MON0000100,President Dessert,386033.54,Ramen,Đã ngưng bán
+MON0000101,Everybody Sashimi,428383.93,Ramen,Có phục vụ
+MON0000102,Expert Ramen,330137.99,Ramen,Đã ngưng bán
+MON0000103,Marriage Dessert,204946.65,Ramen,Tạm hết
+MON0000104,Gas Tempura,205277.03,Dessert,Có phục vụ
+MON0000105,For Dessert,142096.16,Sushi,Tạm hết
+MON0000106,Plant Drinks,475370.94,Drinks,Tạm hết
+MON0000107,At Drinks,341020.15,Ramen,Đã ngưng bán
+MON0000108,Boy Drinks,196145.13,Sashimi,Tạm hết
+MON0000109,Skill Drinks,252585.3,Sashimi,Tạm hết
+MON0000110,Girl Sushi,299898.34,Ramen,Có phục vụ
+MON0000111,Thing Sushi,302788.54,Sushi,Tạm hết
+MON0000112,Result Drinks,368347.65,Sashimi,Đã ngưng bán
+MON0000113,Series Sashimi,327067.06,Sushi,Tạm hết
+MON0000114,Democrat Sashimi,482048.53,Drinks,Có phục vụ
+MON0000115,Low Sashimi,236213.27,Tempura,Đã ngưng bán
+MON0000116,Form Drinks,185466.28,Drinks,Có phục vụ
+MON0000117,Of Sushi,181593.3,Sushi,Có phục vụ
+MON0000118,Fact Ramen,372011.82,Drinks,Tạm hết
+MON0000119,Market Tempura,444694.55,Tempura,Đã ngưng bán
+MON0000120,Really Dessert,173155.99,Sashimi,Tạm hết
+MON0000121,Career Drinks,434389.3,Ramen,Tạm hết
+MON0000122,Spend Tempura,479777.06,Sushi,Có phục vụ
+MON0000123,Total Ramen,124721.56,Drinks,Có phục vụ
+MON0000124,Focus Sushi,428454.34,Sashimi,Tạm hết
+MON0000125,Walk Sashimi,483575.07,Dessert,Đã ngưng bán
+MON0000126,Especially Tempura,52818.8,Ramen,Tạm hết
+MON0000127,Building Sushi,383494.41,Tempura,Tạm hết
+MON0000128,Resource Drinks,400578.9,Tempura,Có phục vụ
+MON0000129,Stock Tempura,464132.97,Dessert,Đã ngưng bán
+MON0000130,Have Ramen,63147.04,Sashimi,Tạm hết
+MON0000131,General Ramen,305868.16,Drinks,Đã ngưng bán
+MON0000132,Finally Dessert,82450.48,Drinks,Có phục vụ
+MON0000133,Manage Sushi,185806.53,Tempura,Đã ngưng bán
+MON0000134,Choose Sushi,173098.77,Drinks,Đã ngưng bán
+MON0000135,Food Drinks,269552.25,Drinks,Tạm hết
+MON0000136,Lot Tempura,175813.32,Sashimi,Đã ngưng bán
+MON0000137,New Sushi,71764.62,Dessert,Có phục vụ
+MON0000138,Goal Dessert,308357.32,Ramen,Đã ngưng bán
+MON0000139,Deal Ramen,125409.74,Tempura,Có phục vụ
+MON0000140,Score Drinks,340774.24,Drinks,Có phục vụ
+MON0000141,Rock Dessert,413884.46,Dessert,Có phục vụ
+MON0000142,Moment Ramen,95408.87,Sushi,Có phục vụ
+MON0000143,Represent Ramen,372920.66,Dessert,Tạm hết
+MON0000144,Single Dessert,431102.78,Sashimi,Đã ngưng bán
+MON0000145,Eight Drinks,437663.18,Dessert,Đã ngưng bán
+MON0000146,Hot Drinks,456466.44,Tempura,Đã ngưng bán
+MON0000147,Phone Drinks,61994.41,Tempura,Đã ngưng bán
+MON0000148,Politics Dessert,369880.1,Sashimi,Có phục vụ
+MON0000149,Serious Tempura,158366.53,Drinks,Có phục vụ
+MON0000150,Sure Tempura,293912.81,Dessert,Tạm hết
+MON0000151,Soon Dessert,397309.31,Ramen,Tạm hết
+MON0000152,Serve Tempura,193462.89,Dessert,Tạm hết
+MON0000153,Blood Tempura,134037.22,Sushi,Tạm hết
+MON0000154,Partner Sushi,249109.6,Ramen,Đã ngưng bán
+MON0000155,Manager Sushi,98971.8,Tempura,Đã ngưng bán
+MON0000156,Simple Dessert,472310.69,Dessert,Đã ngưng bán
+MON0000157,Collection Tempura,218772.3,Tempura,Đã ngưng bán
+MON0000158,Main Drinks,475596.82,Tempura,Có phục vụ
+MON0000159,Bar Sashimi,414923.79,Ramen,Đã ngưng bán
+MON0000160,Open Dessert,91685.52,Tempura,Tạm hết
+MON0000161,Commercial Dessert,202211.4,Ramen,Có phục vụ
+MON0000162,Phone Dessert,445316.74,Drinks,Có phục vụ
+MON0000163,Deep Tempura,243564.67,Tempura,Tạm hết
+MON0000164,Animal Drinks,286447.75,Sashimi,Có phục vụ
+MON0000165,Reflect Sushi,270696.65,Ramen,Đã ngưng bán
+MON0000166,What Ramen,274091.87,Sushi,Tạm hết
+MON0000167,Toward Sushi,116949.94,Sashimi,Có phục vụ
+MON0000168,Hundred Sashimi,169398.3,Dessert,Đã ngưng bán
+MON0000169,Society Sushi,274803.54,Dessert,Có phục vụ
+MON0000170,Year Sashimi,405858.05,Dessert,Tạm hết
+MON0000171,Themselves Ramen,365304.61,Sushi,Đã ngưng bán
+MON0000172,Box Dessert,132925.52,Sashimi,Đã ngưng bán
+MON0000173,Reduce Drinks,84177.64,Sushi,Tạm hết
+MON0000174,Choice Ramen,208678.28,Sashimi,Có phục vụ
+MON0000175,Show Dessert,388854.14,Drinks,Đã ngưng bán
+MON0000176,Strong Sashimi,180635.47,Sashimi,Tạm hết
+MON0000177,Conference Dessert,383634.25,Sushi,Tạm hết
+MON0000178,Several Dessert,264617.83,Sashimi,Tạm hết
+MON0000179,Your Ramen,272933.34,Ramen,Đã ngưng bán
+MON0000180,Mission Sushi,101317.75,Drinks,Đã ngưng bán
+MON0000181,Money Sushi,364750.3,Dessert,Có phục vụ
+MON0000182,You Drinks,75666.09,Drinks,Có phục vụ
+MON0000183,Of Dessert,418451.19,Ramen,Tạm hết
+MON0000184,Phone Sashimi,161552.97,Tempura,Đã ngưng bán
+MON0000185,Seven Ramen,111470.88,Ramen,Có phục vụ
+MON0000186,True Dessert,394180.23,Ramen,Đã ngưng bán
+MON0000187,Occur Sashimi,120458.97,Dessert,Có phục vụ
+MON0000188,Why Ramen,404882.61,Sushi,Có phục vụ
+MON0000189,Television Ramen,96104.13,Ramen,Có phục vụ
+MON0000190,Pay Drinks,303420.03,Ramen,Tạm hết
+MON0000191,Morning Tempura,400704.02,Sushi,Có phục vụ
+MON0000192,Music Ramen,468570.81,Tempura,Tạm hết
+MON0000193,Wall Ramen,106029.22,Ramen,Tạm hết
+MON0000194,Method Dessert,183964.02,Sushi,Đã ngưng bán
+MON0000195,Man Dessert,474172.36,Sashimi,Tạm hết
+MON0000196,Way Drinks,136541.63,Sushi,Tạm hết
+MON0000197,Store Drinks,162136.49,Drinks,Có phục vụ
+MON0000198,Author Ramen,447916.25,Dessert,Tạm hết
+MON0000199,Successful Dessert,237552.49,Sushi,Có phục vụ
+MON0000200,Can Dessert,458223.14,Drinks,Đã ngưng bán

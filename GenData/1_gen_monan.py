@@ -1,34 +1,33 @@
-from faker import Faker
 import csv
+from faker import Faker
 import random
 
 # Initialize faker
 fake = Faker()
 
-# Number of records to generate
-num_records = 100
+# File path
+monan_csv_file = "1_MONAN_data.csv"
 
-# Function to generate unique MAMON values
-def generate_mamon(index):
-    return f"MON{index:07d}"
+# Generate data for MONAN
+monan_data = []
+danhmuc_list = ["Sushi", "Sashimi", "Tempura", "Ramen", "Dessert", "Drinks"]
+trangthai_list = ['Available', 'Out of stock', 'Discontinued']  # Valid values
 
-# Generate data
-data = []
-for i in range(1, num_records + 1):
-    mamon = generate_mamon(i)
-    tenmon = " ".join(fake.words(nb=3)).title()  # Simulate a Vietnamese dish name
-    giahientai = round(random.uniform(10000, 500000), 2)  # Price in VND
-    danhmuc = random.choice(["Khai vị", "Món chính", "Tráng miệng", "Đồ uống"])  # Categories
-    trangthai = random.choice(["Có sẵn", "Hết món", "Ngừng phục vụ"])  # Status
-    data.append([mamon, tenmon, giahientai, danhmuc, trangthai])
+for index in range(1, 201):  # Generate 200 dishes
+    mamon = f"MON{index:07d}"  # MAMON is CHAR(10)
+    tenmon = fake.word().capitalize() + " " + random.choice(danhmuc_list)  # Random dish name
+    giahientai = round(random.uniform(50, 500) * 1000, 2)  # Price between 50,000 to 500,000
+    danhmuc = random.choice(danhmuc_list)  # Random category
+    trangthai = random.choice(trangthai_list)  # Random valid serving status
 
-# File path for the CSV
-csv_file_path = "1_MONAN_data.csv"
+    monan_data.append([mamon, tenmon, giahientai, danhmuc, trangthai])
 
 # Write to CSV
-with open(csv_file_path, mode="w", encoding="utf-8", newline="") as file:
+with open(monan_csv_file, mode="w", encoding="utf-8", newline="") as file:
     writer = csv.writer(file)
+    # Write header
     writer.writerow(["MAMON", "TENMON", "GIAHIENTAI", "DANHMUC", "TRANGTHAIPHUCVU"])
-    writer.writerows(data)
+    # Write rows
+    writer.writerows(monan_data)
 
-print(f"Data has been generated into the file: {csv_file_path}")
+print(f"MONAN data has been generated into the file: {monan_csv_file}")
