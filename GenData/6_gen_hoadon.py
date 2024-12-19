@@ -35,21 +35,23 @@ for row in dondatmon_data:
 # Generate data for HOADON
 hoadon_data = []
 
-for index, (mahoadon, thanhtien_list) in enumerate(dondatmon_by_hoadon.items(), 1):
+for index in range(1, 201):  # Generate 200 rows
+    mahoadon = f"HD{index:08d}"  # Format MAHOADON as HD0000001 to HD0000200
     giolap = (datetime.now() - timedelta(hours=index % 24, minutes=index % 60)).strftime("%H:%M:%S")
     ngaylap = fake.date_this_year()
     vat = random.choice([0.05, 0.10])  # Random VAT: 5% or 10%
-    tienkhachdua = sum(thanhtien_list) * (1 + vat) + random.uniform(5000, 20000)  # Ensure payment > total
+    tongtien = random.uniform(100000, 1000000)  # Total amount before VAT
+    tienkhachdua = round(tongtien * (1 + vat) + random.uniform(5000, 20000), 2)  # Ensure payment > total
     trangthai = random.choice(['Unpaid', 'Paid', 'Cancelled'])
     phuongthuc = random.choice(['Bank transfer', 'Cash', 'Credit card'])
-    
+
     # Ensure valid MAKHACHHANG (it must exist in KHACHHANG data)
     makhachhang = random.choice(khachhang_ids)
     
     # Ensure valid MACHINHANH (it must exist in DONDATMON data)
     machinhanh = random.choice(list(machinhanh_set))  # Random MACHINHANH that exists in DONDATMON
     
-    tongtientruockm = round(sum(thanhtien_list) * (1 + vat), 2)
+    tongtientruockm = round(tongtien * (1 + vat), 2)
 
     # Assume discounts: random percent (0–20%) and fixed amount (0–5000)
     discount_percent = random.uniform(0, 0.20)  # 0% to 20%
@@ -60,7 +62,7 @@ for index, (mahoadon, thanhtien_list) in enumerate(dondatmon_by_hoadon.items(), 
     tongtiensaukm = max(tongtiensaukm, 0)
 
     hoadon_data.append([
-        mahoadon, giolap, ngaylap, vat, round(tienkhachdua, 2), trangthai, phuongthuc,
+        mahoadon, giolap, ngaylap, vat, tienkhachdua, trangthai, phuongthuc,
         makhachhang, machinhanh, tongtientruockm, tongtiensaukm
     ])
 
@@ -75,4 +77,4 @@ with open(hoadon_csv_file, mode="w", encoding="utf-8", newline="") as file:
     # Write rows
     writer.writerows(hoadon_data)
 
-print(f"HOADON data has been generated into the file: {hoadon_csv_file}")
+hoadon_csv_file
