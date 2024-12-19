@@ -231,8 +231,8 @@ BEGIN
         HD.TONGTIENSAUKM AS ThanhTien,
         HD.TRANGTHAI AS TrangThaiHoaDon,
         CASE 
-            WHEN DHTT.MADHTRUCTUYEN IS NOT NULL THEN N'Đặt hàng trực tuyến'
-            WHEN DHTC.MADHTAICHO IS NOT NULL THEN N'Đặt hàng tại chỗ'
+            WHEN DHTT.MADHTRUCTUYEN IS NOT NULL THEN N'Online order'
+            WHEN DHTC.MADHTAICHO IS NOT NULL THEN N'In-store order'
         END AS LoaiDonHang,
         -- Chỉ hiển thị thông tin giao hàng trực tuyến nếu là đặt hàng trực tuyến
         CASE 
@@ -327,7 +327,7 @@ BEGIN
         SELECT SUM(THANHTIEN) * (1 + VAT)
         FROM DONDATMON
         JOIN HOADON ON DONDATMON.HOADONLIENQUAN = HOADON.MAHOADON
-        WHERE DONDATMON.HOADONLIENQUAN = @MAHOADON AND DONDATMON.TRANGTHAI = N'Thành công'
+        WHERE DONDATMON.HOADONLIENQUAN = @MAHOADON AND DONDATMON.TRANGTHAI = N'Successful'
     );
 
     DECLARE @LUONGKMTIEN FLOAT;
@@ -359,13 +359,13 @@ BEGIN
     WHERE MAHOADON = @MAHOADON;
 
 	UPDATE DONDATMON
-	SET TRANGTHAI = N'Đã thanh toán'
+	SET TRANGTHAI = N'Paid'
 	WHERE HOADONLIENQUAN = @MAHOADON
 END;
 GO
 
 
--- Thống kê doanh thu của một chi nhánh
+-- Thống kê doanh thu của một chi nhánh trong khoảng thời gian
 CREATE PROCEDURE sp_ThongKeDoanhThu
     @MACHI_NHANH CHAR(10),
     @NGAYBATDAU DATE, 
@@ -391,7 +391,7 @@ BEGIN
         SELECT SUM(DONDATMON.THANHTIEN)
         FROM DONDATMON
         WHERE DONDATMON.CHINHANHDAT = @MACHI_NHANH
-          AND DONDATMON.TRANGTHAI = N'Đã thanh toán'
+          AND DONDATMON.TRANGTHAI = N'Paid'
           AND DONDATMON.NGAYDAT >= @NGAYBATDAU
           AND DONDATMON.NGAYDAT <= @NGAYKETTHUC
     );

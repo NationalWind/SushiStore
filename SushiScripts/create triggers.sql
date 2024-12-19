@@ -160,7 +160,7 @@ BEGIN
 	IF EXISTS	(SELECT 1
 				FROM DONDATMON D
 				INNER JOIN INSERTED I ON D.MADON = I.MADONDATMON
-				WHERE D.TRANGTHAI = N'Chưa xác nhận' OR I.MADONDATMON IS NULL)
+				WHERE D.TRANGTHAI = N'Unconfirmed' OR I.MADONDATMON IS NULL)
 	BEGIN
 		RAISERROR (N'Đơn đặt món phải được xác nhận trước khi chuẩn bị.', 16, 1)
 		ROLLBACK TRANSACTION;
@@ -177,7 +177,7 @@ BEGIN
 	DELETE FROM CHITIETMONAN
 	WHERE MADONDATMON = (SELECT I.MADON
 						FROM INSERTED I
-						WHERE I.TRANGTHAI = N'Chưa xác nhận')
+						WHERE I.TRANGTHAI = N'Unconfirmed')
 END
 GO
 
@@ -385,8 +385,8 @@ BEGIN
 		FROM INSERTED I
 		JOIN DONDATMON D ON D.MADON = I.MADHTRUCTUYEN
 		JOIN HOADON H ON H.MAHOADON = D.HOADONLIENQUAN
-		WHERE I.TRANGTHAIGIAO = N'Đang giao hàng'
-		AND H.PHUONGTHUC <> N'Thanh toán trực tuyến'
+		WHERE I.TRANGTHAIGIAO = N'Processing'
+		AND H.PHUONGTHUC <> N'Bank transfer'
 	)
 	BEGIN --Ngăn chặn cập nhật giao hàng
 		RAISERROR(N'Khách hàng phải thanh toán trực tuyến trước khi nhận hàng.', 16, 1)
@@ -424,7 +424,7 @@ BEGIN
 		FROM INSERTED I
 		JOIN CHITIETMONAN C ON C.MADONDATMON = I.MADON
 		JOIN MONAN M ON C.MAMON = M.MAMON
-		WHERE M.TRANGTHAIPHUCVU LIKE N'Có phục vụ'
+		WHERE M.TRANGTHAIPHUCVU LIKE N'Available'
 	)
 	BEGIN
 		RAISERROR(N'Món ăn không có sẵn!', 16, 1)
@@ -468,7 +468,7 @@ BEGIN
 		SELECT 1
 		FROM DONDATMON
 		WHERE MADON = @ORDERID
-		AND TRANGTHAI = N'Đã xác nhận'
+		AND TRANGTHAI = N'Confirmed'
 	)
 	BEGIN
 		RAISERROR(N'Đơn hàng chưa được xác nhận. Không thể bắt đầu chế biến!', 16, 1)
