@@ -12,7 +12,7 @@ datcho_csv_file = "9_DATCHO_data.csv"
 # Generate DATCHO data
 datcho_data = []
 
-for index in range(1, 201):  # MADATCHO goes from DC00000001 to DC00000200
+for index in range(1, 351):  # MADATCHO goes from DC00000001 to DC00000200
     madatcho = f"DC{index:08d}"
     ngayden = fake.date_this_year()  # Random date this year
     gioden = (datetime.now() - timedelta(hours=index % 24, minutes=index % 60)).strftime("%H:%M:%S")

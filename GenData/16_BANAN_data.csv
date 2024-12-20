@@ -1,0 +1,301 @@
+SOBAN,MACHINHANH,VITRI,TRANGTHAI,SONGUOITOIDA
+001,CN00000001,Table 1 - Branch 1 - left,Available,8
+001,CN00000002,Table 1 - Branch 2 - right,Available,8
+001,CN00000003,Table 1 - Branch 3 - middle,Available,12
+001,CN00000004,Table 1 - Branch 4 - left,Unavailable,8
+001,CN00000005,Table 1 - Branch 5 - right,In use,8
+001,CN00000006,Table 1 - Branch 6 - left,Reserved,4
+001,CN00000007,Table 1 - Branch 7 - right,Available,8
+001,CN00000008,Table 1 - Branch 8 - right,Reserved,4
+001,CN00000009,Table 1 - Branch 9 - right,Unavailable,4
+001,CN00000010,Table 1 - Branch 10 - left,Reserved,8
+002,CN00000001,Table 2 - Branch 1 - middle,Unavailable,12
+002,CN00000002,Table 2 - Branch 2 - middle,Unavailable,4
+002,CN00000003,Table 2 - Branch 3 - middle,In use,12
+002,CN00000004,Table 2 - Branch 4 - right,In use,12
+002,CN00000005,Table 2 - Branch 5 - left,Reserved,8
+002,CN00000006,Table 2 - Branch 6 - right,Available,8
+002,CN00000007,Table 2 - Branch 7 - right,In use,12
+002,CN00000008,Table 2 - Branch 8 - middle,Unavailable,8
+002,CN00000009,Table 2 - Branch 9 - middle,In use,8
+002,CN00000010,Table 2 - Branch 10 - left,Available,8
+003,CN00000001,Table 3 - Branch 1 - right,In use,12
+003,CN00000002,Table 3 - Branch 2 - left,Reserved,12
+003,CN00000003,Table 3 - Branch 3 - right,In use,4
+003,CN00000004,Table 3 - Branch 4 - middle,Unavailable,12
+003,CN00000005,Table 3 - Branch 5 - right,Unavailable,8
+003,CN00000006,Table 3 - Branch 6 - right,Unavailable,12
+003,CN00000007,Table 3 - Branch 7 - right,In use,12
+003,CN00000008,Table 3 - Branch 8 - right,Reserved,8
+003,CN00000009,Table 3 - Branch 9 - right,Available,8
+003,CN00000010,Table 3 - Branch 10 - right,Reserved,8
+004,CN00000001,Table 4 - Branch 1 - middle,Reserved,12
+004,CN00000002,Table 4 - Branch 2 - left,Unavailable,12
+004,CN00000003,Table 4 - Branch 3 - right,Available,4
+004,CN00000004,Table 4 - Branch 4 - middle,Reserved,12
+004,CN00000005,Table 4 - Branch 5 - left,In use,8
+004,CN00000006,Table 4 - Branch 6 - left,In use,4
+004,CN00000007,Table 4 - Branch 7 - left,Reserved,4
+004,CN00000008,Table 4 - Branch 8 - middle,Available,12
+004,CN00000009,Table 4 - Branch 9 - middle,Reserved,8
+004,CN00000010,Table 4 - Branch 10 - left,Unavailable,4
+005,CN00000001,Table 5 - Branch 1 - left,Unavailable,4
+005,CN00000002,Table 5 - Branch 2 - middle,Reserved,8
+005,CN00000003,Table 5 - Branch 3 - right,Reserved,4
+005,CN00000004,Table 5 - Branch 4 - left,In use,8
+005,CN00000005,Table 5 - Branch 5 - left,Available,12
+005,CN00000006,Table 5 - Branch 6 - left,Available,4
+005,CN00000007,Table 5 - Branch 7 - left,Unavailable,8
+005,CN00000008,Table 5 - Branch 8 - left,Reserved,8
+005,CN00000009,Table 5 - Branch 9 - middle,In use,8
+005,CN00000010,Table 5 - Branch 10 - middle,In use,4
+006,CN00000001,Table 6 - Branch 1 - left,Unavailable,8
+006,CN00000002,Table 6 - Branch 2 - right,Unavailable,12
+006,CN00000003,Table 6 - Branch 3 - left,Available,12
+006,CN00000004,Table 6 - Branch 4 - left,Unavailable,8
+006,CN00000005,Table 6 - Branch 5 - left,Reserved,4
+006,CN00000006,Table 6 - Branch 6 - middle,In use,8
+006,CN00000007,Table 6 - Branch 7 - left,Unavailable,4
+006,CN00000008,Table 6 - Branch 8 - left,In use,12
+006,CN00000009,Table 6 - Branch 9 - middle,Unavailable,8
+006,CN00000010,Table 6 - Branch 10 - left,Unavailable,8
+007,CN00000001,Table 7 - Branch 1 - left,In use,8
+007,CN00000002,Table 7 - Branch 2 - right,Reserved,12
+007,CN00000003,Table 7 - Branch 3 - left,Available,8
+007,CN00000004,Table 7 - Branch 4 - left,In use,12
+007,CN00000005,Table 7 - Branch 5 - middle,Available,4
+007,CN00000006,Table 7 - Branch 6 - right,Available,8
+007,CN00000007,Table 7 - Branch 7 - left,Reserved,8
+007,CN00000008,Table 7 - Branch 8 - left,Unavailable,8
+007,CN00000009,Table 7 - Branch 9 - left,Available,12
+007,CN00000010,Table 7 - Branch 10 - left,Available,4
+008,CN00000001,Table 8 - Branch 1 - left,Reserved,12
+008,CN00000002,Table 8 - Branch 2 - right,Available,12
+008,CN00000003,Table 8 - Branch 3 - middle,Available,12
+008,CN00000004,Table 8 - Branch 4 - right,Unavailable,4
+008,CN00000005,Table 8 - Branch 5 - left,Unavailable,12
+008,CN00000006,Table 8 - Branch 6 - right,Reserved,8
+008,CN00000007,Table 8 - Branch 7 - middle,In use,4
+008,CN00000008,Table 8 - Branch 8 - middle,Unavailable,8
+008,CN00000009,Table 8 - Branch 9 - right,Unavailable,12
+008,CN00000010,Table 8 - Branch 10 - left,Available,8
+009,CN00000001,Table 9 - Branch 1 - right,Available,4
+009,CN00000002,Table 9 - Branch 2 - middle,Reserved,4
+009,CN00000003,Table 9 - Branch 3 - right,Unavailable,4
+009,CN00000004,Table 9 - Branch 4 - middle,Unavailable,4
+009,CN00000005,Table 9 - Branch 5 - left,Available,8
+009,CN00000006,Table 9 - Branch 6 - middle,In use,12
+009,CN00000007,Table 9 - Branch 7 - left,Unavailable,4
+009,CN00000008,Table 9 - Branch 8 - middle,Reserved,8
+009,CN00000009,Table 9 - Branch 9 - left,Unavailable,8
+009,CN00000010,Table 9 - Branch 10 - left,Available,8
+010,CN00000001,Table 10 - Branch 1 - left,In use,8
+010,CN00000002,Table 10 - Branch 2 - middle,Unavailable,8
+010,CN00000003,Table 10 - Branch 3 - left,Unavailable,12
+010,CN00000004,Table 10 - Branch 4 - right,Available,8
+010,CN00000005,Table 10 - Branch 5 - left,Unavailable,12
+010,CN00000006,Table 10 - Branch 6 - left,Reserved,8
+010,CN00000007,Table 10 - Branch 7 - middle,Available,4
+010,CN00000008,Table 10 - Branch 8 - middle,Reserved,8
+010,CN00000009,Table 10 - Branch 9 - left,Available,4
+010,CN00000010,Table 10 - Branch 10 - middle,Reserved,8
+011,CN00000001,Table 11 - Branch 1 - right,Unavailable,4
+011,CN00000002,Table 11 - Branch 2 - left,Reserved,8
+011,CN00000003,Table 11 - Branch 3 - right,Unavailable,8
+011,CN00000004,Table 11 - Branch 4 - left,In use,4
+011,CN00000005,Table 11 - Branch 5 - right,In use,12
+011,CN00000006,Table 11 - Branch 6 - left,Available,8
+011,CN00000007,Table 11 - Branch 7 - right,Unavailable,8
+011,CN00000008,Table 11 - Branch 8 - middle,In use,12
+011,CN00000009,Table 11 - Branch 9 - right,Unavailable,4
+011,CN00000010,Table 11 - Branch 10 - right,Reserved,12
+012,CN00000001,Table 12 - Branch 1 - left,Reserved,12
+012,CN00000002,Table 12 - Branch 2 - left,In use,8
+012,CN00000003,Table 12 - Branch 3 - left,Available,8
+012,CN00000004,Table 12 - Branch 4 - middle,Available,8
+012,CN00000005,Table 12 - Branch 5 - left,Unavailable,4
+012,CN00000006,Table 12 - Branch 6 - left,Available,8
+012,CN00000007,Table 12 - Branch 7 - right,Unavailable,4
+012,CN00000008,Table 12 - Branch 8 - right,Unavailable,12
+012,CN00000009,Table 12 - Branch 9 - right,Available,12
+012,CN00000010,Table 12 - Branch 10 - middle,In use,4
+013,CN00000001,Table 13 - Branch 1 - right,In use,4
+013,CN00000002,Table 13 - Branch 2 - left,Available,8
+013,CN00000003,Table 13 - Branch 3 - left,In use,12
+013,CN00000004,Table 13 - Branch 4 - right,Unavailable,4
+013,CN00000005,Table 13 - Branch 5 - left,Unavailable,4
+013,CN00000006,Table 13 - Branch 6 - left,Reserved,8
+013,CN00000007,Table 13 - Branch 7 - left,In use,8
+013,CN00000008,Table 13 - Branch 8 - left,Available,4
+013,CN00000009,Table 13 - Branch 9 - middle,Reserved,8
+013,CN00000010,Table 13 - Branch 10 - left,In use,12
+014,CN00000001,Table 14 - Branch 1 - right,Unavailable,8
+014,CN00000002,Table 14 - Branch 2 - right,Available,8
+014,CN00000003,Table 14 - Branch 3 - left,Reserved,12
+014,CN00000004,Table 14 - Branch 4 - right,Reserved,12
+014,CN00000005,Table 14 - Branch 5 - right,In use,4
+014,CN00000006,Table 14 - Branch 6 - left,Reserved,4
+014,CN00000007,Table 14 - Branch 7 - left,Unavailable,8
+014,CN00000008,Table 14 - Branch 8 - right,In use,12
+014,CN00000009,Table 14 - Branch 9 - middle,Reserved,8
+014,CN00000010,Table 14 - Branch 10 - left,Available,12
+015,CN00000001,Table 15 - Branch 1 - middle,Available,8
+015,CN00000002,Table 15 - Branch 2 - right,In use,12
+015,CN00000003,Table 15 - Branch 3 - right,Available,12
+015,CN00000004,Table 15 - Branch 4 - middle,In use,12
+015,CN00000005,Table 15 - Branch 5 - left,In use,8
+015,CN00000006,Table 15 - Branch 6 - middle,Reserved,12
+015,CN00000007,Table 15 - Branch 7 - middle,Reserved,12
+015,CN00000008,Table 15 - Branch 8 - right,Unavailable,12
+015,CN00000009,Table 15 - Branch 9 - right,Reserved,12
+015,CN00000010,Table 15 - Branch 10 - right,Unavailable,8
+016,CN00000001,Table 16 - Branch 1 - left,Available,12
+016,CN00000002,Table 16 - Branch 2 - right,Unavailable,4
+016,CN00000003,Table 16 - Branch 3 - middle,Available,4
+016,CN00000004,Table 16 - Branch 4 - middle,In use,4
+016,CN00000005,Table 16 - Branch 5 - middle,Available,8
+016,CN00000006,Table 16 - Branch 6 - left,Unavailable,4
+016,CN00000007,Table 16 - Branch 7 - right,In use,4
+016,CN00000008,Table 16 - Branch 8 - right,Reserved,12
+016,CN00000009,Table 16 - Branch 9 - left,Available,8
+016,CN00000010,Table 16 - Branch 10 - middle,In use,8
+017,CN00000001,Table 17 - Branch 1 - middle,Unavailable,8
+017,CN00000002,Table 17 - Branch 2 - left,Reserved,8
+017,CN00000003,Table 17 - Branch 3 - right,Reserved,8
+017,CN00000004,Table 17 - Branch 4 - right,Reserved,12
+017,CN00000005,Table 17 - Branch 5 - left,Unavailable,4
+017,CN00000006,Table 17 - Branch 6 - left,Unavailable,4
+017,CN00000007,Table 17 - Branch 7 - middle,Reserved,12
+017,CN00000008,Table 17 - Branch 8 - right,In use,4
+017,CN00000009,Table 17 - Branch 9 - middle,Unavailable,8
+017,CN00000010,Table 17 - Branch 10 - middle,In use,4
+018,CN00000001,Table 18 - Branch 1 - middle,Reserved,12
+018,CN00000002,Table 18 - Branch 2 - middle,Unavailable,4
+018,CN00000003,Table 18 - Branch 3 - right,Available,4
+018,CN00000004,Table 18 - Branch 4 - middle,Available,12
+018,CN00000005,Table 18 - Branch 5 - right,Reserved,4
+018,CN00000006,Table 18 - Branch 6 - middle,Available,12
+018,CN00000007,Table 18 - Branch 7 - middle,Reserved,4
+018,CN00000008,Table 18 - Branch 8 - left,Unavailable,8
+018,CN00000009,Table 18 - Branch 9 - right,In use,12
+018,CN00000010,Table 18 - Branch 10 - left,In use,12
+019,CN00000001,Table 19 - Branch 1 - left,Reserved,4
+019,CN00000002,Table 19 - Branch 2 - middle,In use,4
+019,CN00000003,Table 19 - Branch 3 - left,Reserved,12
+019,CN00000004,Table 19 - Branch 4 - left,Available,4
+019,CN00000005,Table 19 - Branch 5 - left,Available,8
+019,CN00000006,Table 19 - Branch 6 - left,In use,4
+019,CN00000007,Table 19 - Branch 7 - middle,Unavailable,12
+019,CN00000008,Table 19 - Branch 8 - right,Available,12
+019,CN00000009,Table 19 - Branch 9 - right,Reserved,4
+019,CN00000010,Table 19 - Branch 10 - right,Reserved,4
+020,CN00000001,Table 20 - Branch 1 - middle,In use,12
+020,CN00000002,Table 20 - Branch 2 - left,Unavailable,12
+020,CN00000003,Table 20 - Branch 3 - middle,Unavailable,12
+020,CN00000004,Table 20 - Branch 4 - right,Reserved,12
+020,CN00000005,Table 20 - Branch 5 - right,Reserved,12
+020,CN00000006,Table 20 - Branch 6 - middle,Reserved,12
+020,CN00000007,Table 20 - Branch 7 - middle,Reserved,4
+020,CN00000008,Table 20 - Branch 8 - right,Available,4
+020,CN00000009,Table 20 - Branch 9 - middle,Unavailable,8
+020,CN00000010,Table 20 - Branch 10 - left,Reserved,8
+021,CN00000001,Table 21 - Branch 1 - right,Unavailable,4
+021,CN00000002,Table 21 - Branch 2 - middle,Unavailable,8
+021,CN00000003,Table 21 - Branch 3 - left,Reserved,12
+021,CN00000004,Table 21 - Branch 4 - middle,Available,12
+021,CN00000005,Table 21 - Branch 5 - left,In use,12
+021,CN00000006,Table 21 - Branch 6 - left,Available,4
+021,CN00000007,Table 21 - Branch 7 - right,Reserved,4
+021,CN00000008,Table 21 - Branch 8 - middle,Available,4
+021,CN00000009,Table 21 - Branch 9 - middle,Reserved,12
+021,CN00000010,Table 21 - Branch 10 - right,In use,4
+022,CN00000001,Table 22 - Branch 1 - left,Available,4
+022,CN00000002,Table 22 - Branch 2 - left,Reserved,4
+022,CN00000003,Table 22 - Branch 3 - middle,Available,4
+022,CN00000004,Table 22 - Branch 4 - right,Available,4
+022,CN00000005,Table 22 - Branch 5 - left,Available,8
+022,CN00000006,Table 22 - Branch 6 - right,Reserved,8
+022,CN00000007,Table 22 - Branch 7 - middle,Available,12
+022,CN00000008,Table 22 - Branch 8 - right,In use,12
+022,CN00000009,Table 22 - Branch 9 - right,Available,12
+022,CN00000010,Table 22 - Branch 10 - right,Available,8
+023,CN00000001,Table 23 - Branch 1 - left,Reserved,8
+023,CN00000002,Table 23 - Branch 2 - left,Reserved,12
+023,CN00000003,Table 23 - Branch 3 - middle,Unavailable,4
+023,CN00000004,Table 23 - Branch 4 - left,Reserved,4
+023,CN00000005,Table 23 - Branch 5 - middle,Available,4
+023,CN00000006,Table 23 - Branch 6 - left,Unavailable,8
+023,CN00000007,Table 23 - Branch 7 - middle,Unavailable,8
+023,CN00000008,Table 23 - Branch 8 - left,In use,12
+023,CN00000009,Table 23 - Branch 9 - middle,Available,4
+023,CN00000010,Table 23 - Branch 10 - middle,Available,4
+024,CN00000001,Table 24 - Branch 1 - left,Reserved,12
+024,CN00000002,Table 24 - Branch 2 - left,Reserved,12
+024,CN00000003,Table 24 - Branch 3 - right,Reserved,8
+024,CN00000004,Table 24 - Branch 4 - right,Unavailable,8
+024,CN00000005,Table 24 - Branch 5 - right,Unavailable,12
+024,CN00000006,Table 24 - Branch 6 - middle,In use,12
+024,CN00000007,Table 24 - Branch 7 - right,Reserved,8
+024,CN00000008,Table 24 - Branch 8 - middle,Reserved,8
+024,CN00000009,Table 24 - Branch 9 - left,Reserved,12
+024,CN00000010,Table 24 - Branch 10 - left,Reserved,12
+025,CN00000001,Table 25 - Branch 1 - middle,Available,8
+025,CN00000002,Table 25 - Branch 2 - middle,In use,12
+025,CN00000003,Table 25 - Branch 3 - middle,Available,8
+025,CN00000004,Table 25 - Branch 4 - middle,Available,12
+025,CN00000005,Table 25 - Branch 5 - left,Unavailable,4
+025,CN00000006,Table 25 - Branch 6 - right,Available,12
+025,CN00000007,Table 25 - Branch 7 - middle,Available,12
+025,CN00000008,Table 25 - Branch 8 - left,Available,12
+025,CN00000009,Table 25 - Branch 9 - middle,Unavailable,12
+025,CN00000010,Table 25 - Branch 10 - middle,In use,12
+026,CN00000001,Table 26 - Branch 1 - left,Reserved,12
+026,CN00000002,Table 26 - Branch 2 - middle,In use,12
+026,CN00000003,Table 26 - Branch 3 - left,Available,12
+026,CN00000004,Table 26 - Branch 4 - right,Unavailable,12
+026,CN00000005,Table 26 - Branch 5 - middle,Reserved,8
+026,CN00000006,Table 26 - Branch 6 - right,Available,4
+026,CN00000007,Table 26 - Branch 7 - left,Reserved,8
+026,CN00000008,Table 26 - Branch 8 - middle,Reserved,4
+026,CN00000009,Table 26 - Branch 9 - middle,Reserved,12
+026,CN00000010,Table 26 - Branch 10 - middle,Unavailable,8
+027,CN00000001,Table 27 - Branch 1 - right,In use,12
+027,CN00000002,Table 27 - Branch 2 - left,Reserved,12
+027,CN00000003,Table 27 - Branch 3 - middle,Reserved,12
+027,CN00000004,Table 27 - Branch 4 - left,Unavailable,12
+027,CN00000005,Table 27 - Branch 5 - middle,Available,4
+027,CN00000006,Table 27 - Branch 6 - right,Available,12
+027,CN00000007,Table 27 - Branch 7 - right,In use,12
+027,CN00000008,Table 27 - Branch 8 - left,Unavailable,12
+027,CN00000009,Table 27 - Branch 9 - left,Available,8
+027,CN00000010,Table 27 - Branch 10 - left,Available,8
+028,CN00000001,Table 28 - Branch 1 - left,Available,8
+028,CN00000002,Table 28 - Branch 2 - right,In use,12
+028,CN00000003,Table 28 - Branch 3 - left,Available,12
+028,CN00000004,Table 28 - Branch 4 - middle,Available,12
+028,CN00000005,Table 28 - Branch 5 - middle,In use,8
+028,CN00000006,Table 28 - Branch 6 - right,Unavailable,8
+028,CN00000007,Table 28 - Branch 7 - right,Available,12
+028,CN00000008,Table 28 - Branch 8 - left,Unavailable,8
+028,CN00000009,Table 28 - Branch 9 - right,Reserved,12
+028,CN00000010,Table 28 - Branch 10 - middle,Unavailable,8
+029,CN00000001,Table 29 - Branch 1 - right,Available,8
+029,CN00000002,Table 29 - Branch 2 - middle,Available,12
+029,CN00000003,Table 29 - Branch 3 - right,Reserved,12
+029,CN00000004,Table 29 - Branch 4 - middle,Unavailable,8
+029,CN00000005,Table 29 - Branch 5 - left,Unavailable,8
+029,CN00000006,Table 29 - Branch 6 - right,Unavailable,8
+029,CN00000007,Table 29 - Branch 7 - left,Available,8
+029,CN00000008,Table 29 - Branch 8 - right,Unavailable,12
+029,CN00000009,Table 29 - Branch 9 - middle,In use,12
+029,CN00000010,Table 29 - Branch 10 - left,Unavailable,8
+030,CN00000001,Table 30 - Branch 1 - right,Available,12
+030,CN00000002,Table 30 - Branch 2 - right,Unavailable,8
+030,CN00000003,Table 30 - Branch 3 - right,Reserved,12
+030,CN00000004,Table 30 - Branch 4 - middle,Reserved,4
+030,CN00000005,Table 30 - Branch 5 - middle,Unavailable,12
+030,CN00000006,Table 30 - Branch 6 - left,Reserved,12
+030,CN00000007,Table 30 - Branch 7 - middle,In use,8
+030,CN00000008,Table 30 - Branch 8 - left,Reserved,8
+030,CN00000009,Table 30 - Branch 9 - middle,Available,12
+030,CN00000010,Table 30 - Branch 10 - left,Reserved,4

@@ -12,7 +12,7 @@ chinhanh_csv_file = "7_CHINHANH_data.csv"
 chinhanh_data = []
 
 # Generate MACHINHANH values from CN00000001 to CN00000200
-for index in range(1, 201):
+for index in range(1, 11):
     machinhanh = f"CN{index:08d}"  # MACHINHANH in the format CN00000001 to CN00000200
     
     # Generate branch name and ensure it doesn't contain commas

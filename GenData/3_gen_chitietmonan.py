@@ -13,31 +13,32 @@ chitiet_csv_file = "3_CHITIETMONAN_data.csv"
 # Load MONAN data
 with open(monan_csv_file, mode="r", encoding="utf-8") as file:
     monan_data = [row for row in csv.reader(file)][1:]  # Skip the header row
+    monan_ids = [row[0] for row in monan_data]  # Extract MAMON values
 
 # Load COMBOMONAN data
 with open(combo_csv_file, mode="r", encoding="utf-8") as file:
     combo_data = [row for row in csv.reader(file)][1:]  # Skip the header row
-
-# Extract valid prices for MONAN and COMBOMONAN
-monan_prices = {row[0]: float(row[2]) for row in monan_data}  # MAMON -> GIAHIENTAI
-combo_prices = {row[0]: float(row[3]) for row in combo_data}  # MACOMBO -> DONGIACOMBO
+    combo_ids = [row[0] for row in combo_data]  # Extract MACOMBO values
 
 # Generate data for CHITIETMONAN
-num_chitiet = 200  # Number of records to generate
+num_chitiet = 6000  # Number of records to generate
 chitiet_data = []
 
 for i in range(1, num_chitiet + 1):
     mactmon = f"CTMON{i:05d}"  # Unique MACTMON
-    mamon = random.choice(list(monan_prices.keys()))  # Random MAMON from MONAN table
-    macombo = random.choice(list(combo_prices.keys()))  # Random MACOMBO from COMBOMONAN table
-    soluong = random.randint(1, 10)  # Random quantity
-    ghichu = fake.sentence()  # Random note
-    # Calculate DONGIATONG using SOLUONG and price from MONAN or COMBOMONAN
-    if random.choice([True, False]):  # Randomly choose between MONAN and COMBOMONAN
-        dongiatong = round(soluong * monan_prices[mamon], 2)
+    
+    # Randomly decide whether MAMON or MACOMBO will be NULL
+    if random.choice([True, False]):
+        mamon = random.choice(monan_ids)  # Random MAMON
+        macombo = None  # Null MACOMBO
     else:
-        dongiatong = round(soluong * combo_prices[macombo], 2)
-    madondatmon = f"DONDAT{i:04d}"  # Unique MADONDATMON
+        mamon = None  # Null MAMON
+        macombo = random.choice(combo_ids)  # Random MACOMBO
+    
+    soluong = random.randint(1, 10)  # Random quantity
+    ghichu = fake.sentence().replace(",", "").replace('"', "").strip()  # Cleaned note
+    dongiatong = 0  # Placeholder for total price
+    madondatmon = f"DONDAT{random.randint(1, 3000):04d}"  # Random MADONDATMON in range 1–100
     chitiet_data.append([mactmon, mamon, macombo, soluong, ghichu, dongiatong, madondatmon])
 
 # Write CHITIETMONAN data to CSV
@@ -49,5 +50,3 @@ with open(chitiet_csv_file, mode="w", encoding="utf-8", newline="") as file:
     writer.writerows(chitiet_data)
 
 print(f"CHITIETMONAN data has been generated into the file: {chitiet_csv_file}")
-
-
