@@ -1,4 +1,5 @@
-﻿ALTER TABLE MENU
+﻿-- Menu có khoá ngoại đến mã chi nhánh, mã món ăn, và mã combo liên quan
+ALTER TABLE MENU
 ADD
 	CONSTRAINT FK_MENU_CHINHANH
 	FOREIGN KEY (MACHINHANH)
@@ -190,7 +191,7 @@ ADD
 	REFERENCES DONDATMON(MADON)
 	ON DELETE NO ACTION
 
--- Chi tiết món ăn có khoá ngoại đến món ăn, combo món ăn, và đơn đặt món liên quan
+-- Chi tiết món ăn có khoá ngoại đến menu, và đơn đặt món liên quan
 ALTER TABLE CHITIETMONAN
 ADD
 	CONSTRAINT FK_CHITIETMONAN_MAMENU

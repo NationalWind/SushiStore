@@ -1,8 +1,9 @@
 ﻿CREATE DATABASE SushiDB
 /*
-USE master;
+USE MASTER;
+GO;
 ALTER DATABASE SushiDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-DROP DATABASE SushiDB ;
+DROP DATABASE SushiDB;
 */
 
 GO
@@ -358,6 +359,10 @@ CREATE TABLE KHUYENMAITHETHANHVIEN
 	PRIMARY KEY (MAKHUYENMAI)
 )
 
+-- Menu định danh bởi mã menu
+-- Menu chứa thông tin của một món ăn hoặc một combo
+-- Menu khẳng định những thông tin món hoặc combo ở những chi nhánh khác nhau
+-- Menu có thể chứa cùng một món ăn hoặc combo nhưng khác giá và trạng thái ở các chi nhánh 
 CREATE TABLE MENU 
 (
 	MAMENU CHAR(10),
