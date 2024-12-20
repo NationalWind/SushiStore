@@ -209,12 +209,12 @@ BEGIN
     ORDER BY
         NGAY_DG DESC, DIEMCHATLUONG_TB DESC; -- Sắp xếp theo ngày đánh giá và điểm chất lượng món ăn
 
-    PRINT 'Thống kê chất lượng món ăn đã được thực hiện thành công';
+    PRINT N'Thống kê chất lượng món ăn đã được thực hiện thành công';
 END;
 GO
 
-EXEC THONGKE_CHATLUONG_MONAN @NGAYBATDAU = '2024-01-01';
-GO
+--EXEC THONGKE_CHATLUONG_MONAN @NGAYBATDAU = '2024-01-01';
+--GO
 
 
 -- Thống kê danh sách các đơn hàng và hóa đơn theo ngày đặt cụ thể
@@ -269,8 +269,8 @@ BEGIN
 END
 GO
 
-EXEC SP_DS_DONDATMON_HOADON_THEONGAY @ngaydat = '2024-12-17'
-GO
+--EXEC SP_DS_DONDATMON_HOADON_THEONGAY @ngaydat = '2024-12-17'
+--GO
 
 -- Danh sách theo dõi xu hướng của các khách hàng khi lựa chọn loại đặt hàng tại một chi nhánh trong một khoảng thời gian
 CREATE PROCEDURE SP_THONGKE_XUHUONG_KHACHHANG
@@ -305,8 +305,8 @@ BEGIN
 END
 
 -- CREATE PROCEDURE 
-EXEC SP_THONGKE_XUHUONG_KHACHHANG @ngayBatDau = '2024-12-12', @ngayKetThuc = '2025-1-12', @maChiNhanh = 'CN0001'
-GO
+--EXEC SP_THONGKE_XUHUONG_KHACHHANG @ngayBatDau = '2024-12-12', @ngayKetThuc = '2025-1-12', @maChiNhanh = 'CN0001'
+--GO
 
 
 -- Tính toán tổng tiền trước và sau khuyến mãi, sau đó cập nhật theo mã hóa đơn.
@@ -440,8 +440,8 @@ BEGIN
 END;
 GO
 
-EXEC THONGKE_TOP_MONAN '2000-01-01', '2024-12-31', 3;
-GO
+--EXEC THONGKE_TOP_MONAN '2000-01-01', '2024-12-31', 3;
+--GO
 
 
 -- Thống kê những khách hàng mang lại doanh thu cao nhất trong khoảng thời gian nhất định
@@ -476,5 +476,5 @@ BEGIN
 END;
 GO
 
-EXEC THONGKE_TOP_KHACHHANG '2000-01-01', '2024-12-31', 5;
-GO
+--EXEC THONGKE_TOP_KHACHHANG '2000-01-01', '2024-12-31', 5;
+--GO
