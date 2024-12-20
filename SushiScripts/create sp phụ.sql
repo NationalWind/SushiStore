@@ -18,7 +18,7 @@ END;
 GO
 
 EXEC sp_TaoMonAn 'MON9000001', N'Salmon Nigiri', 'Nigiri';
-EXEC sp_TaoMonAn 'MON9000002', N'Salmon Nigiri', 'Nigiri';
+EXEC sp_TaoMonAn 'MON9000002', N'Tuna Nigiri', 'Nigiri';
 GO
 
 
@@ -47,6 +47,7 @@ GO
 EXEC sp_TaoChiTietMonAn_Mon 'CTMON90001', 'MENU000001', '2', N'Nothing', NULL;
 GO
 
+
 -- Tạo bảng tạm chứa danh sách món cần thêm vào combo
 -- Thay đổi khi cần thêm combo mới
 CREATE TYPE DanhSachMonAn AS TABLE (
@@ -61,7 +62,6 @@ CREATE PROCEDURE sp_TaoComboMonAn
     @MaCombo NVARCHAR(50),
     @TenCombo NVARCHAR(100),
     @MoTaCombo NVARCHAR(MAX),
-    @PhanTramGiamGia FLOAT,
     @DanhSachMon DanhSachMonAn READONLY  -- Bảng tạm chứa danh sách món
 AS
 BEGIN
@@ -92,5 +92,7 @@ EXEC sp_TaoComboMonAn
     @MaCombo = 'COMBO00001', 
     @TenCombo = N'Combo nigiri',
     @MoTaCombo = N'Combo includes Nigiri and Salmon.',
-    @PhanTramGiamGia = 0.1,
     @DanhSachMon = @DanhSachMon;
+
+
+-- Tạo menu cho 

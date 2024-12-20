@@ -367,9 +367,10 @@ CREATE TABLE MENU
 (
 	MAMENU CHAR(10),
 	MACHINHANH CHAR(10),
-	MAMON CHAR(10),
-	MACOMBO CHAR(10),
-	GIAHIENTAI FLOAT,
+	MAMON CHAR(10),			-- Mã món có giá trị thì mã menu phải null
+	MACOMBO CHAR(10),		-- Mã menu có giá trị thì mã món phải null
+	GIAHIENTAI FLOAT,		-- Giá hiện tại của món ăn sẽ tương đối giống nhau tuỳ vào chi nhánh
+							-- Giá hiện tại của combo sẽ bằng tổng các món ăn trừ đi % giảm giá 
 	TRANGTHAIPHUCVU NVARCHAR(20) NOT NULL CHECK (TRANGTHAIPHUCVU IN (N'Available', N'Out of stock', N'Discontinued')),
 
 	CONSTRAINT PK_MENU
