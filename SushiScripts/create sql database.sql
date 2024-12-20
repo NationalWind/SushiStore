@@ -346,8 +346,6 @@ CREATE TABLE KHUYENMAIKHACHHANG
 	PRIMARY KEY (MAKHUYENMAI)
 )
 
-
-
 -- Khuyến mãi thẻ thành viên định danh bởi mã khuyến mãi
 -- Khuyến mãi thẻ thành viên là con của khuyến mãi
 -- Khuyến mãi thẻ thành viên tự động áp dụng cho các khách hàng thuộc mã thẻ loại SILVER, GOLD theo %
@@ -374,9 +372,10 @@ CREATE TABLE MENU
 	PRIMARY KEY(MAMENU)
 )
 
-insert into THETHANHVIEN(MATHE, LOAITHE)
-values ('M', 'Membership')
-insert into THETHANHVIEN(MATHE, LOAITHE)
-values ('S', N'Silver')
-insert into THETHANHVIEN(MATHE, LOAITHE)
-values ('G', N'Gold')
+-- Insert dữ liệu loại thẻ (Membership, Silver, Gold) cho THETHANHVIEN
+INSERT INTO THETHANHVIEN(MATHE, LOAITHE)
+VALUES ('M', 'Membership')
+INSERT INTO THETHANHVIEN(MATHE, LOAITHE)
+VALUES ('S', N'Silver')
+INSERT INTO THETHANHVIEN(MATHE, LOAITHE)
+VALUES ('G', N'Gold')
