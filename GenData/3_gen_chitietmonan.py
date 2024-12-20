@@ -26,26 +26,18 @@ chitiet_data = []
 
 for i in range(1, num_chitiet + 1):
     mactmon = f"CTMON{i:05d}"  # Unique MACTMON
-    
-    # Randomly decide whether MAMON or MACOMBO will be NULL
-    if random.choice([True, False]):
-        mamon = random.choice(monan_ids)  # Random MAMON
-        macombo = None  # Null MACOMBO
-    else:
-        mamon = None  # Null MAMON
-        macombo = random.choice(combo_ids)  # Random MACOMBO
-    
+    mamenu = f"MENU{random.randint(1, 600):06d}"    
     soluong = random.randint(1, 10)  # Random quantity
     ghichu = fake.sentence().replace(",", "").replace('"', "").strip()  # Cleaned note
     dongiatong = 0  # Placeholder for total price
     madondatmon = f"DONDAT{random.randint(1, 3000):04d}"  # Random MADONDATMON in range 1–100
-    chitiet_data.append([mactmon, mamon, macombo, soluong, ghichu, dongiatong, madondatmon])
+    chitiet_data.append([mactmon, mamenu, soluong, ghichu, dongiatong, madondatmon])
 
 # Write CHITIETMONAN data to CSV
 with open(chitiet_csv_file, mode="w", encoding="utf-8", newline="") as file:
     writer = csv.writer(file)
     # Write header
-    writer.writerow(["MACTMON", "MAMON", "MACOMBO", "SOLUONG", "GHICHU", "DONGIATONG", "MADONDATMON"])
+    writer.writerow(["MACTMON", "MAMENU", "SOLUONG", "GHICHU", "DONGIATONG", "MADONDATMON"])
     # Write rows
     writer.writerows(chitiet_data)
 

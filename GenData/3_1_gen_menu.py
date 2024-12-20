@@ -26,7 +26,7 @@ trangthai_list = ['Available', 'Out of stock', 'Discontinued']  # Valid serving 
 
 for i in range(1, num_menu + 1):
     mamenu = f"MENU{i:06d}"  # Unique MAMENU
-    machinhanh = f"CN{random.randint(1, 3):08d}"  # Random MACHINHANH (branches CN001-CN010)
+    machinhanh = f"CN{random.randint(1, 10):08d}"  # Random MACHINHANH (branches CN001-CN010)
 
     # Decide whether MAMON or MACOMBO will be NULL
     if random.choice([True, False]):
