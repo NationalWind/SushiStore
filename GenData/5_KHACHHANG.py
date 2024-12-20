@@ -1,37 +1,26 @@
 import csv
 from faker import Faker
-import random
 
 # Initialize faker
 fake = Faker()
 
-# File paths
-dondatmon_csv_file = "4_DONDATMON_data_corrected.csv"
+# File path for the KHACHHANG CSV
 khachhang_csv_file = "5_KHACHHANG_data.csv"
 
-# Load KHACHHANGDAT from DONDATMON
-with open(dondatmon_csv_file, mode="r", encoding="utf-8") as file:
-    dondatmon_data = [row for row in csv.reader(file)][1:]  # Skip the header row
+# Number of customers
+num_customers = 500
 
-# Extract unique KHACHHANGDAT values
-khachhangdat_values = list(set(row[6] for row in dondatmon_data))  # KHACHHANGDAT is at index 6
-
-# Ensure unique MAKHACHHANG
-unique_makhachhang = set()
+# Generate data for KHACHHANG
 khachhang_data = []
 
-for khachhangdat in khachhangdat_values:
-    while khachhangdat in unique_makhachhang:
-        # If duplicate, append random digits to make it unique
-        khachhangdat = f"{khachhangdat[:6]}{random.randint(1000, 9999):04d}"
-    unique_makhachhang.add(khachhangdat)
-
-    hoten = fake.name()
-    sdt = f"0{random.randint(100000000, 999999999)}"  # Random 10-digit phone number starting with 0
-    email = fake.email()
-    cccd = f"{random.randint(100000000000, 999999999999)}"  # Random 12-digit number for CCCD
-
-    khachhang_data.append([khachhangdat, hoten, sdt, email, cccd])
+for index in range(1, num_customers + 1):
+    makhachhang = f"KH{index:08d}"  # Sequential MAKHACHHANG from 1 to 500
+    hoten = fake.name()  # Random full name
+    sdt = fake.msisdn()[0:10]  # Random 10-digit phone number
+    email = fake.email()  # Random email
+    cccd = ''.join(fake.random_choices(elements=('0123456789'), length=12))  # Random 12-digit number for CCCD
+    
+    khachhang_data.append([makhachhang, hoten, sdt, email, cccd])
 
 # Write to CSV
 with open(khachhang_csv_file, mode="w", encoding="utf-8", newline="") as file:
