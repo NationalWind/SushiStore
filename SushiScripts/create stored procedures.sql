@@ -40,7 +40,7 @@ BEGIN
                 SET MATHE = 'S', NGAYNANGHANG = GETDATE(), DIEMTICHLUY = 0
                 WHERE MAKHACHHANG = @MAKHACHHANG;
 
-                PRINT 'Khách hàng đã được nâng cấp lên hạng thẻ SILVER.';
+                PRINT N'Khách hàng đã được nâng cấp lên hạng thẻ SILVER.';
             END
         END
 
@@ -53,7 +53,7 @@ BEGIN
                 SET MATHE = 'G', NGAYNANGHANG = GETDATE(), DIEMTICHLUY = 0
                 WHERE MAKHACHHANG = @MAKHACHHANG;
 
-                PRINT 'Khách hàng đã được nâng cấp lên hạng thẻ GOLD.';
+                PRINT N'Khách hàng đã được nâng cấp lên hạng thẻ GOLD.';
             END
             ELSE IF @DIEMTRONGNAM < 50
             BEGIN
@@ -62,11 +62,11 @@ BEGIN
                 SET MATHE = 'M', NGAYNANGHANG = GETDATE(), DIEMTICHLUY = 0
                 WHERE MAKHACHHANG = @MAKHACHHANG;
 
-                PRINT 'Khách hàng đã bị hạ cấp xuống hạng thẻ MEMBERSHIP.';
+                PRINT N'Khách hàng đã bị hạ cấp xuống hạng thẻ MEMBERSHIP.';
             END
             ELSE
             BEGIN
-                PRINT 'Khách hàng giữ nguyên hạng thẻ SILVER.';
+                PRINT N'Khách hàng giữ nguyên hạng thẻ SILVER.';
             END
         END
 
@@ -79,11 +79,11 @@ BEGIN
                 SET MATHE = 'S', NGAYNANGHANG = GETDATE(), DIEMTICHLUY = 0
                 WHERE MAKHACHHANG = @MAKHACHHANG;
 
-                PRINT 'Khách hàng đã bị hạ cấp xuống hạng thẻ SILVER.';
+                PRINT N'Khách hàng đã bị hạ cấp xuống hạng thẻ SILVER.';
             END
             ELSE
             BEGIN
-                PRINT 'Khách hàng giữ nguyên hạng thẻ GOLD.';
+                PRINT N'Khách hàng giữ nguyên hạng thẻ GOLD.';
             END
         END
 
@@ -118,11 +118,11 @@ BEGIN
         INSERT INTO KHACHHANG (MAKHACHHANG, HOTEN, SDT, EMAIL, CCCD)
         VALUES (@MAKHACHHANG, @HOTEN, @SDT, @EMAIL, @CCCD);
 
-        PRINT 'Khách hàng mới đã được thêm vào hệ thống.';
+        PRINT N'Khách hàng mới đã được thêm vào hệ thống.';
     END
     ELSE
     BEGIN
-        PRINT 'Khách hàng đã tồn tại trong hệ thống.';
+        PRINT N'Khách hàng đã tồn tại trong hệ thống.';
     END
 
     -- Kiểm tra xem thẻ đã tồn tại trong bảng CHITIETKHACHHANG hay chưa
@@ -132,7 +132,7 @@ BEGIN
         INSERT INTO CHITIETKHACHHANG (MAKHACHHANG, MATHE, NGAYDK, DIEMTICHLUY, NGAYNANGHANG, TRANGTHAITAIKHOAN, NHANVIENTAOLAP)
         VALUES (@MAKHACHHANG, 'M', GETDATE(), 0, GETDATE(), N'Active', @NHANVIENTAOLAP);
 
-        PRINT 'Thẻ mới (Membership) đã được cấp cho khách hàng.';
+        PRINT N'Thẻ mới (Membership) đã được cấp cho khách hàng.';
     END
     ELSE
     BEGIN
@@ -143,14 +143,14 @@ BEGIN
             NHANVIENTAOLAP = @NHANVIENTAOLAP
         WHERE MAKHACHHANG = @MAKHACHHANG;
 
-        PRINT 'Thông tin thẻ của khách hàng đã được cập nhật.';
+        PRINT N'Thông tin thẻ của khách hàng đã được cập nhật.';
     END
 END;
 GO
 
 
 -- Xem danh sách nhân viên và đánh giá tương ứng với mỗi nhân viên đó
-CREATE PROCEDURE XemDanhSachDanhGiaNhanVien
+CREATE PROCEDURE SP_XemDanhSachDanhGiaNhanVien
 AS
 BEGIN
     -- Hiển thị danh sách nhân viên kèm theo thông tin đánh giá
@@ -177,12 +177,9 @@ BEGIN
 END;
 GO
 
-EXEC XemDanhSachDanhGiaNhanVien;
-GO
-
 
 -- Thống kê chất lượng món ăn và đánh giá của khách hàng
-CREATE PROCEDURE THONGKE_CHATLUONG_MONAN
+CREATE PROCEDURE SP_THONGKE_CHATLUONG_MONAN
     @NGAYBATDAU DATE 
 AS
 BEGIN
@@ -212,9 +209,6 @@ BEGIN
     PRINT N'Thống kê chất lượng món ăn đã được thực hiện thành công';
 END;
 GO
-
---EXEC THONGKE_CHATLUONG_MONAN @NGAYBATDAU = '2024-01-01';
---GO
 
 
 -- Thống kê danh sách các đơn hàng và hóa đơn theo ngày đặt cụ thể
@@ -269,8 +263,6 @@ BEGIN
 END
 GO
 
---EXEC SP_DS_DONDATMON_HOADON_THEONGAY @ngaydat = '2024-12-17'
---GO
 
 -- Danh sách theo dõi xu hướng của các khách hàng khi lựa chọn loại đặt hàng tại một chi nhánh trong một khoảng thời gian
 CREATE PROCEDURE SP_THONGKE_XUHUONG_KHACHHANG
@@ -304,10 +296,6 @@ BEGIN
         DH.MACHINHANH;
 END
 
--- CREATE PROCEDURE 
---EXEC SP_THONGKE_XUHUONG_KHACHHANG @ngayBatDau = '2024-12-12', @ngayKetThuc = '2025-1-12', @maChiNhanh = 'CN0001'
---GO
-
 
 -- Tính toán tổng tiền trước và sau khuyến mãi, sau đó cập nhật theo mã hóa đơn.
 CREATE PROCEDURE SP_TinhVaCapNhatTongTien
@@ -324,11 +312,15 @@ BEGIN
 
     DECLARE @TONGTIENTRUOCKM FLOAT;
     SET @TONGTIENTRUOCKM = (
-        SELECT SUM(THANHTIEN) * (1 + VAT)
+        SELECT SUM(THANHTIEN)
         FROM DONDATMON
         JOIN HOADON ON DONDATMON.HOADONLIENQUAN = HOADON.MAHOADON
-        WHERE DONDATMON.HOADONLIENQUAN = @MAHOADON AND DONDATMON.TRANGTHAI = N'Successful'
+        WHERE DONDATMON.HOADONLIENQUAN = @MAHOADON AND DONDATMON.TRANGTHAI = N'Paid'
     );
+
+	UPDATE HOADON
+	SET @TONGTIENTRUOCKM = @TONGTIENTRUOCKM * (1 - VAT)
+	WHERE MAHOADON = @MAHOADON
 
     DECLARE @LUONGKMTIEN FLOAT;
     SET @LUONGKMTIEN = ISNULL((
@@ -388,12 +380,11 @@ BEGIN
 
     DECLARE @TONGDOANHTHU FLOAT;
     SET @TONGDOANHTHU = (
-        SELECT SUM(DONDATMON.THANHTIEN)
-        FROM DONDATMON
-        WHERE DONDATMON.CHINHANHDAT = @MACHI_NHANH
-          AND DONDATMON.TRANGTHAI = N'Paid'
-          AND DONDATMON.NGAYDAT >= @NGAYBATDAU
-          AND DONDATMON.NGAYDAT <= @NGAYKETTHUC
+        SELECT SUM(HOADON.TONGTIENSAUKM)
+        FROM HOADON
+        WHERE HOADON.MACHINHANH = @MACHI_NHANH
+          AND HOADON.TRANGTHAI = N'Paid'
+          AND HOADON.NGAYLAP BETWEEN @NGAYBATDAU AND @NGAYKETTHUC
     );
 
     IF @TONGDOANHTHU IS NULL
@@ -428,7 +419,7 @@ BEGIN
     JOIN
 		MENU M ON CTMA.MAMENU = M.MAMENU
 	JOIN
-        MONAN MA ON M.MAMENU = MA.MaMon
+        MONAN MA ON M.MaMon = MA.MaMon
     JOIN
         DONDATMON DDM ON DDM.MaDon = CTMA.MaDonDatMon
     WHERE
@@ -439,9 +430,6 @@ BEGIN
         TongSoLuong DESC;
 END;
 GO
-
---EXEC THONGKE_TOP_MONAN '2000-01-01', '2024-12-31', 3;
---GO
 
 
 -- Thống kê những khách hàng mang lại doanh thu cao nhất trong khoảng thời gian nhất định
@@ -475,6 +463,3 @@ BEGIN
 		TongTienTichLuy DESC;
 END;
 GO
-
---EXEC THONGKE_TOP_KHACHHANG '2000-01-01', '2024-12-31', 5;
---GO
