@@ -2,7 +2,7 @@
 GO
 
 
--- Truy vấn A
+-- Truy vấn A: Cấp và cập nhật thông tin thẻ cho khách hàng
 SET STATISTICS TIME ON;
 EXEC SP_TaoVaCapThe 'KH00000501', N'Tran Dan Huy', '0913958295', 'danhuy@gmail.com', '059284823324', 'NV00000001'
 SET STATISTICS TIME OFF;
@@ -15,7 +15,7 @@ CREATE NONCLUSTERED INDEX IDX_KHACHHANG_MAKHACHHANG ON KHACHHANG(MAKHACHHANG);
 CREATE NONCLUSTERED INDEX IDX_CHITIETKHACHHANG_NHANVIENTAOLAP ON CHITIETKHACHHANG(NHANVIENTAOLAP);
 
 
--- Truy vấn B
+-- Truy vấn B: Kiểm tra và cập nhật hạng thẻ 
 SET STATISTICS TIME ON;
 EXEC SP_CapNhatHangThe
 SET STATISTICS TIME OFF;
@@ -35,7 +35,25 @@ CREATE NONCLUSTERED INDEX IDX_CHITIETKHACHHANG_DIEMTICHLUY ON CHITIETKHACHHANG(D
 GO
 
 
--- Truy vấn C
+-- Truy vấn C: Danh sách các hóa đơn và đơn đặt món theo ngày cụ thể
+SET STATISTICS TIME ON;
+EXEC SP_DS_DONDATMON_HOADON_THEONGAY @ngaydat = '2024-12-17'
+SET STATISTICS TIME OFF;
+GO
+
+-- Chỉ mục cho cột HOADONLIENQUAN trong bảng DONDATMON để tối ưu hóa JOIN với HOADON
+CREATE NONCLUSTERED INDEX IDX_DONDATMON_HOADONLIENQUAN ON DONDATMON(HOADONLIENQUAN);
+GO
+
+
+-- Truy vấn D: Danh sách theo dõi xu hướng của các khách hàng khi lựa chọn loại đặt hàng tại một chi nhánh trong một khoảng thời gian
+SET STATISTICS TIME ON;
+EXEC SP_THONGKE_XUHUONG_KHACHHANG @ngayBatDau = '2024-12-12', @ngayKetThuc = '2025-1-12', @maChiNhanh = 'CN00000001'
+SET STATISTICS TIME OFF;
+GO
+
+
+-- Truy vấn E: Xem danh sách nhân viên và đánh giá tương ứng với mỗi nhân viên đó
 SET STATISTICS TIME ON;
 EXEC SP_XemDanhSachDanhGiaNhanVien;
 SET STATISTICS TIME OFF;
@@ -57,7 +75,8 @@ CREATE NONCLUSTERED INDEX IDX_DANHGIA_DIEMVITRICHINHANH ON DANHGIA(DIEMVITRICHIN
 CREATE NONCLUSTERED INDEX IDX_DANHGIA_DIEMKHONGGIAN ON DANHGIA(DIEMKHONGGIAN);
 GO
 
--- Truy vấn D
+
+-- Truy vấn F: Thống kê chất lượng món ăn và đánh giá của khách hàng
 SET STATISTICS TIME ON;
 EXEC SP_THONGKE_CHATLUONG_MONAN @NGAYBATDAU = '2024-01-01';
 SET STATISTICS TIME OFF;
@@ -68,25 +87,7 @@ CREATE NONCLUSTERED INDEX IDX_DONDATMON_NGAYDAT ON DONDATMON(NGAYDAT);
 GO
 
 
--- Truy vấn E
-SET STATISTICS TIME ON;
-EXEC SP_DS_DONDATMON_HOADON_THEONGAY @ngaydat = '2024-12-17'
-SET STATISTICS TIME OFF;
-GO
-
--- Chỉ mục cho cột HOADONLIENQUAN trong bảng DONDATMON để tối ưu hóa JOIN với HOADON
-CREATE NONCLUSTERED INDEX IDX_DONDATMON_HOADONLIENQUAN ON DONDATMON(HOADONLIENQUAN);
-GO
-
-
--- Truy vấn F
-SET STATISTICS TIME ON;
-EXEC SP_THONGKE_XUHUONG_KHACHHANG @ngayBatDau = '2024-12-12', @ngayKetThuc = '2025-1-12', @maChiNhanh = 'CN0001'
-SET STATISTICS TIME OFF;
-GO
-
-
--- Truy vấn G
+-- Truy vấn G: Tính toán tổng tiền trước và sau khuyến mãi, sau đó cập nhật theo mã hóa đơn.
 SET STATISTICS TIME ON;
 EXEC SP_TinhVaCapNhatTongTien 'HD00000001'
 SET STATISTICS TIME OFF;
@@ -105,14 +106,21 @@ CREATE NONCLUSTERED INDEX IDX_KHUYENMAITHETHANHVIEN_MATHE ON KHUYENMAITHETHANHVI
 GO
 
 
--- Truy vấn H
+-- Truy vấn H: Thống kê doanh thu của một chi nhánh trong khoảng thời gian
 SET STATISTICS TIME ON;
 EXEC sp_ThongKeDoanhThu 'CN00000002', '2024-01-01', '2024-11-29'
 SET STATISTICS TIME OFF;
 GO
 
 
--- Truy vấn I
+-- Truy vấn I: Thống kê những món ăn đắt hàng nhất về số lượng trong khoảng thời gian nhất định
+SET STATISTICS TIME ON;
+EXEC SP_THONGKE_TOP_MONAN '2024-05-07', '2030-12-31', 10;
+SET STATISTICS TIME OFF;
+GO
+
+
+-- Truy vấn J: Thống kê những khách hàng mang lại doanh thu cao nhất trong khoảng thời gian nhất định
 SET STATISTICS TIME ON;
 EXEC SP_ThongKe_Top_KhachHang '2000-01-01', '2024-12-31', 5;
 SET STATISTICS TIME OFF;
@@ -125,10 +133,3 @@ ON HOADON (MaKhachHang);
 -- Tạo chỉ mục non-clustered trên NgayLap trong bảng HOADON
 CREATE NONCLUSTERED INDEX IX_HOADON_NgayLap
 ON HOADON (NgayLap);
-
-
--- Truy vấn J
-SET STATISTICS TIME ON;
-EXEC SP_THONGKE_TOP_MONAN '2024-05-07', '2030-12-31', 10;
-SET STATISTICS TIME OFF;
-GO
