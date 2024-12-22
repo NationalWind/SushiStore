@@ -296,6 +296,7 @@ BEGIN
         DH.MACHINHANH;
 END
 
+go
 
 -- Tính toán tổng tiền trước và sau khuyến mãi, sau đó cập nhật theo mã hóa đơn.
 CREATE PROCEDURE SP_TinhVaCapNhatTongTien
