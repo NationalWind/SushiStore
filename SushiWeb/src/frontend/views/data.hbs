@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+
+<body>
+    {{> header}} <!-- Include the header -->
+
+    <h1>Branch Information</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Mã Chi Nhánh</th>
+                <th>Tên Chi Nhánh</th>
+                <th>Địa Chỉ</th>
+                <th>Khu Vực</th>
+                <th>Thời Gian Mở Cửa</th>
+                <th>Thời Gian Đóng Cửa</th>
+                <th>Số Điện Thoại</th>
+                <th>Email</th>
+                <th>Có Bãi Đỗ Xe</th>
+                <th>Nhân Viên Quản Lý</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each branches}}
+            <tr>
+                <td>{{this.MACHINHANH}}</td>
+                <td>{{this.TENCHINHANH}}</td>
+                <td>{{this.DIACHI}}</td>
+                <td>{{this.KHUVUC}}</td>
+                <td>{{this.THOIGIANMOCUA}}</td>
+                <td>{{this.THOIGIANDONGCUA}}</td>
+                <td>{{this.SDT}}</td>
+                <td>{{this.EMAIL}}</td>
+                <td>{{#if this.COBAIDOXE}}Yes{{else}}No{{/if}}</td>
+                <td>{{this.NHANVIENQUANLY}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    {{> footer}} <!-- Include the footer -->
+</body>
+
+</html>

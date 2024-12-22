@@ -2,6 +2,8 @@ GO
 USE SushiDB
 GO
 
+-- SELECT 'DROP PROCEDURE' + ' ' + F.NAME + ';' FROM SYS.objects AS F where type='P'
+
 -- Kiểm tra và cập nhật hạng thẻ 
 CREATE PROCEDURE SP_CapNhatHangThe
 AS
@@ -294,9 +296,14 @@ BEGIN
         KH.HOTEN,
         KH.SDT,
         DH.MACHINHANH;
+<<<<<<< HEAD
 END
 
 go
+=======
+END;
+GO
+>>>>>>> 185f2af8f7c2e14f814e8488e8eda3f11410c647
 
 -- Tính toán tổng tiền trước và sau khuyến mãi, sau đó cập nhật theo mã hóa đơn.
 CREATE PROCEDURE SP_TinhVaCapNhatTongTien
