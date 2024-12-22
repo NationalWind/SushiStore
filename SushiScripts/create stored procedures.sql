@@ -57,34 +57,6 @@ END;
 GO
 
 
--- Xem danh sách nhân viên và đánh giá tương ứng với mỗi nhân viên đó
-CREATE PROCEDURE SP_XemDanhSachDanhGiaNhanVien
-AS
-BEGIN
-    -- Hiển thị danh sách nhân viên kèm theo thông tin đánh giá
-    SELECT 
-        NV.MANHANVIEN AS MaNhanVien,
-        NV.HOTEN AS HoTen,
-        NV.CHINHANHLAMVIEC AS MaChiNhanh,
-        CN.TENCHINHANH AS TenChiNhanh,
-        ISNULL(AVG(DG.DIEMPHUCVU), 0) AS DiemPhucVuTB,
-        ISNULL(AVG(DG.DIEMVITRICHINHANH), 0) AS DiemViTriChiNhanhTB,
-        ISNULL(AVG(DG.DIEMKHONGGIAN), 0) AS DiemKhongGianTB,
-        COUNT(DG.MADANHGIA) AS SoLuotDanhGia,
-        STRING_AGG(DG.BINHLUAN, '; ') AS BinhLuan
-    FROM 
-        NHANVIEN NV
-    LEFT JOIN 
-        DANHGIA DG ON NV.MANHANVIEN = DG.NHANVIEN
-    LEFT JOIN 
-        CHINHANH CN ON NV.CHINHANHLAMVIEC = CN.MACHINHANH
-    GROUP BY 
-        NV.MANHANVIEN, NV.HOTEN, NV.CHINHANHLAMVIEC, CN.TENCHINHANH
-    ORDER BY 
-        NV.MANHANVIEN;
-END;
-GO
-
 -- Kiểm tra và cập nhật hạng thẻ 
 CREATE PROCEDURE SP_CapNhatHangThe
 AS
@@ -176,6 +148,35 @@ BEGIN
 
     CLOSE CardCursor;
     DEALLOCATE CardCursor;
+END;
+GO
+
+
+-- Xem danh sách nhân viên và đánh giá tương ứng với mỗi nhân viên đó
+CREATE PROCEDURE SP_XemDanhSachDanhGiaNhanVien
+AS
+BEGIN
+    -- Hiển thị danh sách nhân viên kèm theo thông tin đánh giá
+    SELECT 
+        NV.MANHANVIEN AS MaNhanVien,
+        NV.HOTEN AS HoTen,
+        NV.CHINHANHLAMVIEC AS MaChiNhanh,
+        CN.TENCHINHANH AS TenChiNhanh,
+        ISNULL(AVG(DG.DIEMPHUCVU), 0) AS DiemPhucVuTB,
+        ISNULL(AVG(DG.DIEMVITRICHINHANH), 0) AS DiemViTriChiNhanhTB,
+        ISNULL(AVG(DG.DIEMKHONGGIAN), 0) AS DiemKhongGianTB,
+        COUNT(DG.MADANHGIA) AS SoLuotDanhGia,
+        STRING_AGG(DG.BINHLUAN, '; ') AS BinhLuan
+    FROM 
+        NHANVIEN NV
+    LEFT JOIN 
+        DANHGIA DG ON NV.MANHANVIEN = DG.NHANVIEN
+    LEFT JOIN 
+        CHINHANH CN ON NV.CHINHANHLAMVIEC = CN.MACHINHANH
+    GROUP BY 
+        NV.MANHANVIEN, NV.HOTEN, NV.CHINHANHLAMVIEC, CN.TENCHINHANH
+    ORDER BY 
+        NV.MANHANVIEN;
 END;
 GO
 
