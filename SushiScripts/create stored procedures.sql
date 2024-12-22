@@ -4,6 +4,87 @@ GO
 
 -- SELECT 'DROP PROCEDURE' + ' ' + F.NAME + ';' FROM SYS.objects AS F where type='P'
 
+
+-- Cấp và cập nhật thông tin thẻ cho khách hàng 
+CREATE PROCEDURE SP_TaoVaCapThe
+(
+    @MAKHACHHANG CHAR(10),           -- Mã khách hàng
+    @HOTEN NVARCHAR(50),             -- Họ tên khách hàng
+    @SDT CHAR(10),                   -- Số điện thoại
+    @EMAIL VARCHAR(50),              -- Email khách hàng
+    @CCCD VARCHAR(20),               -- CCCD khách hàng
+    @NHANVIENTAOLAP CHAR(10)         -- Nhân viên tạo lập thẻ
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Kiểm tra xem khách hàng đã tồn tại trong bảng KHACHHANG hay chưa
+    IF NOT EXISTS (SELECT 1 FROM KHACHHANG WHERE MAKHACHHANG = @MAKHACHHANG)
+    BEGIN
+        -- Thêm thông tin khách hàng mới
+        INSERT INTO KHACHHANG (MAKHACHHANG, HOTEN, SDT, EMAIL, CCCD)
+        VALUES (@MAKHACHHANG, @HOTEN, @SDT, @EMAIL, @CCCD);
+
+        PRINT N'Khách hàng mới đã được thêm vào hệ thống.';
+    END
+    ELSE
+    BEGIN
+        PRINT N'Khách hàng đã tồn tại trong hệ thống.';
+    END
+
+    -- Kiểm tra xem thẻ đã tồn tại trong bảng CHITIETKHACHHANG hay chưa
+    IF NOT EXISTS (SELECT 1 FROM CHITIETKHACHHANG WHERE MAKHACHHANG = @MAKHACHHANG)
+    BEGIN
+        -- Cấp thẻ mới với loại thẻ Membership và trạng thái Active
+        INSERT INTO CHITIETKHACHHANG (MAKHACHHANG, MATHE, NGAYDK, DIEMTICHLUY, NGAYNANGHANG, TRANGTHAITAIKHOAN, NHANVIENTAOLAP)
+        VALUES (@MAKHACHHANG, 'M', GETDATE(), 0, GETDATE(), N'Active', @NHANVIENTAOLAP);
+
+        PRINT N'Thẻ mới (Membership) đã được cấp cho khách hàng.';
+    END
+    ELSE
+    BEGIN
+        -- Cập nhật thông tin thẻ nếu khách hàng đã có thẻ
+        UPDATE CHITIETKHACHHANG
+        SET NGAYDK = GETDATE(),
+            TRANGTHAITAIKHOAN = N'Active',
+            NHANVIENTAOLAP = @NHANVIENTAOLAP
+        WHERE MAKHACHHANG = @MAKHACHHANG;
+
+        PRINT N'Thông tin thẻ của khách hàng đã được cập nhật.';
+    END
+END;
+GO
+
+
+-- Xem danh sách nhân viên và đánh giá tương ứng với mỗi nhân viên đó
+CREATE PROCEDURE SP_XemDanhSachDanhGiaNhanVien
+AS
+BEGIN
+    -- Hiển thị danh sách nhân viên kèm theo thông tin đánh giá
+    SELECT 
+        NV.MANHANVIEN AS MaNhanVien,
+        NV.HOTEN AS HoTen,
+        NV.CHINHANHLAMVIEC AS MaChiNhanh,
+        CN.TENCHINHANH AS TenChiNhanh,
+        ISNULL(AVG(DG.DIEMPHUCVU), 0) AS DiemPhucVuTB,
+        ISNULL(AVG(DG.DIEMVITRICHINHANH), 0) AS DiemViTriChiNhanhTB,
+        ISNULL(AVG(DG.DIEMKHONGGIAN), 0) AS DiemKhongGianTB,
+        COUNT(DG.MADANHGIA) AS SoLuotDanhGia,
+        STRING_AGG(DG.BINHLUAN, '; ') AS BinhLuan
+    FROM 
+        NHANVIEN NV
+    LEFT JOIN 
+        DANHGIA DG ON NV.MANHANVIEN = DG.NHANVIEN
+    LEFT JOIN 
+        CHINHANH CN ON NV.CHINHANHLAMVIEC = CN.MACHINHANH
+    GROUP BY 
+        NV.MANHANVIEN, NV.HOTEN, NV.CHINHANHLAMVIEC, CN.TENCHINHANH
+    ORDER BY 
+        NV.MANHANVIEN;
+END;
+GO
+
 -- Kiểm tra và cập nhật hạng thẻ 
 CREATE PROCEDURE SP_CapNhatHangThe
 AS
@@ -95,87 +176,6 @@ BEGIN
 
     CLOSE CardCursor;
     DEALLOCATE CardCursor;
-END;
-GO
-
-
--- Cấp và cập nhật thông tin thẻ cho khách hàng 
-CREATE PROCEDURE SP_TaoVaCapThe
-(
-    @MAKHACHHANG CHAR(10),           -- Mã khách hàng
-    @HOTEN NVARCHAR(50),             -- Họ tên khách hàng
-    @SDT CHAR(10),                   -- Số điện thoại
-    @EMAIL VARCHAR(50),              -- Email khách hàng
-    @CCCD VARCHAR(20),               -- CCCD khách hàng
-    @NHANVIENTAOLAP CHAR(10)         -- Nhân viên tạo lập thẻ
-)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    -- Kiểm tra xem khách hàng đã tồn tại trong bảng KHACHHANG hay chưa
-    IF NOT EXISTS (SELECT 1 FROM KHACHHANG WHERE MAKHACHHANG = @MAKHACHHANG)
-    BEGIN
-        -- Thêm thông tin khách hàng mới
-        INSERT INTO KHACHHANG (MAKHACHHANG, HOTEN, SDT, EMAIL, CCCD)
-        VALUES (@MAKHACHHANG, @HOTEN, @SDT, @EMAIL, @CCCD);
-
-        PRINT N'Khách hàng mới đã được thêm vào hệ thống.';
-    END
-    ELSE
-    BEGIN
-        PRINT N'Khách hàng đã tồn tại trong hệ thống.';
-    END
-
-    -- Kiểm tra xem thẻ đã tồn tại trong bảng CHITIETKHACHHANG hay chưa
-    IF NOT EXISTS (SELECT 1 FROM CHITIETKHACHHANG WHERE MAKHACHHANG = @MAKHACHHANG)
-    BEGIN
-        -- Cấp thẻ mới với loại thẻ Membership và trạng thái Active
-        INSERT INTO CHITIETKHACHHANG (MAKHACHHANG, MATHE, NGAYDK, DIEMTICHLUY, NGAYNANGHANG, TRANGTHAITAIKHOAN, NHANVIENTAOLAP)
-        VALUES (@MAKHACHHANG, 'M', GETDATE(), 0, GETDATE(), N'Active', @NHANVIENTAOLAP);
-
-        PRINT N'Thẻ mới (Membership) đã được cấp cho khách hàng.';
-    END
-    ELSE
-    BEGIN
-        -- Cập nhật thông tin thẻ nếu khách hàng đã có thẻ
-        UPDATE CHITIETKHACHHANG
-        SET NGAYDK = GETDATE(),
-            TRANGTHAITAIKHOAN = N'Active',
-            NHANVIENTAOLAP = @NHANVIENTAOLAP
-        WHERE MAKHACHHANG = @MAKHACHHANG;
-
-        PRINT N'Thông tin thẻ của khách hàng đã được cập nhật.';
-    END
-END;
-GO
-
-
--- Xem danh sách nhân viên và đánh giá tương ứng với mỗi nhân viên đó
-CREATE PROCEDURE SP_XemDanhSachDanhGiaNhanVien
-AS
-BEGIN
-    -- Hiển thị danh sách nhân viên kèm theo thông tin đánh giá
-    SELECT 
-        NV.MANHANVIEN AS MaNhanVien,
-        NV.HOTEN AS HoTen,
-        NV.CHINHANHLAMVIEC AS MaChiNhanh,
-        CN.TENCHINHANH AS TenChiNhanh,
-        ISNULL(AVG(DG.DIEMPHUCVU), 0) AS DiemPhucVuTB,
-        ISNULL(AVG(DG.DIEMVITRICHINHANH), 0) AS DiemViTriChiNhanhTB,
-        ISNULL(AVG(DG.DIEMKHONGGIAN), 0) AS DiemKhongGianTB,
-        COUNT(DG.MADANHGIA) AS SoLuotDanhGia,
-        STRING_AGG(DG.BINHLUAN, '; ') AS BinhLuan
-    FROM 
-        NHANVIEN NV
-    LEFT JOIN 
-        DANHGIA DG ON NV.MANHANVIEN = DG.NHANVIEN
-    LEFT JOIN 
-        CHINHANH CN ON NV.CHINHANHLAMVIEC = CN.MACHINHANH
-    GROUP BY 
-        NV.MANHANVIEN, NV.HOTEN, NV.CHINHANHLAMVIEC, CN.TENCHINHANH
-    ORDER BY 
-        NV.MANHANVIEN;
 END;
 GO
 
