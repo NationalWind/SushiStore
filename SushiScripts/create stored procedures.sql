@@ -4,7 +4,60 @@ GO
 
 -- SELECT 'DROP PROCEDURE' + ' ' + F.NAME + ';' FROM SYS.objects AS F where type='P'
 
--- Kiểm tra và cập nhật hạng thẻ 
+
+-- Truy vấn A: Cấp và cập nhật thông tin thẻ cho khách hàng 
+CREATE PROCEDURE SP_TaoVaCapThe
+(
+    @MAKHACHHANG CHAR(10),           -- Mã khách hàng
+    @HOTEN NVARCHAR(50),             -- Họ tên khách hàng
+    @SDT CHAR(10),                   -- Số điện thoại
+    @EMAIL VARCHAR(50),              -- Email khách hàng
+    @CCCD VARCHAR(20),               -- CCCD khách hàng
+    @NHANVIENTAOLAP CHAR(10)         -- Nhân viên tạo lập thẻ
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Kiểm tra xem khách hàng đã tồn tại trong bảng KHACHHANG hay chưa
+    IF NOT EXISTS (SELECT 1 FROM KHACHHANG WHERE MAKHACHHANG = @MAKHACHHANG)
+    BEGIN
+        -- Thêm thông tin khách hàng mới
+        INSERT INTO KHACHHANG (MAKHACHHANG, HOTEN, SDT, EMAIL, CCCD)
+        VALUES (@MAKHACHHANG, @HOTEN, @SDT, @EMAIL, @CCCD);
+
+        PRINT N'Khách hàng mới đã được thêm vào hệ thống.';
+    END
+    ELSE
+    BEGIN
+        PRINT N'Khách hàng đã tồn tại trong hệ thống.';
+    END
+
+    -- Kiểm tra xem thẻ đã tồn tại trong bảng CHITIETKHACHHANG hay chưa
+    IF NOT EXISTS (SELECT 1 FROM CHITIETKHACHHANG WHERE MAKHACHHANG = @MAKHACHHANG)
+    BEGIN
+        -- Cấp thẻ mới với loại thẻ Membership và trạng thái Active
+        INSERT INTO CHITIETKHACHHANG (MAKHACHHANG, MATHE, NGAYDK, DIEMTICHLUY, NGAYNANGHANG, TRANGTHAITAIKHOAN, NHANVIENTAOLAP)
+        VALUES (@MAKHACHHANG, 'M', GETDATE(), 0, GETDATE(), N'Active', @NHANVIENTAOLAP);
+
+        PRINT N'Thẻ mới (Membership) đã được cấp cho khách hàng.';
+    END
+    ELSE
+    BEGIN
+        -- Cập nhật thông tin thẻ nếu khách hàng đã có thẻ
+        UPDATE CHITIETKHACHHANG
+        SET NGAYDK = GETDATE(),
+            TRANGTHAITAIKHOAN = N'Active',
+            NHANVIENTAOLAP = @NHANVIENTAOLAP
+        WHERE MAKHACHHANG = @MAKHACHHANG;
+
+        PRINT N'Thông tin thẻ của khách hàng đã được cập nhật.';
+    END
+END;
+GO
+
+
+-- Truy vấn B: Kiểm tra và cập nhật hạng thẻ 
 CREATE PROCEDURE SP_CapNhatHangThe
 AS
 BEGIN
@@ -99,121 +152,7 @@ END;
 GO
 
 
--- Cấp và cập nhật thông tin thẻ cho khách hàng 
-CREATE PROCEDURE SP_TaoVaCapThe
-(
-    @MAKHACHHANG CHAR(10),           -- Mã khách hàng
-    @HOTEN NVARCHAR(50),             -- Họ tên khách hàng
-    @SDT CHAR(10),                   -- Số điện thoại
-    @EMAIL VARCHAR(50),              -- Email khách hàng
-    @CCCD VARCHAR(20),               -- CCCD khách hàng
-    @NHANVIENTAOLAP CHAR(10)         -- Nhân viên tạo lập thẻ
-)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    -- Kiểm tra xem khách hàng đã tồn tại trong bảng KHACHHANG hay chưa
-    IF NOT EXISTS (SELECT 1 FROM KHACHHANG WHERE MAKHACHHANG = @MAKHACHHANG)
-    BEGIN
-        -- Thêm thông tin khách hàng mới
-        INSERT INTO KHACHHANG (MAKHACHHANG, HOTEN, SDT, EMAIL, CCCD)
-        VALUES (@MAKHACHHANG, @HOTEN, @SDT, @EMAIL, @CCCD);
-
-        PRINT N'Khách hàng mới đã được thêm vào hệ thống.';
-    END
-    ELSE
-    BEGIN
-        PRINT N'Khách hàng đã tồn tại trong hệ thống.';
-    END
-
-    -- Kiểm tra xem thẻ đã tồn tại trong bảng CHITIETKHACHHANG hay chưa
-    IF NOT EXISTS (SELECT 1 FROM CHITIETKHACHHANG WHERE MAKHACHHANG = @MAKHACHHANG)
-    BEGIN
-        -- Cấp thẻ mới với loại thẻ Membership và trạng thái Active
-        INSERT INTO CHITIETKHACHHANG (MAKHACHHANG, MATHE, NGAYDK, DIEMTICHLUY, NGAYNANGHANG, TRANGTHAITAIKHOAN, NHANVIENTAOLAP)
-        VALUES (@MAKHACHHANG, 'M', GETDATE(), 0, GETDATE(), N'Active', @NHANVIENTAOLAP);
-
-        PRINT N'Thẻ mới (Membership) đã được cấp cho khách hàng.';
-    END
-    ELSE
-    BEGIN
-        -- Cập nhật thông tin thẻ nếu khách hàng đã có thẻ
-        UPDATE CHITIETKHACHHANG
-        SET NGAYDK = GETDATE(),
-            TRANGTHAITAIKHOAN = N'Active',
-            NHANVIENTAOLAP = @NHANVIENTAOLAP
-        WHERE MAKHACHHANG = @MAKHACHHANG;
-
-        PRINT N'Thông tin thẻ của khách hàng đã được cập nhật.';
-    END
-END;
-GO
-
-
--- Xem danh sách nhân viên và đánh giá tương ứng với mỗi nhân viên đó
-CREATE PROCEDURE SP_XemDanhSachDanhGiaNhanVien
-AS
-BEGIN
-    -- Hiển thị danh sách nhân viên kèm theo thông tin đánh giá
-    SELECT 
-        NV.MANHANVIEN AS MaNhanVien,
-        NV.HOTEN AS HoTen,
-        NV.CHINHANHLAMVIEC AS MaChiNhanh,
-        CN.TENCHINHANH AS TenChiNhanh,
-        ISNULL(AVG(DG.DIEMPHUCVU), 0) AS DiemPhucVuTB,
-        ISNULL(AVG(DG.DIEMVITRICHINHANH), 0) AS DiemViTriChiNhanhTB,
-        ISNULL(AVG(DG.DIEMKHONGGIAN), 0) AS DiemKhongGianTB,
-        COUNT(DG.MADANHGIA) AS SoLuotDanhGia,
-        STRING_AGG(DG.BINHLUAN, '; ') AS BinhLuan
-    FROM 
-        NHANVIEN NV
-    LEFT JOIN 
-        DANHGIA DG ON NV.MANHANVIEN = DG.NHANVIEN
-    LEFT JOIN 
-        CHINHANH CN ON NV.CHINHANHLAMVIEC = CN.MACHINHANH
-    GROUP BY 
-        NV.MANHANVIEN, NV.HOTEN, NV.CHINHANHLAMVIEC, CN.TENCHINHANH
-    ORDER BY 
-        NV.MANHANVIEN;
-END;
-GO
-
-
--- Thống kê chất lượng món ăn và đánh giá của khách hàng
-CREATE PROCEDURE SP_THONGKE_CHATLUONG_MONAN
-    @NGAYBATDAU DATE 
-AS
-BEGIN
-    -- Truy vấn thống kê chất lượng món ăn từ ngày bắt đầu đến ngày hiện tại
-    SELECT
-        M.TENMON,
-        CONVERT(DATE, DD.NGAYDAT) AS NGAY_DG,
-        AVG(DGM.DIEMCHATLUONGMONAN) AS DIEMCHATLUONG_TB, 
-        AVG(DGM.DIEMGIACA) AS DIEMGIACA_TB, 
-        COUNT(DG.MADANHGIA) AS SO_LUONG_DANHGIA 
-    FROM
-        MONAN M
-    JOIN
-        DANHGIAMONAN DGM ON M.MAMON = DGM.MAMON
-    JOIN
-        DANHGIA DG ON DGM.MADANHGIA = DG.MADANHGIA
-    JOIN
-        DONDATMON DD ON DG.MADON = DD.MADON -- Liên kết với bảng Đơn đặt món để lấy ngày đánh giá
-    WHERE
-        DD.NGAYDAT >= @NGAYBATDAU 
-        AND DD.NGAYDAT <= GETDATE() 
-    GROUP BY
-        M.TENMON, CONVERT(DATE, DD.NGAYDAT) -- Nhóm theo tên món và ngày đánh giá
-    ORDER BY
-        NGAY_DG DESC, DIEMCHATLUONG_TB DESC; -- Sắp xếp theo ngày đánh giá và điểm chất lượng món ăn
-
-    PRINT N'Thống kê chất lượng món ăn đã được thực hiện thành công';
-END;
-GO
-
-
--- Thống kê danh sách các đơn hàng và hóa đơn theo ngày đặt cụ thể
+-- Truy vấn C: Thống kê danh sách các đơn hàng và hóa đơn theo ngày đặt cụ thể
 CREATE PROCEDURE SP_DS_DONDATMON_HOADON_THEONGAY
     @ngaydat DATE -- Tham số đầu vào để lọc theo ngày đặt
 AS
@@ -266,7 +205,7 @@ END
 GO
 
 
--- Danh sách theo dõi xu hướng của các khách hàng khi lựa chọn loại đặt hàng tại một chi nhánh trong một khoảng thời gian
+-- Truy vấn D: Danh sách theo dõi xu hướng của các khách hàng khi lựa chọn loại đặt hàng tại một chi nhánh trong một khoảng thời gian
 CREATE PROCEDURE SP_THONGKE_XUHUONG_KHACHHANG
     @ngayBatDau DATE,
     @ngayKetThuc DATE,
@@ -299,7 +238,70 @@ BEGIN
 END;
 GO
 
--- Tính toán tổng tiền trước và sau khuyến mãi, sau đó cập nhật theo mã hóa đơn.
+
+-- Truy vấn E: Xem danh sách nhân viên và đánh giá tương ứng với mỗi nhân viên đó
+CREATE PROCEDURE SP_XemDanhSachDanhGiaNhanVien
+AS
+BEGIN
+    -- Hiển thị danh sách nhân viên kèm theo thông tin đánh giá
+    SELECT 
+        NV.MANHANVIEN AS MaNhanVien,
+        NV.HOTEN AS HoTen,
+        NV.CHINHANHLAMVIEC AS MaChiNhanh,
+        CN.TENCHINHANH AS TenChiNhanh,
+        ISNULL(AVG(DG.DIEMPHUCVU), 0) AS DiemPhucVuTB,
+        ISNULL(AVG(DG.DIEMVITRICHINHANH), 0) AS DiemViTriChiNhanhTB,
+        ISNULL(AVG(DG.DIEMKHONGGIAN), 0) AS DiemKhongGianTB,
+        COUNT(DG.MADANHGIA) AS SoLuotDanhGia,
+        STRING_AGG(DG.BINHLUAN, '; ') AS BinhLuan
+    FROM 
+        NHANVIEN NV
+    LEFT JOIN 
+        DANHGIA DG ON NV.MANHANVIEN = DG.NHANVIEN
+    LEFT JOIN 
+        CHINHANH CN ON NV.CHINHANHLAMVIEC = CN.MACHINHANH
+    GROUP BY 
+        NV.MANHANVIEN, NV.HOTEN, NV.CHINHANHLAMVIEC, CN.TENCHINHANH
+    ORDER BY 
+        NV.MANHANVIEN;
+END;
+GO
+
+
+-- Truy vấn F: Thống kê chất lượng món ăn và đánh giá của khách hàng
+CREATE PROCEDURE SP_THONGKE_CHATLUONG_MONAN
+    @NGAYBATDAU DATE 
+AS
+BEGIN
+    -- Truy vấn thống kê chất lượng món ăn từ ngày bắt đầu đến ngày hiện tại
+    SELECT
+        M.TENMON,
+        CONVERT(DATE, DD.NGAYDAT) AS NGAY_DG,
+        AVG(DGM.DIEMCHATLUONGMONAN) AS DIEMCHATLUONG_TB, 
+        AVG(DGM.DIEMGIACA) AS DIEMGIACA_TB, 
+        COUNT(DG.MADANHGIA) AS SO_LUONG_DANHGIA 
+    FROM
+        MONAN M
+    JOIN
+        DANHGIAMONAN DGM ON M.MAMON = DGM.MAMON
+    JOIN
+        DANHGIA DG ON DGM.MADANHGIA = DG.MADANHGIA
+    JOIN
+        DONDATMON DD ON DG.MADON = DD.MADON -- Liên kết với bảng Đơn đặt món để lấy ngày đánh giá
+    WHERE
+        DD.NGAYDAT >= @NGAYBATDAU 
+        AND DD.NGAYDAT <= GETDATE() 
+    GROUP BY
+        M.TENMON, CONVERT(DATE, DD.NGAYDAT) -- Nhóm theo tên món và ngày đánh giá
+    ORDER BY
+        NGAY_DG DESC, DIEMCHATLUONG_TB DESC; -- Sắp xếp theo ngày đánh giá và điểm chất lượng món ăn
+
+    PRINT N'Thống kê chất lượng món ăn đã được thực hiện thành công';
+END;
+GO
+
+
+-- Truy vấn G: Tính toán tổng tiền trước và sau khuyến mãi, sau đó cập nhật theo mã hóa đơn.
 CREATE PROCEDURE SP_TinhVaCapNhatTongTien
     @MAHOADON CHAR(10)
 AS
@@ -359,7 +361,7 @@ END;
 GO
 
 
--- Thống kê doanh thu của một chi nhánh trong khoảng thời gian
+-- Truy vấn H: Thống kê doanh thu của một chi nhánh trong khoảng thời gian
 CREATE PROCEDURE sp_ThongKeDoanhThu
     @MACHI_NHANH CHAR(10),
     @NGAYBATDAU DATE, 
@@ -399,7 +401,7 @@ END;
 GO
 
 
--- Thống kê những món ăn đắt hàng nhất về số lượng trong khoảng thời gian nhất định
+-- Truy vấn I: Thống kê những món ăn đắt hàng nhất về số lượng trong khoảng thời gian nhất định
 -- Bảng sấp theo số lượng món được đặt cao nhất và có cột tổng doanh thu
 -- Không tính những món được đặt theo combo
 CREATE PROCEDURE SP_ThongKe_Top_MonAn
@@ -434,7 +436,7 @@ END;
 GO
 
 
--- Thống kê những khách hàng mang lại doanh thu cao nhất trong khoảng thời gian nhất định
+-- Truy vấn J: Thống kê những khách hàng mang lại doanh thu cao nhất trong khoảng thời gian nhất định
 CREATE PROCEDURE SP_ThongKe_Top_KhachHang
     @NgayBatDau DATE,
     @NgayKetThuc DATE,
