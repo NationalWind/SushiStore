@@ -2,9 +2,9 @@ import sql from "mssql";
 
 // SQL Server configuration
 const dbConfig = {
-    user: "sa",
-    password: "TQP@91204",
-    server: "TQPhong",
+    user: "Yen",
+    password: "27072003",
+    server: "AUDREY",
     database: "SushiDB",
     options: {
         encrypt: true, // Use encryption if required
