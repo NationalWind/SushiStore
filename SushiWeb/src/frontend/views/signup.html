@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up</title>
+    <link rel="stylesheet" href="../public/styles.css">
+</head>
+
+<body class="body">
+    <div class="container">
+        <!-- Form đăng nhập -->
+        <form class="form" method="post" onsubmit="handleSubmit(event)">
+            <div class="logo-container">
+                <img src="../public/sushi.png" alt="Logo" class="logo">
+                <p class="title">Sign up an account!</p>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="username" name="username" placeholder="*Username" required>
+            </div>
+
+            <div class="input-group">
+                <input type="email" id="email" name="email" placeholder="*Email" required>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="password" name="password" placeholder="*Password" required>
+            </div>
+
+            <button type="submit" id="submitButton" disabled>Sign up</button>
+
+            <a href="forgetPassword.html" class="link">Forget password</a>
+
+            <div class="divider">
+                <span>Or</span>
+            </div>
+
+            <a href="login.html" class="secondary-button">Sign in</a>
+        </form>
+    </div>
+
+    <script>
+        const passwordInput = document.getElementById('password');
+        const usernameInput = document.getElementById('username');
+        const emailInput = document.getElementById('email');
+        const submitButton = document.getElementById('submitButton');
+
+        usernameInput.addEventListener('input', toggleSubmitButton);
+        passwordInput.addEventListener('input', toggleSubmitButton);
+        emailInput.addEventListener('input', toggleSubmitButton);
+
+        function toggleSubmitButton() {
+            submitButton.disabled = !(usernameInput.value.trim() && passwordInput.value.trim() && emailInput.value.trim());
+        }
+    </script>
+</body>
+
+</html>
