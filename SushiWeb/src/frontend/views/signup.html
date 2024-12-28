@@ -14,7 +14,7 @@
         <form class="form" method="post" onsubmit="handleSubmit(event)">
             <div class="logo-container">
                 <img src="../public/sushi.png" alt="Logo" class="logo">
-                <p class="title">Sign in with your account!</p>
+                <p class="title">Sign up an account!</p>
             </div>
 
             <div class="input-group">
@@ -47,38 +47,12 @@
         const emailInput = document.getElementById('email');
         const submitButton = document.getElementById('submitButton');
 
-        usernameInput.addEventListener('input', checkButtonState);
-        passwordInput.addEventListener('input', checkButtonState);
-        emailInput.addEventListener('input', checkButtonState);
+        usernameInput.addEventListener('input', toggleSubmitButton);
+        passwordInput.addEventListener('input', toggleSubmitButton);
+        emailInput.addEventListener('input', toggleSubmitButton);
 
-        function checkButtonState() {
+        function toggleSubmitButton() {
             submitButton.disabled = !(usernameInput.value.trim() && passwordInput.value.trim() && emailInput.value.trim());
-        }
-
-        async function handleRegister(event) {
-            event.preventDefault();
-
-            const email = document.getElementById("email").value;
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
-
-            try {
-                const response = await fetch('/api/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email, username: username, password: password })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    alert("Sign up successful! Please check your email for verification.");
-                } else {
-                    alert(data.message || 'Đăng ký thất bại!');
-                }
-            } catch (error) {
-                alert('An error occurred. Please try again!');
-            }
         }
     </script>
 </body>
