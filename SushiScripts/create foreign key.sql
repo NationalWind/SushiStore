@@ -1,4 +1,16 @@
-﻿-- Menu có khoá ngoại đến mã chi nhánh, mã món ăn, và mã combo liên quan
+﻿ALTER TABLE KHACHHANG
+ADD
+	CONSTRAINT FK_KHACHHANG_ACCOUNT
+	FOREIGN KEY (ACCOUNT_ID)
+	REFERENCES ACCOUNT(ID)
+
+ALTER TABLE NHANVIEN
+ADD
+	CONSTRAINT FK_NHANVIEN_ACCOUNT
+	FOREIGN KEY (ACCOUNT_ID)
+	REFERENCES ACCOUNT(ID)
+
+-- Menu có khoá ngoại đến mã chi nhánh, mã món ăn, và mã combo liên quan
 ALTER TABLE MENU
 ADD
 	CONSTRAINT FK_MENU_CHINHANH

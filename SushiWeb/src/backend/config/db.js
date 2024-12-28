@@ -1,11 +1,14 @@
 import sql from "mssql";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // SQL Server configuration
 const dbConfig = {
-    user: "sa",
-    password: "TQP@91204",
-    server: "TQPhong",
-    database: "SushiDB",
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    server: process.env.DB_SERVER,
+    database: process.env.DB_DATABASE,
     options: {
         encrypt: true, // Use encryption if required
         trustServerCertificate: true, // Use this for self-signed certificates
