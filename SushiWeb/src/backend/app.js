@@ -1,8 +1,12 @@
 import express from "express";
-import { connectToDatabase } from "./config/db.js"; // Adjust the path as needed
+import cookieParser from "cookie-parser";
+import { connectToDatabase } from "./config/db.js";
 import { engine } from "express-handlebars";
 import path from "path";
-import * as authController from "./controller/auth_controller.js";
+import dotenv from "dotenv";
+import authRoutes from "./routes/auth_routes.js";
+
+dotenv.config();
 
 const app = express();
 
@@ -16,35 +20,19 @@ app.engine("hbs", engine({
 app.set("view engine", "hbs");
 app.set("views", path.resolve("src/frontend/views"));
 
-// Static files
+// Middleware
 app.use(express.static(path.resolve("src/frontend/public")));
-
-// Middleware to parse request bodies
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+// Routes
+app.use("/", authRoutes);
 
 app.get("/", (req, res) => {
-    const userName = "John Doe"; // Replace with actual user info from your session or database
-    res.render("home", { title: "Home", name: userName });
+    res.render("home", { title: "Home", name: req.username });
 });
 
-// Render the login page
-app.get("/login", (req, res) => {
-    res.render("login", { title: "Login" });
-});
-
-// Render the signup page
-app.get("/signup", (req, res) => {
-    res.render("signup", { title: "Sign Up" });
-});
-
-// Render the home page after login/signup
-app.get("/home", (req, res) => {
-    const userName = "John Doe"; // Replace with actual user info from your session or database
-    res.render("home", { title: "Home", name: userName });
-});
-
-// Route to fetch data
 app.get("/data", async (req, res) => {
     try {
         const pool = await connectToDatabase();
@@ -59,9 +47,6 @@ app.get("/data", async (req, res) => {
         res.status(500).send("Database error");
     }
 });
-
-app.post('/signup', authController.signup);
-app.post('/login', authController.login);
 
 // Start server
 const PORT = process.env.PORT;

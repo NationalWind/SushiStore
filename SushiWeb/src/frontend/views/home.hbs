@@ -1,5 +1,10 @@
 <div class="container">
+    {{#if name}}
     <h1>Welcome, {{name}}!</h1>
     <p>You are logged in.</p>
-    <a href="/logout">Logout</a>
+    <a href="/logout" class="logout-btn">Logout</a>
+    {{else}}
+    <h1>You are not logged in.</h1>
+    <p>Please <a href="/login">log in</a> to access your account.</p>
+    {{/if}}
 </div>

@@ -33,7 +33,8 @@ export const signup = async (req, res) => {
             .input("role", sql.NVarChar, "customer") // Insert the role as "customer"
             .query("INSERT INTO ACCOUNT (username, password, role) VALUES (@username, @password, @role)");
 
-        res.status(201).json({ message: "User registered successfully" });
+        res.redirect("/login"); // Redirect to the login page
+        //res.status(201).json({ message: "User registered successfully" });
     } catch (error) {
         console.error("Error during signup:", error);
         res.status(500).json({ message: "Internal server error" });
@@ -53,22 +54,22 @@ export const login = async (req, res) => {
         if (result.recordset.length === 0) {
             return res.status(400).json({ message: "Invalid username or password" });
         }
-
         const user = result.recordset[0];
-
         // Verify the password
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+        const isPasswordValid = await bcrypt.compare(password, user.PASSWORD);
 
         if (!isPasswordValid) {
             return res.status(400).json({ message: "Invalid username or password" });
         }
 
         // Generate a JWT token
-        const token = jwt.sign({ id: user.id, username: user.username }, SECRET_KEY, {
+        const token = jwt.sign({ id: user.id, username: user.USERNAME }, SECRET_KEY, {
             expiresIn: "1h", // Token expires in 1 hour
         });
-
-        res.status(200).json({ message: "Login successful", token });
+        //res.status(200).json({ message: "Login successful", token });
+        // Set token in cookies or session (if using sessions)
+        res.cookie("authToken", token, { httpOnly: true, secure: true }); // Secure in production
+        res.redirect("/home"); // Redirect to the home page
     } catch (error) {
         console.error("Error during login:", error);
         res.status(500).json({ message: "Internal server error" });
