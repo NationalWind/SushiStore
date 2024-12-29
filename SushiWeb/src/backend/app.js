@@ -5,6 +5,10 @@ import { engine } from "express-handlebars";
 import path from "path";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth_routes.js";
+import branchManagerRoutes from "./routes/branch_manager_routes.js";
+import departmentManagerRoutes from "./routes/department_manager_routes.js";
+import staffRoutes from "./routes/staff_routes.js";
+import adminRoutes from "./routes/admin_routes.js";
 
 dotenv.config();
 
@@ -28,6 +32,10 @@ app.use(cookieParser());
 
 // Routes
 app.use("/", authRoutes);
+app.use("/branch-manager", branchManagerRoutes);
+app.use("/department-manager", departmentManagerRoutes);
+app.use("/staff", staffRoutes);
+app.use("/admin", adminRoutes);
 
 app.get("/", (req, res) => {
     res.render("home", { title: "Home", name: req.username });
