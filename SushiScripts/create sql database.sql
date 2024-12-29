@@ -23,6 +23,7 @@ ADD ACCOUNT_ID INT
 ALTER TABLE NHANVIEN
 ADD ACCOUNT_ID INT
 
+
 -- Hoá đơn định danh bởi mã hoá đơn
 CREATE TABLE HOADON
 (
