@@ -1,6 +1,6 @@
 <footer>
-    <p>&copy; {{year}} MyWebsite. All Rights Reserved.</p>
-    <ul class="social-links">
+    <p class="footer_all-rights-reserved">&copy; {{year}} MyWebsite. All Rights Reserved.</p>
+    <ul class="footer_social-links">
         <li><a href="https://facebook.com" target="_blank">Facebook</a></li>
         <li><a href="https://twitter.com" target="_blank">Twitter</a></li>
         <li><a href="https://instagram.com" target="_blank">Instagram</a></li>
@@ -9,7 +9,7 @@
 
 <style>
     footer {
-        background-color: #f4f4f4;
+        background-color: #EA252C;
         text-align: center;
         padding: 20px 0;
         border-top: 1px solid #ddd;
@@ -21,7 +21,7 @@
         font-size: 14px;
     }
 
-    .social-links {
+    .footer_social-links {
         list-style: none;
         padding: 0;
         display: flex;
@@ -29,12 +29,20 @@
         gap: 10px;
     }
 
-    .social-links a {
+    .footer_social-links a {
         text-decoration: none;
-        color: #555;
+        color: #ffffff;
     }
 
-    .social-links a:hover {
-        color: #007BFF;
+    .footer_social-links a:hover {
+        color: #ffffff;
+        font-weight: 700;
+        transition: font-weight 0.5s ease;
+    }
+
+    .footer_all-rights-reserved {
+        color: white;
+        font-weight: 600;
+        font-size: 18px;
     }
 </style>

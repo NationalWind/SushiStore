@@ -1,0 +1,134 @@
+.home_main-homepage {
+    padding: 70px 80px;
+    display: flex;
+    justify-content: space-between;
+    gap: 100px;
+    align-items: center;
+}
+
+.home_main-homepage-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 60px;
+}
+
+.home_main-homepage-top {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.home_main-homepage-title {
+}
+
+.home_main-homepage-description {
+    color: #353535;
+    font-size: 30px;
+}
+
+.home_main-homepage-title-tokyo {
+    color: #353535;
+    font-size: 100px;
+    font-weight: light;
+    text-decoration: none;
+}
+
+.home_main-homepage-title-deli {
+    color: #EA252C;
+    font-size: 100px;
+    font-weight: light;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.home_main-homepage-bottom {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.home_main-homepage-description-two {
+    color: #353535;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.home__main-homepage-right {
+    height: 400px;
+    overflow: hidden;
+    position: relative;
+    object-fit: cover;
+}
+
+.home__main-homepage-right img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.home_main-homepage-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+                    
+.home_main-homepage-login {
+    width: 250px;
+    height: 70px;
+    border-color: #ffffff;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 10px;
+    background-color: #EA252C;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+}
+
+.home_main-homepage-signup {
+    width: 250px;
+    height: 70px;
+    border-color: #EA252C;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 10px;
+    background-color: white;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #EA252C;
+    font-weight: 700;
+    transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+}
+
+.home_main-homepage-login:hover {
+    border-color: #EA252C;
+    background-color: white;
+    color: #EA252C;
+}
+
+.home_main-homepage-login:active {
+    border-color: white;
+    background-color: #EA252C;
+    color: white;
+}
+
+.home_main-homepage-signup:hover {
+    border-color: white;
+    background-color: #EA252C;
+    color: white;
+}
+
+.home_main-homepage-signup:active {
+    border-color: #EA252C;
+    background-color: white;
+    color: #EA252C;
+}
