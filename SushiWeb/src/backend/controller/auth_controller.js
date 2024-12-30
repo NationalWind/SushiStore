@@ -63,7 +63,7 @@ export const login = async (req, res) => {
         }
 
         // Identify the user's role
-        const role = user.ROLE; // Assuming the ROLE column contains values: 'BranchManager', 'DepartmentManager', 'Staff', 'Customer'
+        const role = user.ROLE; // Assuming the ROLE column contains values: 'Admin', 'Branch Manager', 'Department Manager', 'Staff', 'Customer'
 
         // Generate a JWT token
         const token = jwt.sign(

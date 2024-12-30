@@ -9,6 +9,7 @@ import branchManagerRoutes from "./routes/branch_manager_routes.js";
 import departmentManagerRoutes from "./routes/department_manager_routes.js";
 import staffRoutes from "./routes/staff_routes.js";
 import adminRoutes from "./routes/admin_routes.js";
+import menuRoutes from "./routes/menu_routes.js";
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.use("/branch-manager", branchManagerRoutes);
 app.use("/department-manager", departmentManagerRoutes);
 app.use("/staff", staffRoutes);
 app.use("/admin", adminRoutes);
+app.use("/menu", menuRoutes);
 
 app.get("/", (req, res) => {
     res.render("home", { title: "Home", name: req.username });
