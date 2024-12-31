@@ -10,7 +10,7 @@ const SECRET_KEY = process.env.SECRET_KEY; // Replace with a secure key
 
 // User signup controller
 export const signup = async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, hoten, sdt, email, cccd } = req.body;
 
     try {
         // Check if the username already exists
@@ -26,20 +26,45 @@ export const signup = async (req, res) => {
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Insert user into the database
-        await pool.request()
+        // Insert user into the ACCOUNT table
+        const resultAccount = await pool.request()
             .input("username", sql.NVarChar, username)
             .input("password", sql.NVarChar, hashedPassword)
-            .input("role", sql.NVarChar, "Customer") // Insert the role as "customer"
-            .query("INSERT INTO ACCOUNT (username, password, role) VALUES (@username, @password, @role)");
+            .input("role", sql.NVarChar, "Customer") // Default role
+            .query("INSERT INTO ACCOUNT (username, password, role) OUTPUT INSERTED.ID VALUES (@username, @password, @role)");
+
+        const accountId = resultAccount.recordset[0].ID;
+
+        // Get the highest MAKHACHHANG and increment it
+        const resultKhachHang = await pool.request()
+            .query("SELECT TOP 1 MAKHACHHANG FROM KHACHHANG ORDER BY MAKHACHHANG DESC");
+
+        let newMAKHACHHANG = 'KH00000001'; // Default if no records exist
+        if (resultKhachHang.recordset.length > 0) {
+            const lastMAKHACHHANG = resultKhachHang.recordset[0].MAKHACHHANG;
+            const lastNumber = parseInt(lastMAKHACHHANG.substring(2)); // Get the numeric part
+            const newNumber = lastNumber + 1; // Increment it
+            newMAKHACHHANG = `KH${String(newNumber).padStart(8, '0')}`; // Format to "KH00000001"
+        }
+
+        // Insert into KHACHHANG table with the new MAKHACHHANG and the account ID
+        await pool.request()
+            .input("MAKHACHHANG", sql.Char, newMAKHACHHANG)
+            .input("HOTEN", sql.NVarChar, hoten)
+            .input("SDT", sql.Char, sdt)
+            .input("EMAIL", sql.VarChar, email)
+            .input("CCCD", sql.VarChar, cccd)
+            .input("ACCOUNT_ID", sql.Int, accountId)
+            .query("INSERT INTO KHACHHANG (MAKHACHHANG, HOTEN, SDT, EMAIL, CCCD, ACCOUNT_ID) VALUES (@MAKHACHHANG, @HOTEN, @SDT, @EMAIL, @CCCD, @ACCOUNT_ID)");
 
         res.redirect("/login"); // Redirect to the login page
-        //res.status(201).json({ message: "User registered successfully" });
     } catch (error) {
         console.error("Error during signup:", error);
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
+
 
 // User login controller
 export const login = async (req, res) => {

@@ -162,26 +162,6 @@ BEGIN
 END
 GO
 
--- Thành tiền trong đơn đặt món bằng tổng các chi tiết món ăn thuộc về hóa đơn
-CREATE TRIGGER TRG_CHITIETMONAN_INSERT_UPDATE_THANHTIEN
-ON CHITIETMONAN
-AFTER INSERT, UPDATE, DELETE
-AS
-BEGIN
-	SET NOCOUNT ON;
-
-	UPDATE D
-	SET D.THANHTIEN = ISNULL(SUM_CT.TOTAL, 0)
-	FROM DONDATMON D
-	LEFT JOIN (
-		SELECT CT.MADONDATMON, SUM(CT.DONGIATONG) AS TOTAL
-		FROM CHITIETMONAN CT
-		GROUP BY CT.MADONDATMON
-	) AS SUM_CT
-	ON D.MADON = SUM_CT.MADONDATMON;
-END;
-GO
-
 -- Phải có số điện thoại hợp lệ và email để liên lạc hoặc xác nhận các đơn hàng trực tuyến. 
 CREATE FUNCTION dbo.ChkValidEmail(@EMAIL varchar(100))RETURNS bit as
 BEGIN     

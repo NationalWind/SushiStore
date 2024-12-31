@@ -165,3 +165,55 @@ export const getBranches = async () => {
         throw error; // Propagate the error to be handled by the caller
     }
 };
+
+// Add an item to the cart
+export const addToCart = async (req, res) => {
+    const { MAMENU, SOLUONG } = req.body;
+
+    // Validate required fields
+    if (!MAMENU || !SOLUONG) {
+        return res.status(400).json({ message: "Missing required fields." });
+    }
+
+    try {
+        // Connect to the database
+        const pool = await connectToDatabase();
+
+        // Query to get the current highest MACTMON
+        const itemResult = await pool.request()
+            .query("SELECT TOP 1 MACTMON FROM CHITIETMONAN ORDER BY MACTMON DESC");
+
+        let newMACTMON = 'CTMON00001';  // Default to the first ID if no records exist
+
+        if (itemResult.recordset.length > 0) {
+            const highestMACTMON = itemResult.recordset[0].MACTMON;
+            // Extract the numeric part of the highest MACTMON and increment it
+            const numberPart = parseInt(highestMACTMON.slice(5)) + 1;
+            // Generate new MACTMON (pad the number with leading zeros to ensure the format is consistent)
+            newMACTMON = `CTMON${numberPart.toString().padStart(5, '0')}`;
+        }
+
+        // Insert into CHITIETMONAN table with the new MACTMON
+        await pool.request()
+            .input('MACTMON', sql.Char, newMACTMON)
+            .input('MAMENU', sql.Char, MAMENU)
+            .input('SOLUONG', sql.Int, SOLUONG)
+            .query(`
+                INSERT INTO CHITIETMONAN (MACTMON, MAMENU, SOLUONG)
+                VALUES (@MACTMON, @MAMENU, @SOLUONG)
+            `);
+
+        // Insert the new MACTMON into TEMP_CART
+        await pool.request()
+            .input('MACTMON', sql.Char, newMACTMON)
+            .query(`
+                INSERT INTO TEMP_CART (MACTMON)
+                VALUES (@MACTMON)
+            `);
+
+        res.status(201).json({ message: "Item added to cart successfully." });
+    } catch (error) {
+        console.error("Error adding item to cart:", error);
+        res.status(500).json({ message: "Internal server error." });
+    }
+};

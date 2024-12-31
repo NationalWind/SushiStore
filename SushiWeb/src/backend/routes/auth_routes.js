@@ -1,6 +1,6 @@
 import express from "express";
 import * as authController from "../controller/auth_controller.js";
-import authenticateToken from "../middleware/auth_middleware.js";
+import { authenticateToken, authenticateUser } from "../middleware/auth_middleware.js";
 
 const router = express.Router();
 
@@ -21,7 +21,17 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/home", authenticateToken, (req, res) => {
-    res.render("home", { title: "Home", name: req.username });
+    res.render("home", {
+        title: "Home",
+        name: req.username || null // Pass null if the user is not authenticated
+    });
+});
+
+router.get("/", authenticateToken, (req, res) => {
+    res.render("home", {
+        title: "Home",
+        name: req.username || null // Pass null if the user is not authenticated
+    });
 });
 
 export default router;

@@ -4,8 +4,11 @@ import {
     getCategoryItems,
     getItemDetails,
     getFirstBranchId,
-    getBranches
+    getBranches,
+    addToCart
 } from '../controller/menu_controller.js';
+
+import { authenticateToken, authenticateUser } from "../middleware/auth_middleware.js";
 
 const router = express.Router();
 
@@ -30,6 +33,9 @@ router.get('/branch/:branchId/category/:category', getCategoryItems);
 
 // Route to get details of a specific item or combo
 router.get('/branch/:branchId/category/:category/item/:itemId', getItemDetails);
+
+// Add to cart route
+router.post('/add-to-cart', authenticateUser, addToCart);
 
 // POST method to switch between branches
 router.post('/switch-branch', async (req, res) => {

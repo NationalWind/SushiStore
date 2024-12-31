@@ -93,6 +93,29 @@ EXEC sp_TaoComboMonAn
     @TenCombo = N'Combo nigiri',
     @MoTaCombo = N'Combo includes Nigiri and Salmon.',
     @DanhSachMon = @DanhSachMon;
+GO
 
+-- Tính toán thành tiền cho đơn đặt món
+CREATE PROCEDURE sp_TINHTHANHTIEN_DONDATMON
+    @MADON CHAR(10) -- Mã đơn đặt món
+AS
+BEGIN
+    -- Biến để lưu tổng thành tiền
+    DECLARE @THANHTIEN FLOAT = 0;
 
--- Tạo menu cho 
+    -- Tính thành tiền từ bảng CHITIETMONAN
+    SELECT @THANHTIEN = SUM(CS.DONGIATONG)
+    FROM CHITIETMONAN CS
+    INNER JOIN DONDATMON DD ON CS.MADONDATMON = DD.MADON
+    WHERE DD.MADON = @MADON;
+
+    -- Cập nhật thành tiền vào bảng DONDATMON
+    UPDATE DONDATMON
+    SET THANHTIEN = @THANHTIEN
+    WHERE MADON = @MADON;
+
+    -- Trả về kết quả
+    SELECT MADON, THANHTIEN
+    FROM DONDATMON
+    WHERE MADON = @MADON;
+END

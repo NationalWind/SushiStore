@@ -63,20 +63,30 @@
             color: #666;
         }
 
-        .item-status {
-            color: #888;
+        .cart-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
         }
 
-        .branch-selector {
-            margin-bottom: 20px;
-        }
-
-        .branch-selector select {
-            padding: 10px;
-            font-size: 1rem;
+        .cart-controls button {
+            padding: 5px 10px;
+            border: none;
+            background-color: #333;
+            color: #fff;
             border-radius: 5px;
-            border: 1px solid #ddd;
             cursor: pointer;
+        }
+
+        .cart-controls button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .item-count {
+            font-size: 1rem;
+            font-weight: bold;
         }
     </style>
     <script>
@@ -95,13 +105,95 @@
                     <div class="item-info">
                         <div class="item-title">${item.TENMON}</div>
                         <div class="item-price">Price: ${item.GIAHIENTAI} VND</div>
-                        <div class="item-status">Status: ${item.TRANGTHAIPHUCVU}</div>
+                        <div class="cart-controls">
+                            <button class="decrement" data-id="${item.MAMENU}" disabled>-</button>
+                            <span class="item-count" id="count-${item.MAMENU}">0</span>
+                            <button class="increment" data-id="${item.MAMENU}">+</button>
+                            <button class="add-to-cart" data-id="${item.MAMENU}">Add to Cart</button>
+                        </div>
                     </div>
                 `;
-                itemDiv.onclick = () => {
-                    window.location.href = `/menu/branch/${branchId}/category/${category}/item/${item.MAMENU}`;
-                };
+
                 itemsContainer.appendChild(itemDiv);
+            });
+
+            // Attach event listeners to increment and decrement buttons
+            setupCartControls();
+        }
+
+        // Handle the "Add to Cart" button click
+        function setupCartControls() {
+            const incrementButtons = document.querySelectorAll('.increment');
+            const decrementButtons = document.querySelectorAll('.decrement');
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+
+            // Handle increment button click
+            incrementButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const itemId = button.dataset.id;
+                    const countSpan = document.querySelector(`#count-${itemId}`);
+                    const decrementButton = document.querySelector(`.decrement[data-id="${itemId}"]`);
+
+                    let count = parseInt(countSpan.textContent);
+                    count++;
+                    countSpan.textContent = count;
+                    decrementButton.disabled = count === 0;
+                });
+            });
+
+            // Handle decrement button click
+            decrementButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const itemId = button.dataset.id;
+                    const countSpan = document.querySelector(`#count-${itemId}`);
+                    const decrementButton = document.querySelector(`.decrement[data-id="${itemId}"]`);
+
+                    let count = parseInt(countSpan.textContent);
+                    if (count > 0) {
+                        count--;
+                        countSpan.textContent = count;
+                        decrementButton.disabled = count === 0;
+                    }
+                });
+            });
+
+            // Handle "Add to Cart" button click
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', async () => {
+                    const itemId = button.dataset.id;
+                    const countSpan = document.querySelector(`#count-${itemId}`);
+                    const count = parseInt(countSpan.textContent);
+
+                    if (count > 0) {
+                        try {
+                            const response = await fetch('/menu/add-to-cart', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    MAMENU: itemId,
+                                    SOLUONG: count,
+                                }),
+                            });
+
+                            if (response.ok) {
+                                alert(`Added ${count} items to the cart!`);
+                            } else if (response.status === 401) {
+                                // Redirect to login page if unauthorized
+                                alert('Please log in to add items to the cart.');
+                                window.location.href = '/login';
+                            } else {
+                                alert('Failed to add item to cart');
+                            }
+                        } catch (error) {
+                            console.error('Error adding item to cart:', error);
+                            alert('Error adding item to cart');
+                        }
+                    } else {
+                        alert('Please select a quantity greater than 0');
+                    }
+                });
             });
         }
 
@@ -123,7 +215,6 @@
                 const selectElement = document.querySelector('.branch-selector select');
                 selectElement.innerHTML = ''; // Clear any existing options
 
-                // Add an option for each branch
                 branches.forEach(branch => {
                     const option = document.createElement('option');
                     option.value = branch.branchId;
@@ -131,7 +222,6 @@
                     selectElement.appendChild(option);
                 });
 
-                // Set the currently selected branch from the template (if any)
                 selectElement.value = '{{branchId}}';
             } catch (error) {
                 console.error('Error fetching branches:', error);
@@ -142,10 +232,7 @@
             event.preventDefault();
             const branchId = document.querySelector('.branch-selector select').value;
 
-            console.log("Switching to branch:", branchId); // Log branch ID
-
             try {
-                // Send a POST request to switch the branch
                 const postResponse = await fetch('/menu/switch-branch', {
                     method: 'POST',
                     headers: {
@@ -159,9 +246,6 @@
                     return;
                 }
 
-                console.log("Branch switched successfully");
-
-                // Redirect to the GET route for the branch menu
                 window.location.href = `/menu/branch/${branchId}`;
             } catch (error) {
                 console.error("Error in switchBranch:", error);
@@ -198,7 +282,6 @@
     </div>
 
     <script>
-        // Load the first category by default
         document.addEventListener('DOMContentLoaded', () => {
             fetchBranches();
             const firstCategory = document.querySelector('.category-tab');
