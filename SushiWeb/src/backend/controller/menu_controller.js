@@ -1,5 +1,11 @@
 import { connectToDatabase } from '../config/db.js';
 import sql from 'mssql';
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const SECRET_KEY = process.env.SECRET_KEY;
 
 // Get the full menu for a specific branch and render it categorized
 export const getBranchMenu = async (req, res) => {
@@ -68,7 +74,7 @@ export const getCategoryItems = async (req, res) => {
             FROM MENU
             LEFT JOIN MONAN ON MENU.MAMON = MONAN.MAMON
             LEFT JOIN COMBOMONAN ON MENU.MACOMBO = COMBOMONAN.MACOMBO
-            WHERE MENU.MACHINHANH = @branchId`;
+            WHERE MENU.MACHINHANH = @branchId AND MENU.TRANGTHAIPHUCVU = 'Available'`;
 
         // Adjust the query to filter by category
         if (category !== 'Combo') {
@@ -175,11 +181,19 @@ export const addToCart = async (req, res) => {
         return res.status(400).json({ message: "Missing required fields." });
     }
 
+    const token = req.cookies.authToken;
+
+    if (!token) {
+        return res.status(401).json({ message: "No token provided." });
+    }
+
     try {
-        // Connect to the database
-        const pool = await connectToDatabase();
+        // Verify and decode the token to get the username
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const MAKH = decoded.MAKH; // Get the MAKH from the token
 
         // Query to get the current highest MACTMON
+        const pool = await connectToDatabase();
         const itemResult = await pool.request()
             .query("SELECT TOP 1 MACTMON FROM CHITIETMONAN ORDER BY MACTMON DESC");
 
@@ -203,12 +217,13 @@ export const addToCart = async (req, res) => {
                 VALUES (@MACTMON, @MAMENU, @SOLUONG)
             `);
 
-        // Insert the new MACTMON into TEMP_CART
+        // Optionally store MACTMON in TEMP_CART for the user (to be associated with the later order)
         await pool.request()
             .input('MACTMON', sql.Char, newMACTMON)
+            .input('MAKH', sql.Char, MAKH) // Now using the MAKHACHHANG as MAKH
             .query(`
-                INSERT INTO TEMP_CART (MACTMON)
-                VALUES (@MACTMON)
+                INSERT INTO TEMP_CART (MACTMON, MAKH)
+                VALUES (@MACTMON, @MAKH)
             `);
 
         res.status(201).json({ message: "Item added to cart successfully." });

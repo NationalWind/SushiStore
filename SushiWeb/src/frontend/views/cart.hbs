@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+</head>
+
+<body>
+    <h1>Your Cart</h1>
+
+    {{#if errorMessage}}
+    <p style="color: red;">{{errorMessage}}</p>
+    {{/if}}
+
+    {{#if cartItems.length}}
+    <form action="/cart/select" method="POST" id="cart-form">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Item Code (MACTMON)</th>
+                    <th>Quantity (SOLUONG)</th>
+                    <th>Total Price (DONGIATONG)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each cartItems}}
+                <tr>
+                    <td>
+                        <input type="checkbox" name="MACTMON[]" value="{{this.MACTMON}}" class="cart-checkbox"
+                            data-mactmon="{{this.MACTMON}}" {{#if this.SELECTED}}checked{{/if}}>
+                    </td>
+                    <td>{{this.MACTMON}}</td>
+                    <td>{{this.SOLUONG}}</td>
+                    <td>{{this.DONGIATONG}}</td>
+                    <td>
+                        <!-- Form for deleting an item -->
+                        <form action="/cart/delete" method="POST" style="display:inline;">
+                            <input type="hidden" name="MACTMON" value="{{this.MACTMON}}">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </form>
+    {{else}}
+    <p>Your cart is empty.</p>
+    {{/if}}
+
+    <script>
+        // Add event listeners to checkboxes
+        document.querySelectorAll('.cart-checkbox').forEach((checkbox) => {
+            checkbox.addEventListener('change', async function () {
+                const MACTMON = this.getAttribute('data-mactmon');
+                const isChecked = this.checked;
+
+                try {
+                    const response = await fetch('/cart/select', {
+                        method: 'POST',
+                        body: JSON.stringify({ MACTMON, SELECTED: isChecked ? 1 : 0 })
+                    });
+
+                    if (response.ok) {
+                        console.log('Item selection updated');
+                    } else {
+                        const errorData = await response.json();
+                        console.error('Error:', errorData.message);
+                    }
+                } catch (error) {
+                    console.error('Network error:', error);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
