@@ -14,7 +14,7 @@ export const getOrders = async (req, res) => {
         const token = req.cookies.authToken;
 
         if (!token) {
-            return res.render('order', { cartItems: [], errorMessage: "No token provided." });
+            return res.render('order', { orderItems: [], errorMessage: "No token provided." });
         }
 
         // Decode the token to get the user's MAKH (customer ID)
@@ -22,7 +22,7 @@ export const getOrders = async (req, res) => {
         const MAKH = decoded.MAKH;
 
         if (!MAKH) {
-            return res.render('order', { cartItems: [], errorMessage: "Customer ID not found in token." });
+            return res.render('order', { orderItems: [], errorMessage: "Customer ID not found in token." });
         }
 
         // Connect to the database
@@ -41,7 +41,8 @@ export const getOrders = async (req, res) => {
                     DATHANGTRUCTUYEN.DIACHIGIAO,
                     DATHANGTRUCTUYEN.TRANGTHAIGIAO AS DATHANGTRUCTUYEN_TRANGTHAIGIAO,
                     DATHANGTAICHO.MACHINHANH,
-                    DATHANGTAICHO.SOBAN
+                    DATHANGTAICHO.SOBAN,
+                    DONDATMON.THANHTIEN
                 FROM 
                     DONDATMON
                 LEFT JOIN 
@@ -54,13 +55,13 @@ export const getOrders = async (req, res) => {
 
         // If no orders found
         if (result.recordset.length === 0) {
-            return res.render('order', { cartItems: [], errorMessage: "There are no orders." });
+            return res.render('order', { orderItems: [], errorMessage: "There are no orders." });
         }
 
         // Render the orders to the view
-        res.render('order', { cartItems: result.recordset });
+        res.render('order', { orderItems: result.recordset });
     } catch (error) {
         console.error("Error fetching orders:", error);
-        res.render("order", { cartItems: [], errorMessage: "Internal server error." });
+        res.render("order", { orderItems: [], errorMessage: "Internal server error." });
     }
 };
