@@ -172,44 +172,48 @@
 </head>
 
 <body>
-    <div 
-    <h1>Menu for Branch {{branchId}}</h1>
+    <div class="menu_container">
+        <div class="menu_container-choose">
+            <div class="medium-title-deli">Menu for Branch {{branchId}}</div>
 
-    <div class="branch-selector">
-        <label for="branchSelect">Select Branch: </label>
-        <select onchange="switchBranch(event)">
-            {{#each branches}}
-            <option value="{{this.branchId}}" {{#if (eq this.branchId ../branchId)}}selected{{/if}}>{{this.branchName}}
-            </option>
-            {{/each}}
-        </select>
-    </div>
-
-    <div class="categories">
-        {{#each categories}}
-        <div class="category-tab" data-category="{{this.categoryName}}"
-            onclick="setActiveCategory('{{this.categoryName}}'); loadCategoryItems('{{../branchId}}', '{{this.categoryName}}');">
-            {{this.categoryName}}
+            <div class="branch-selector">
+                <label for="branchSelect">Select Branch: </label>
+                <select onchange="switchBranch(event)">
+                    {{#each branches}}
+                    <option value="{{this.branchId}}" {{#if (eq this.branchId ../branchId)}}selected{{/if}}>{{this.branchName}}
+                    </option>
+                    {{/each}}
+                </select>
+            </div>
         </div>
-        {{/each}}
+
+        <div class="categories">
+            {{#each categories}}
+            <div class="category-tab" data-category="{{this.categoryName}}"
+                onclick="setActiveCategory('{{this.categoryName}}'); loadCategoryItems('{{../branchId}}', '{{this.categoryName}}');">
+                {{this.categoryName}}
+            </div>
+            {{/each}}
+        </div>
+
+        <div class="items-container">
+            <!-- Items will be dynamically loaded here -->
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                fetchBranches();
+                const firstCategory = document.querySelector('.category-tab');
+                if (firstCategory) {
+                    const branchId = '{{branchId}}';
+                    const category = firstCategory.dataset.category;
+                    setActiveCategory(category);
+                    loadCategoryItems(branchId, category);
+                }
+            });
+        </script>
     </div>
 
-    <div class="items-container">
-        <!-- Items will be dynamically loaded here -->
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchBranches();
-            const firstCategory = document.querySelector('.category-tab');
-            if (firstCategory) {
-                const branchId = '{{branchId}}';
-                const category = firstCategory.dataset.category;
-                setActiveCategory(category);
-                loadCategoryItems(branchId, category);
-            }
-        });
-    </script>
 </body>
 
 </html>
