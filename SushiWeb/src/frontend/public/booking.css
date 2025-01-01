@@ -65,16 +65,29 @@ body {
 .form-group input[type="time"] {
     float: right;
 }
-
+/* ghi chú */
 .form-group textarea {
     resize: none;
-    height: 56px;
+    height: 100px;
+}
+
+.branch-container {
+    display: flex;
+    gap: 10px; 
+}
+
+.branch-container select {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 
 .submit-btn {
     width: 100%;
     padding: 14px;
-    background-color: #d50000;
+    background-color: #EA252C;
     color: white;
     font-size: 16px;
     font-weight: bold;
