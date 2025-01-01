@@ -28,7 +28,6 @@ footer {
     background-color: #EA252C;
     color: #ffffff;
     padding: 40px 0;
-    border-top: 1px solid #ddd;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -105,6 +104,7 @@ button {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+    z-index: 2;
 }
 
 button:disabled {
@@ -138,6 +138,7 @@ button:active:not(:disabled) {
     font-size: 16px;
     margin-top: 10px;
     transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+    z-index: 2;
 }
 
 .secondary-button:hover {
@@ -168,6 +169,7 @@ button:active:not(:disabled) {
     font-weight: 700;
     text-decoration: none;
     transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+    z-index: 2;
 }
 
 .button-red:hover {
@@ -198,6 +200,7 @@ button:active:not(:disabled) {
     font-weight: 700;
     text-decoration: none;
     transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+    z-index: 2;
 }
 
 .button-whitered:hover {
@@ -228,6 +231,7 @@ button:active:not(:disabled) {
     font-weight: 700;
     text-decoration: none;
     transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+    z-index: 2;
 }
 
 .button-gray:hover {
@@ -258,6 +262,7 @@ button:active:not(:disabled) {
     font-weight: 700;
     text-decoration: none;
     transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+    z-index: 2;
 }
 
 .button-whitegray:hover {
@@ -270,6 +275,37 @@ button:active:not(:disabled) {
     border-color: #353535;
     background-color: white;
     color: #353535;
+}
+
+.button-transparent {
+    width: 250px;
+    height: 70px;
+    border-color: #ffffff;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 10px;
+    background-color: transparent;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-weight: 700;
+    text-decoration: none;
+    transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+    z-index: 2;
+}
+
+.button-transparent:hover {
+    border-color: #ffffff;
+    background-color: #ffffff;
+    color: #353535;
+}
+
+.button-transparent:active {
+    border-color: #ffffff;
+    background-color: transparent;
+    color: #ffffff;
 }
 
 
@@ -318,6 +354,7 @@ button:active:not(:disabled) {
     font-size: 25px;
     font-weight: light;
     text-decoration: none;
+    z-index: 2;
 }
 
 .logo-text-deli {
@@ -325,6 +362,7 @@ button:active:not(:disabled) {
     font-size: 25px;
     text-decoration: none;
     font-weight: bold;
+    z-index: 2;
 }
 
 .logo-text-white {
@@ -332,6 +370,7 @@ button:active:not(:disabled) {
     font-size: 25px;
     font-weight: light;
     text-decoration: none;
+    z-index: 2;
 }
 
 .large-title-tokyo {
@@ -339,6 +378,7 @@ button:active:not(:disabled) {
     font-size: 100px;
     font-weight: light;
     text-decoration: none;
+    z-index: 2;
 }
 
 .large-title-deli {
@@ -346,6 +386,7 @@ button:active:not(:disabled) {
     font-size: 100px;
     text-decoration: none;
     font-weight: bold;
+    z-index: 2;
 }
 
 .large-title-white {
@@ -353,6 +394,7 @@ button:active:not(:disabled) {
     font-size: 100px;
     text-decoration: none;
     font-weight: bold;
+    z-index: 2;
 }
 
 .medium-title-tokyo {
@@ -360,6 +402,7 @@ button:active:not(:disabled) {
     font-size: 50px;
     font-weight: light;
     text-decoration: none;
+    z-index: 2;
 }
 
 .medium-title-deli {
@@ -367,6 +410,7 @@ button:active:not(:disabled) {
     font-size: 50px;
     text-decoration: none;
     font-weight: bold;
+    z-index: 2;
 }
 
 .medium-title-white {
@@ -374,44 +418,52 @@ button:active:not(:disabled) {
     font-size: 50px;
     text-decoration: none;
     font-weight: bold;
+    z-index: 2;
 }
 
 .section-title-text-red {
     color: #EA252C;
     font-size: 50px;
     font-weight: 700;
+    z-index: 2;
 }
 
 .section-title-text-gray {
     color: #353535;
     font-size: 50px;
     font-weight: 700;
+    z-index: 2;
 }
 
 .section-title-text-white {
     color: #ffffff;
     font-size: 50px;
     font-weight: 700;
+    z-index: 2;
 }
 
 .paragraph-text-left-gray {
     font-size: 20px;
     color: #353535;
+    z-index: 2;
 }
 
 .paragraph-text-center-gray {
     font-size: 25px;
     text-align: center;
     color: #353535;
+    z-index: 2;
 }
 
 .paragraph-text-left-white {
     font-size: 20px;
     color: #ffffff;
+    z-index: 2;
 }
 
 .paragraph-text-center-white {
     font-size: 25px;
     text-align: center;
     color: #ffffff;
+    z-index: 2;
 }

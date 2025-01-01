@@ -65,7 +65,7 @@
 /* INTRODUCTION TOKYODELI */
 
 .home_introduction {
-    padding: 100px 140px 100px 140px;
+    padding: 120px 140px 120px 140px;
     display: flex;
     justify-content: space-between;
     gap: 140px;
@@ -145,12 +145,28 @@
 /* BOOK A TABLE */
 
 .home_book-table {
-    padding: 100px 200px 180px 200px;
+    padding: 180px 200px 180px 200px;
     display: flex;
     flex-direction: column;
     gap: 60px;
     display: flex;
     align-items: center;
+    background-image: url('https://images.unsplash.com/photo-1455279032140-49a4bf46f343?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-size: cover;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    z-index: 0;
+    position: relative;
+}
+
+.home_book-table-transparent {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
 }
 
 .home_book-table-text {
@@ -158,4 +174,6 @@
     display: flex;
     flex-direction: column;
     gap: 30px;
+    z-index: 2;
 }
+
