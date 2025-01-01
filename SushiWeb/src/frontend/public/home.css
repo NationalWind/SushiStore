@@ -1,11 +1,26 @@
 /* MAIN SCREEN TOKYODELI */
 
 .home_main-homepage {
-    padding: 90px 80px 115px 80px;
+    padding: 90px 100px 110px 120px;
     display: flex;
     justify-content: space-between;
     gap: 100px;
     align-items: center;
+    background-image: url('https://images.unsplash.com/photo-1607301404882-06d3c9778bac?q=80&w=2091&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-size: cover;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.home_main-homepage-transparent {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 0;
 }
 
 .home_main-homepage-left {
@@ -13,6 +28,7 @@
     flex-direction: column;
     justify-content: space-between;
     gap: 60px;
+    z-index: 5;
 }
 
 .home_main-homepage-top {
@@ -25,7 +41,7 @@
 .home_main-homepage-title {}
 
 .home_main-homepage-description {
-    color: #353535;
+    color: #ffffff;
     font-size: 30px;
 }
 
@@ -37,7 +53,7 @@
 }
 
 .home_main-homepage-description-two {
-    color: #353535;
+    color: #ffffff;
     font-size: 25px;
     font-weight: 700;
 }
@@ -47,6 +63,7 @@
     overflow: hidden;
     position: relative;
     object-fit: cover;
+    z-index: 5;
 }
 
 .home__main-homepage-right img {
@@ -93,7 +110,7 @@
 
 /* PHOTO SLIDER */
 .home_menu-photos {
-    padding: 120px 80px 120px 80px;
+    padding: 100px 80px 120px 80px;
 }
 
 .home_menu-photos-carousel {

@@ -20,6 +20,8 @@ header {
     padding: 20px 80px;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
+    z-index: 10;
+    position: relative;
 }
 
 footer {
@@ -308,6 +310,37 @@ footer {
     color: #ffffff;
 }
 
+.button-whitetransparent {
+    width: 250px;
+    height: 70px;
+    border-color: white;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 10px;
+    background-color: white;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #353535;
+    font-weight: 700;
+    text-decoration: none;
+    transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+    z-index: 2;
+}
+
+.button-whitetransparent:hover {
+    border-color: #ffffff;
+    background-color: transparent;
+    color: white;
+}
+
+.button-whitetransparent:active {
+    border-color: #ffffff;
+    background-color: white;
+    color: #353535;
+}
+
 
 /* Links */
 .link {
@@ -394,7 +427,6 @@ footer {
     color: #ffffff;
     font-size: 100px;
     text-decoration: none;
-    font-weight: bold;
     z-index: 2;
 }
 
