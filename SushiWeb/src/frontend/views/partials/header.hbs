@@ -6,23 +6,23 @@
         <div class="header_left">
             <img class="logo"
                 src="https://scontent.fsgn2-3.fna.fbcdn.net/v/t39.30808-6/448201804_845814457576232_3022944095576243187_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=kj0IUBtdNS4Q7kNvgHcLg8y&_nc_oc=Adi9JRyTbz1sXiIeTsNbFImYb-RIlvu33nwwak5ESn9lIXCUxJ36ocknALOSN8YEYW7o9bADeam6F_udEpGWojym&_nc_zt=23&_nc_ht=scontent.fsgn2-3.fna&_nc_gid=ADFrxNedtgJ7_KHknC2zN3F&oh=00_AYDQtxwv4jkBIhyFHp0Er-TjMk8asdV5aW36_1T0wI5sLg&oe=67773453"
-                alt="Sushi Logo">
+                alt="Sushi Logo"/>
             <div>
                 <a class="header_left-text" href="/">
                     <span class="logo-text-tokyo">TOKYO</span><span class="logo-text-deli">DELI</span>
                 </a>
             </div>
         </div>
-        <div class="nav-links">
-            <li><a href="/">HOME</a></li>
-            <li><a href="/about">ABOUT</a></li>
-            <li><a href="/menu">MENU</a></li>
-            <li><a href="/promotion">PROMOTION</a></li>
-            <li><a href="/membership">MENBERSHIP</a></li>
-            <li><a href="/booking">BOOKING</a></li>
-            <li><a href="/stores">STORES</a></li>
-            <li><a href="/rescruitment">RECRUITMENT</a></li>
-            <li><a href="/contact">CONTACT</a></li>
+        <ul class="nav-links">
+            <a href="/">HOME</a>
+            <a href="/about">ABOUT</a>
+            <a href="/menu">MENU</a>
+            <a href="/promotion">PROMOTION</a>
+            <a href="/membership">MEMBERSHIP</a>
+            <a href="/booking">BOOKING</a>
+            <a href="/stores">STORES</a>
+            <a href="/recruitment">RECRUITMENT</a>
+            <a href="/contact">CONTACT</a>
             <a href="/cart">
                 <button class="cart-button">
                     <img src="https://img.icons8.com/ios-filled/50/000000/shopping-cart.png" alt="Cart Icon">
@@ -35,16 +35,11 @@
                         alt="Order Icon">
                 </button>
             </a>
-        </div>
+        </ul>
     </nav>
 </header>
 
 <style>
-    header {
-        background-color: #ffffff;
-        padding: 25px 80px;
-        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
-    }
 
     .header_left {
         display: flex;
@@ -93,13 +88,16 @@
         justify-content: space-between;
         gap: 20px;
         font-weight: 400;
-        font-size: 18px;
+        font-size: 15px;
     }
 
     .nav-links a {
         color: #353535;
         text-decoration: none;
         transition: font-weight 0.5s, color 0.5s;
+        justify-content: center;
+        display: flex;
+        flex-direction: column;;
     }
 
     .nav-links a:hover {
@@ -112,6 +110,9 @@
         font-weight: 700;
     }
 
+    .nav-links li {
+    }
+
     .header_container {
         display: flex;
         justify-content: space-between;
@@ -120,23 +121,25 @@
 
     .cart-button,
     .order-button {
-        background-color: #ffffff;
+        background-color: white;
         border: none;
-        border-radius: 50%;
-        padding: 0px;
         cursor: pointer;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 40px;
+        height: 40px;
+        transition: background-color 0.5s;
+        border-radius: 25px;
     }
 
     .cart-button img,
     .order-button img {
-        width: 30px;
-        height: 20px;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
     }
 
     .cart-button:hover,
     .order-button:hover {
-        background-color: #f0f0f0;
+        background-color: #EA252C;
     }
 </style>
 

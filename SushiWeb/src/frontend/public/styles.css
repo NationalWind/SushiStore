@@ -14,18 +14,21 @@ body {
 
 header {
     background-color: #ffffff;
-    padding: 1em 0;
     text-align: center;
+    padding: 20px 80px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
 }
 
 footer {
     background-color: #ffffff;
     color: #c52626;
     text-align: center;
-    padding: 0.5em 0;
-    position: fixed;
-    bottom: 0;
     width: 100%;
+    background-color: #EA252C;
+    text-align: center;
+    padding: 30px 0;
+    border-top: 1px solid #ddd;
+    margin-top: 20px;
 }
 
 /* Authentication */
@@ -78,7 +81,7 @@ footer {
 }
 
 /* Buttons */
-button {
+/* button {
     width: 100%;
     padding: 10px;
     background-color: #007bff;
@@ -116,6 +119,7 @@ button:hover:not(:disabled) {
 .secondary-button:hover {
     background-color: #5a6268;
 }
+*/
 
 /* Links */
 .link {

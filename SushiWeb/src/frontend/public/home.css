@@ -1,5 +1,7 @@
+/* MAIN SCREEN TOKYODELI */
+
 .home_main-homepage {
-    padding: 70px 80px;
+    padding: 100px 80px 140px 80px;
     display: flex;
     justify-content: space-between;
     gap: 100px;
@@ -88,6 +90,7 @@
     justify-content: center;
     color: white;
     font-weight: 700;
+    text-decoration: none;
     transition: border-color 0.5s, background-color 0.5s, color 0.5s;
 }
 
@@ -105,6 +108,7 @@
     justify-content: center;
     color: #EA252C;
     font-weight: 700;
+    text-decoration: none;
     transition: border-color 0.5s, background-color 0.5s, color 0.5s;
 }
 
@@ -131,3 +135,6 @@
     background-color: white;
     color: #EA252C;
 }
+
+
+/* MAIN SCREEN TOKYODELI */
