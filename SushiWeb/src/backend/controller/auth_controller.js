@@ -11,7 +11,6 @@ const SECRET_KEY = process.env.SECRET_KEY; // Replace with a secure key
 // User signup controller
 export const signup = async (req, res) => {
     const { username, password, hoten, sdt, email, cccd } = req.body;
-
     try {
         // Check if the username already exists
         const pool = await connectToDatabase();
@@ -22,7 +21,6 @@ export const signup = async (req, res) => {
         if (result.recordset.length > 0) {
             return res.status(400).json({ message: "Username already exists" });
         }
-
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -34,7 +32,7 @@ export const signup = async (req, res) => {
             .query("INSERT INTO ACCOUNT (username, password, role) OUTPUT INSERTED.ID VALUES (@username, @password, @role)");
 
         const accountId = resultAccount.recordset[0].ID;
-
+        console.log("Account inserted with ID:", resultAccount.recordset[0].ID);
         // Get the highest MAKHACHHANG and increment it
         const resultKhachHang = await pool.request()
             .query("SELECT TOP 1 MAKHACHHANG FROM KHACHHANG ORDER BY MAKHACHHANG DESC");
@@ -90,24 +88,32 @@ export const login = async (req, res) => {
         // Identify the user's role
         const role = user.ROLE; // Assuming the ROLE column contains values: 'Admin', 'Branch Manager', 'Department Manager', 'Staff', 'Customer'
 
-        const result2 = await pool.request()
-            .input('username', sql.NVarChar, username)
-            .query(`
-                SELECT MAKHACHHANG 
-                FROM KHACHHANG
-                JOIN ACCOUNT ON ACCOUNT_ID = ID
-                WHERE USERNAME = @username
-            `);
-        const MAKH = result2.recordset[0].MAKHACHHANG;
-        // Generate a JWT token
-        const token = jwt.sign(
-            { id: user.ID, username: user.USERNAME, role, MAKH: MAKH },
-            SECRET_KEY,
-            { expiresIn: "1h" }
-        );
-
-        // Set token in cookies
-        res.cookie("authToken", token, { httpOnly: true, secure: true });
+        if (role == 'Customer') {
+            const result2 = await pool.request()
+                .input('username', sql.NVarChar, username)
+                .query(`
+                    SELECT MAKHACHHANG 
+                    FROM KHACHHANG
+                    JOIN ACCOUNT ON ACCOUNT_ID = ID
+                    WHERE USERNAME = @username
+                `);
+            const MAKH = result2.recordset[0].MAKHACHHANG;
+            // Generate a JWT token
+            const token = jwt.sign(
+                { id: user.ID, username: user.USERNAME, role, MAKH: MAKH },
+                SECRET_KEY,
+                { expiresIn: "1h" }
+            );
+            res.cookie("authToken", token, { httpOnly: true, secure: true });
+        }
+        else {
+            const token = jwt.sign(
+                { id: user.ID, username: user.USERNAME, role },
+                SECRET_KEY,
+                { expiresIn: "1h" }
+            );
+            res.cookie("authToken", token, { httpOnly: true, secure: true });
+        }
 
         // Redirect based on role
         switch (role) {

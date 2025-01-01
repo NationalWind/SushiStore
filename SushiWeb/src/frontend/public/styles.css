@@ -1,44 +1,54 @@
 * {
     font-family: 'Montserrat', sans-serif;
-}
-
-body {
-    background-color: rgb(255, 255, 255);
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+body.authen-page {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
 }
 
+header, footer {
+    width: 100%;
+    position: fixed;
+    left: 0;
+}
+
 header {
+    top: 0;
     background-color: #ffffff;
+    padding: 0;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
-    padding: 20px 80px;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
 }
 
 footer {
-    background-color: #ffffff;
-    color: #c52626;
-    text-align: center;
-    width: 100%;
+    bottom: 0;
     background-color: #EA252C;
+    color: #ffffff;
     text-align: center;
-    padding: 30px 0;
+    padding: 20px 0;
     border-top: 1px solid #ddd;
 }
 
 /* Authentication */
 .container {
-    width: 100%;
-    max-width: 400px;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    position: relative;
+    margin: auto;
+    width: 400px;
+    max-width: 800px; 
     padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 1;
+    margin-top: 80px;
+    margin-bottom: 80px;
 }
 
 /* Logo Section */
@@ -80,7 +90,7 @@ footer {
 }
 
 /* Buttons */
-/* button {
+button {
     width: 100%;
     padding: 10px;
     background-color: #007bff;
@@ -118,7 +128,6 @@ button:hover:not(:disabled) {
 .secondary-button:hover {
     background-color: #5a6268;
 }
-*/
 
 .button-red {
     width: 250px;
@@ -261,12 +270,12 @@ button:hover:not(:disabled) {
     align-items: center;
     justify-content: center;
     margin: 20px 0;
-    color: #666; /* Màu nhẹ */
+    color: #666;
     font-size: 14px;
 }
 
 .divider span {
-    background: #fff; /* Màu nền đồng nhất */
+    background: #fff; 
     padding: 0 10px;
 }
 
@@ -275,7 +284,7 @@ button:hover:not(:disabled) {
     content: "";
     flex: 1;
     height: 1px;
-    background: #ddd; /* Màu line nhẹ */
+    background: #ddd; 
     margin: 0 10px;
 }
 
