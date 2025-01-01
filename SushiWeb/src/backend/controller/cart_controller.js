@@ -179,12 +179,12 @@ export const createOrder = async (req, res) => {
         const resultMaDon = await pool.request()
             .query("SELECT TOP 1 MADON FROM DONDATMON ORDER BY MADON DESC");
 
-        let newMADON = "DONDAT0001";
+        let newMADON = "DON0000001";
         if (resultMaDon.recordset.length > 0) {
             const lastMADON = resultMaDon.recordset[0].MADON;
-            const lastNumber = parseInt(lastMADON.substring(6));
+            const lastNumber = parseInt(lastMADON.substring(3));
             const newNumber = lastNumber + 1;
-            newMADON = `DONDAT${String(newNumber).padStart(4, "0")}`;
+            newMADON = `DONDAT${String(newNumber).padStart(7, "0")}`;
         }
 
         // Insert the new order
