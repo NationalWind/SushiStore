@@ -1,0 +1,172 @@
+/* Này là style nền cũng như là style chung */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+header {
+    width: 100%;
+    left: 0;
+    top: 0;
+    background-color: #ffffff;
+    padding: 20px 80px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+footer {
+    left: 0;
+    bottom: 0;
+    background-color: #EA252C;
+    color: #ffffff;
+    padding: 40px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    gap: 30px;
+    width: 100%;
+}
+
+.wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 600px;
+}
+
+
+/* Tiêu đề */
+.head-title {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.head-title h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.head-title-zone .title {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    font-weight: 400;
+}
+
+.head-title-zone .title li {
+    margin: 0;
+}
+
+.head-title-zone .title li a {
+    text-decoration: none;
+    color: #333;
+    padding: 10px 20px;
+    border: 1px solid black;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-block;
+    transition: background-color 0.2s ease, color 0.2s ease, border 0.2s ease;
+}
+
+.head-title-zone .title li a:hover {
+    background-color: #e60023;
+    color: #fff;
+    border: none;
+}
+
+.head-title-zone .title li.active a {
+    background-color: #e60023;
+    color: #fff;
+    border: none;
+}
+
+/* Khối chứa form */
+.container {
+    width: 500px;
+    max-width: 800px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    text-align: center;
+    margin-top: 25px;
+}
+
+/* Nội dung form */
+.wrap-form .text p {
+    color: #333;
+    font-family: Nunito, sans-serif;
+    font-weight: 400;
+    text-align: center;
+    line-height: 1.5;
+    font-size: 16px;
+    box-sizing: border-box;
+    margin-bottom: 30px;
+}
+
+/* Chổ nhập */
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 23px;
+    border-bottom: 1px solid #ddd;
+    /* border-radius: 5px; */
+    padding: 10px;
+    background: #fff;
+    gap: 10px;
+}
+
+.form-group .icon {
+    font-size: 18px;
+    color: #555;
+}
+
+.form-group input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 14px;
+    color: #333;
+    background: transparent;
+}
+
+/* Placeholder */
+.form-group input::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+/* Nút bấm */
+.frm-btnwrap .frm-btn input {
+    background-color: #e60023;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+.frm-btnwrap .frm-btn input:hover {
+    background-color: #cc0020;
+}
