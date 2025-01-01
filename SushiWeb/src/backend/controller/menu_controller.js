@@ -197,14 +197,14 @@ export const addToCart = async (req, res) => {
         const itemResult = await pool.request()
             .query("SELECT TOP 1 MACTMON FROM CHITIETMONAN ORDER BY MACTMON DESC");
 
-        let newMACTMON = 'CTMON00001';  // Default to the first ID if no records exist
+        let newMACTMON = 'CTM0000001';  // Default to the first ID if no records exist
 
         if (itemResult.recordset.length > 0) {
             const highestMACTMON = itemResult.recordset[0].MACTMON;
             // Extract the numeric part of the highest MACTMON and increment it
-            const numberPart = parseInt(highestMACTMON.slice(5)) + 1;
+            const numberPart = parseInt(highestMACTMON.slice(3)) + 1;
             // Generate new MACTMON (pad the number with leading zeros to ensure the format is consistent)
-            newMACTMON = `CTMON${numberPart.toString().padStart(5, '0')}`;
+            newMACTMON = `CTMON${numberPart.toString().padStart(7, '0')}`;
         }
 
         // Insert into CHITIETMONAN table with the new MACTMON
