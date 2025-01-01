@@ -90,9 +90,18 @@ export const login = async (req, res) => {
         // Identify the user's role
         const role = user.ROLE; // Assuming the ROLE column contains values: 'Admin', 'Branch Manager', 'Department Manager', 'Staff', 'Customer'
 
+        const result2 = await pool.request()
+            .input('username', sql.NVarChar, username)
+            .query(`
+                SELECT MAKHACHHANG 
+                FROM KHACHHANG
+                JOIN ACCOUNT ON ACCOUNT_ID = ID
+                WHERE USERNAME = @username
+            `);
+        const MAKH = result2.recordset[0].MAKHACHHANG;
         // Generate a JWT token
         const token = jwt.sign(
-            { id: user.ID, username: user.USERNAME, role },
+            { id: user.ID, username: user.USERNAME, role, MAKH: MAKH },
             SECRET_KEY,
             { expiresIn: "1h" }
         );

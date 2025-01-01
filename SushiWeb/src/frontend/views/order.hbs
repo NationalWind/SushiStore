@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Orders</title>
+</head>
+
+<body>
+    <h1>Your Orders</h1>
+
+    {{#if errorMessage}}
+    <p style="color: red;">{{errorMessage}}</p>
+    {{/if}}
+
+    {{#if cartItems.length}}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Order ID (MADON)</th>
+                <th>Order Date (NGAYDAT)</th>
+                <th>Order Time (GIODAT)</th>
+                <th>Status (TRANGTHAI)</th>
+                <th>Delivery Time (THOIGIANGIAO)</th>
+                <th>Delivery Address (DIACHIGIAO)</th>
+                <th>Delivery Status (TRANGTHAIGIAO)</th>
+                <th>Branch (MACHINHANH)</th>
+                <th>Table (SOBAN)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each cartItems}}
+            <tr>
+                <td>{{this.MADON}}</td>
+                <td>{{this.NGAYDAT}}</td>
+                <td>{{this.GIODAT}}</td>
+                <td>{{this.DONDATMON_TRANGTHAI}}</td>
+                <td>{{this.THOIGIANGIAO}}</td>
+                <td>{{this.DIACHIGIAO}}</td>
+                <td>{{this.DATHANGTRUCTUYEN_TRANGTHAIGIAO}}</td>
+                <td>{{this.MACHINHANH}}</td>
+                <td>{{this.SOBAN}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    {{else}}
+
+    {{/if}}
+
+</body>
+
+</html>
