@@ -4,27 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đặt bàn</title>
+    <title>Booking</title>
     <link rel="stylesheet" href="../public/booking.css">
 </head>
 
 <body>
     <div class="wrapper">
-        <h1 class="page-title">Đặt bàn</h1>
-        <div class="container">
+        <h1 class="page-title">Booking</h1>
+        <div class="booking_container">
             <div class="form-container">
-                <p>Quý khách vui lòng điền đầy đủ thông tin và yêu cầu đặt bàn.</p>
+                <p class="form-container-note">Please fill in all of your personal and booking information.</p>
                 <form>
                     <div class="form-group">
-                        <label for="name">Họ và tên (*)</label>
-                        <input type="text" id="name" placeholder="Nhập họ và tên">
+                        <label for="name">Full Name (*)</label>
+                        <input type="text" id="name" placeholder="Your full name">
                     </div>
                     <div class="form-group">
-                        <label for="phone">Số điện thoại (*)</label>
-                        <input type="text" id="phone" placeholder="Nhập số điện thoại">
+                        <label for="phone">Phone Number (*)</label>
+                        <input type="text" id="phone" placeholder="Your phone number">
                     </div>
                     <div class="form-group">
-                        <label for="branch">Chọn chi nhánh (*)</label>
+                        <label for="branch">Branch to Book (*)</label>
                         <div class="branch-container">
                             <select id="branch" name="branch">
                                 <option value="hcm">TP Hồ Chí Minh</option>
@@ -38,19 +38,19 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="guests">Số lượng khách</label>
-                        <input type="number" id="guests" placeholder="Nhập số lượng khách">
+                        <label for="guests">Number of Guests</label>
+                        <input type="number" id="guests" placeholder="Your number of guests to book">
                     </div>
                     <div class="form-group">
-                        <label for="date">Ngày</label>
+                        <label for="date">Date and Time</label>
                         <input type="date" id="date">
                         <input type="time" id="time">
                     </div>
                     <div class="form-group">
-                        <label for="notes">Ghi chú</label>
-                        <textarea id="notes" placeholder="Nhập ghi chú (nếu có)"></textarea>
+                        <label for="notes">Notes</label>
+                        <textarea id="notes" placeholder="Your notes (if any)"></textarea>
                     </div>
-                    <button type="submit" class="submit-btn">Gửi</button>
+                    <button type="submit" class="submit-btn">Submit Booking</button>
                 </form>
             </div>
 

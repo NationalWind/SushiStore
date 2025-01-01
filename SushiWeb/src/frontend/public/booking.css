@@ -1,12 +1,5 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
-    display: flex;
-    justify-content: center; 
-    align-items: center;
-    min-height: 100vh;
+.wrapper {
+    padding: 50px;
 }
 
 .wrapper .page-title {
@@ -14,17 +7,21 @@ body {
 }
 
 .page-title {
-    font-size: 30px;
+    font-size: 50px;
     font-weight: bold;
-    margin-bottom: 15px; 
+    margin-bottom: 40px;
+    color: #EA252C;
+
 }
 
-.container {
+.booking_container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
     display: flex;
     gap: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 60px;
 }
 
 .form-container {
@@ -32,7 +29,6 @@ body {
     background: white;
     padding: 30px;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     min-width: 400px;
 }
 
@@ -91,13 +87,22 @@ body {
     color: white;
     font-size: 16px;
     font-weight: bold;
-    border: none;
+    border-color: white;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.5s, color 0.5s, border-color 0.5s;
 }
 
 .submit-btn:hover {
-    background-color: #a50000;
+    background-color: #ffffff;
+    color: #EA252C;
+    border-color: #EA252C;
+}
+
+.submit-btn:active {
+    background-color: #EA252C;
+    color: #ffffff;
+    border-color: #ffffff;
 }
 
 .image-container {
@@ -111,4 +116,9 @@ body {
     width: 100%;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-container-note {
+    margin-bottom: 20px;
+    font-style: italic;
 }

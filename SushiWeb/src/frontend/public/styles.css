@@ -313,8 +313,9 @@ footer {
 .link {
     display: block;
     text-align: center;
-    font-size: 14px;
-    color: #007bff;
+    font-size: 15px;
+    color: #353535;
+    font-weight: 600;
     text-decoration: none;
     margin-top: 10px;
 }

@@ -47,6 +47,20 @@ app.use("/menu", menuRoutes);
 app.use("/cart", cartRoutes);
 app.use("/order", orderRoutes);
 
+// Tạm thời
+// Membership and Booking routes
+const router = express.Router();
+
+router.get("/membership", (req, res) => {
+    res.render("membership", { title: "Membership" });
+});
+
+router.get("/booking", (req, res) => {
+    res.render("booking", { title: "Booking" });
+});
+
+app.use(router);
+
 // Start server
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
