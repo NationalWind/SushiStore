@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <link rel="stylesheet" href="../public/styles.css">
+</head>
+
+<style>
+    .contact_container {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 80px 100px 150px 100px;
+        background-image: url('https://images.unsplash.com/photo-1583623025817-d180a2221d0a?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+        background-size: cover;
+        background-position: top;
+        background-repeat: no-repeat;
+        gap: 30px;
+        z-index: 0;
+        position: relative;
+        min-height: 640px;
+    }
+
+    .contact_container-transparent {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 1;
+    }
+
+    .contact_container-all {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 100px;
+        z-index: 3;
+    }
+
+    .contact_information {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        z-index: 3;
+    }
+
+    .contact_map {
+        height: 300px;
+    }
+</style>
+
+<body>
+    <div class="contact_container">
+        <div class="contact_container-transparent"></div>
+        <p class="medium-title-white">Contact</p>
+        <div class="contact_container-all">
+            <div class="contact_information">
+                <div class="paragraph-text-left-white">
+                    <strong>TOKYO<span style="color: #EA252C;">DELI</span> MAIN BRANCH - BROWN AND SONS</strong></div>
+                <div class="paragraph-text-left-white">
+                    <strong>Address:</strong> 2151 Crystal Mills Apt. 392 South Malik OH 88407, District 7
+                </div>
+                <div class="paragraph-text-left-white">
+                    <strong>Restaurant Host:</strong> Tran Quoc Phong
+                </div>
+                <div class="paragraph-text-left-white">
+                    <strong>Bookings:</strong> 028 3975 6922 | 0903 382 482
+                </div>
+                <div class="paragraph-text-left-white">
+                    <strong>Email:</strong> tqphong22@clc.fitus.edu.vn
+                </div>
+                <div class="paragraph-text-left-white">
+                    <strong>Opening hours:</strong> 08:00 AM - 10:00 PM
+                </div>
+            </div>
+            <iframe class="contact_map"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62719.35302012148!2d106.68716379025764!3d10.737599988510626!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752560b050b093%3A0x6dcb89c51055ccc9!2sDistrict%207%2C%20Ho%20Chi%20Minh%20City%2C%20Vietnam!5e0!3m2!1sen!2s!4v1735744605990!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" 
+                width="600" 
+                height="450" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy">
+            </iframe>
+        </div>
+    </div>
+</body>
+
+</html>

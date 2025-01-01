@@ -1,7 +1,7 @@
 /* MAIN SCREEN TOKYODELI */
 
 .home_main-homepage {
-    padding: 120px 80px 125px 80px;
+    padding: 90px 80px 115px 80px;
     display: flex;
     justify-content: space-between;
     gap: 100px;
@@ -43,7 +43,7 @@
 }
 
 .home__main-homepage-right {
-    height: 400px;
+    height: 450px;
     overflow: hidden;
     position: relative;
     object-fit: cover;
@@ -176,4 +176,3 @@
     gap: 30px;
     z-index: 2;
 }
-

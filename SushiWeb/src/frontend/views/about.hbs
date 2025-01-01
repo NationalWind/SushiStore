@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <link rel="stylesheet" href="../public/styles.css">
+</head>
+
+<style>
+    .about-us__container {
+        align-content: center;
+        position: relative;
+        z-index: 3;
+        overflow: hidden;
+    }
+
+    /* Card */
+    .about-us__card-container {
+        width: 100vw;
+        justify-content: center;
+        display: flex;
+        color: white;
+    }
+
+    .about-us__card {
+        --formHeight: auto;
+        --borderRad: 20px;
+        flex: 1;
+        height: var(--formHeight);
+        border-radius: var(--borderRad);
+        padding: 80px 120px 80px 120px;
+        scale: 1;
+        position: relative;
+        z-index: 6;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    /* Story and Team Containers */
+    .about-us__story-container,
+    .about-us__team-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 100px;
+    }
+
+    /* Logo Container */
+    .about-us__logo-container {
+        --logoSize: 400px;
+        width: var(--logoSize);
+        height: var(--logoSize);
+        background: transparent;
+    }
+
+    .about-us__logo-container img {
+        width: 400px;
+        height: 400px;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 50%;
+    }
+
+    /* Text Areas */
+    .about-us__story-text,
+    .about-us__team-text {
+        font-size: 20px;
+        text-align: justify;
+        width: 70%;
+        line-height: 1.6;
+    }
+
+    .about-us__story-text span,
+    .about-us__team-text span {
+        color: #EA252C;
+    }
+
+    /* Team Image Container */
+    .about-us__team-img-container {
+        width: 400px;
+        height: 400px;
+        object-fit: contain;
+        object-position: center;
+        border-radius: 50%;
+    }
+</style>
+
+<body>
+    <div class="about-us__container">
+      <div class="about-us__card-container">
+        <div class="about-us__card">
+          <p class="medium-title-deli">About Us</p>
+          <div class="about-us__story-container">
+            <div class="about-us__logo-container">
+              <img src="https://static.blog.bolt.eu/LIVE/wp-content/uploads/2024/05/10110345/different-types-of-sushi-1024x536.jpg"/>
+            </div>
+            <div class="about-us__story-text">
+              <p class="paragraph-text-left-gray">
+                <strong>TOKYO<span>DELI</span></strong> was founded in 2010 by a group of passionate sushi lovers with a shared vision: to bring the authentic tastes of Japan’s vibrant culinary culture to the local community. Inspired by the rich heritage of Japanese cuisine and the bustling sushi bars of Tokyo, the founders wanted to create a place where sushi lovers could experience traditional Japanese flavors in a modern, inviting atmosphere.
+              </p>
+            </div>
+          </div>
+          <div class="about-us__team-container">
+            <div class="about-us__team-text">
+              <p class="paragraph-text-left-gray">
+                Born out of a deep respect for the meticulous craftsmanship that goes into each sushi roll, <strong>TOKYO<span>DELI</span></strong> was designed to be more than just a sushi restaurant—it was a place to share the art of Japanese cooking with the world. The founders, who spent years studying sushi-making in Japan and apprenticing under master sushi chefs, decided to open this restaurant to introduce the community to the delicate balance of flavors that defines authentic Japanese sushi.
+              </p>
+            </div>
+            <img src="https://img.freepik.com/free-vector/sushi-japanese-nation-tradition-food-symbol_1308-128534.jpg?t=st=1735740503~exp=1735744103~hmac=83535e859944ed908740f9c44059c023059dd3a2401fed8a5b9bf166abafffac&w=740" class="about-us__team-img-container"
+            />
+          </div>
+          <div class="about-us__story-container">
+            <div class="about-us__logo-container">
+              <img src="https://i.shgcdn.com/170776f5-8678-4b7b-aba7-9157fd1b5aab/-/format/auto/-/preview/3000x3000/-/quality/lighter/"/>
+            </div>
+            <div class="about-us__story-text">
+              <p class="paragraph-text-left-gray">
+                From its humble beginnings as a small, local eatery, <strong>TOKYO<span>DELI</span></strong> has grown into a beloved destination for sushi enthusiasts seeking a truly authentic experience. What started as a single restaurant has expanded to multiple locations, each maintaining the same commitment to quality and craftsmanship that the founders envisioned when they first opened their doors.
+              </p>
+            </div>
+          </div>
+          <div class="about-us__team-container">
+            <div class="about-us__team-text">
+              <p class="paragraph-text-left-gray">
+                At <strong>TOKYO<span>DELI</span></strong>, we honor tradition while embracing innovation. Our story is one of dedication to craftsmanship, a love for the art of sushi, and a commitment to providing our guests with an unforgettable dining experience. Today, we continue to honor our roots by serving fresh, high-quality sushi that reflects the timeless tradition of Japanese cuisine while offering a modern and welcoming space for friends and families to gather.
+              </p>
+            </div>
+            <img src="https://img.freepik.com/free-vector/delicious-sushi-vector-illustration_1308-176195.jpg?t=st=1735483027~exp=1735486627~hmac=f99220b45444aa35afa297d9324fb4fb4c6a3451ead9f51b9c2a0c1a1e9ea940&w=900" class="about-us__team-img-container"/>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+
+</html>

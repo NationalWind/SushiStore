@@ -34,4 +34,12 @@ router.get("/", authenticateToken, (req, res) => {
     });
 });
 
+router.get("/about", (req, res) => {
+    res.render("about", { title: "About" }); // Render the aboutus.hbs template
+});
+
+router.get("/contact", (req, res) => {
+    res.render("contact", { title: "Contact" }); // Render the aboutus.hbs template
+});
+
 export default router;
