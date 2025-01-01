@@ -21,7 +21,6 @@ export const signup = async (req, res) => {
         if (result.recordset.length > 0) {
             return res.status(400).json({ message: "Username already exists" });
         }
-
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -33,7 +32,7 @@ export const signup = async (req, res) => {
             .query("INSERT INTO ACCOUNT (username, password, role) OUTPUT INSERTED.ID VALUES (@username, @password, @role)");
 
         const accountId = resultAccount.recordset[0].ID;
-
+        console.log("Account inserted with ID:", resultAccount.recordset[0].ID);
         // Get the highest MAKHACHHANG and increment it
         const resultKhachHang = await pool.request()
             .query("SELECT TOP 1 MAKHACHHANG FROM KHACHHANG ORDER BY MAKHACHHANG DESC");

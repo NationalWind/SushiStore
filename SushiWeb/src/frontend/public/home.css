@@ -1,7 +1,7 @@
 /* MAIN SCREEN TOKYODELI */
 
 .home_main-homepage {
-    padding: 100px 80px 140px 80px;
+    padding: 100px 80px 115px 80px;
     display: flex;
     justify-content: space-between;
     gap: 100px;
@@ -27,21 +27,6 @@
 .home_main-homepage-description {
     color: #353535;
     font-size: 30px;
-}
-
-.home_main-homepage-title-tokyo {
-    color: #353535;
-    font-size: 100px;
-    font-weight: light;
-    text-decoration: none;
-}
-
-.home_main-homepage-title-deli {
-    color: #EA252C;
-    font-size: 100px;
-    font-weight: light;
-    text-decoration: none;
-    font-weight: bold;
 }
 
 .home_main-homepage-bottom {
@@ -76,65 +61,101 @@
     align-items: center;
 }
 
-.home_main-homepage-login {
-    width: 250px;
-    height: 70px;
-    border-color: #ffffff;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 10px;
+
+/* INTRODUCTION TOKYODELI */
+
+.home_introduction {
+    padding: 100px 140px 100px 140px;
+    display: flex;
+    justify-content: space-between;
+    gap: 140px;
+    align-items: center;
     background-color: #EA252C;
-    font-size: 20px;
+}
+
+.home_introduction-left {
+    
+}
+
+.home_introduction-big-logo {
+    width: 400px;
+    border-radius: 200px;
+}
+
+.home_introduction-right {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    flex-direction: column;
+}
+
+
+/* PHOTO SLIDER */
+.home_menu-photos {
+    padding: 120px 80px 120px 80px;
+}
+
+.home_menu-photos-carousel {
+    margin-top: 50px;
+}
+
+#slider {
+    overflow: hidden;
+}
+
+#slider figure {
+    width: 500%;
+    margin: 0;
+    position: relative;
+    left: 0;
+    animation: slider 25s infinite;
+    height: 65vh;
+}
+
+#slider figure img {
+    float: left;
+    width: 20%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+@keyframes slider {
+    0%, 20% {
+        left: 0; /* Show the 1st picture */
+    }
+    25%, 40% {
+        left: -100%; /* Show the 2nd picture */
+    }
+    45%, 60% {
+        left: -200%; /* Show the 3rd picture */
+    }
+    65%, 80% {
+        left: -300%; /* Show the 4th picture */
+    }
+    85%, 95% {
+        left: -400%; /* Show the 5th picture */
+    }
+    100% {
+        left: 0;
+    }
+}
+
+/* BOOK A TABLE */
+
+.home_book-table {
+    padding: 100px 200px 180px 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 700;
-    text-decoration: none;
-    transition: border-color 0.5s, background-color 0.5s, color 0.5s;
 }
 
-.home_main-homepage-signup {
-    width: 250px;
-    height: 70px;
-    border-color: #EA252C;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 10px;
-    background-color: white;
-    font-size: 20px;
-    display: flex;
+.home_book-table-text {
     align-items: center;
-    justify-content: center;
-    color: #EA252C;
-    font-weight: 700;
-    text-decoration: none;
-    transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
-
-.home_main-homepage-login:hover {
-    border-color: #EA252C;
-    background-color: white;
-    color: #EA252C;
-}
-
-.home_main-homepage-login:active {
-    border-color: white;
-    background-color: #EA252C;
-    color: white;
-}
-
-.home_main-homepage-signup:hover {
-    border-color: white;
-    background-color: #EA252C;
-    color: white;
-}
-
-.home_main-homepage-signup:active {
-    border-color: #EA252C;
-    background-color: white;
-    color: #EA252C;
-}
-
-
-/* MAIN SCREEN TOKYODELI */
