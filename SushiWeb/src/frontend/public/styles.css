@@ -91,7 +91,7 @@ footer {
 
 /* Buttons */
 
-button {
+.login-signup-button {
     width: 100%;
     padding: 10px;
     background-color: #EA252C;
@@ -107,18 +107,18 @@ button {
     z-index: 2;
 }
 
-button:disabled {
+.login-signup-button:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
 }
 
-button:hover:not(:disabled) {
+.login-signup-button:hover:not(:disabled) {
     background-color: #ffffff;
     border-color: #EA252C;
     color: #EA252C;
 }
 
-button:active:not(:disabled) {
+.login-signup-button:active:not(:disabled) {
     background-color: #EA252C;
     border-color: #ffffff;
     color: #ffffff;
