@@ -14,54 +14,94 @@
     <p style="color: red;">{{errorMessage}}</p>
     {{/if}}
 
-    {{#if cartItems.length}}
-    <form action="/cart/select" method="POST" id="cart-form">
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Select</th>
-                    <th>Item Code (MACTMON)</th>
-                    <th>Quantity (SOLUONG)</th>
-                    <th>Total Price (DONGIATONG)</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each cartItems}}
-                <tr>
-                    <td>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Item Code (MACTMON)</th>
+                <th>Quantity (SOLUONG)</th>
+                <th>Total Price (DONGIATONG)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each cartItems}}
+            <tr>
+                <td>
+                    <form action="/cart/select" method="POST" id="cart-form">
                         <input type="checkbox" name="MACTMON[]" value="{{this.MACTMON}}" class="cart-checkbox"
                             data-mactmon="{{this.MACTMON}}" {{#if this.SELECTED}}checked{{/if}}>
-                    </td>
-                    <td>{{this.MACTMON}}</td>
-                    <td>{{this.SOLUONG}}</td>
-                    <td>{{this.DONGIATONG}}</td>
-                    <td>
-                        <!-- Form for deleting an item -->
-                        <form action="/cart/delete" method="POST" style="display:inline;">
-                            <input type="hidden" name="MACTMON" value="{{this.MACTMON}}">
-                            <button type="submit">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
+                    </form>
+                </td>
+                <td>{{this.MACTMON}}</td>
+                <td>{{this.SOLUONG}}</td>
+                <td>{{this.DONGIATONG}}</td>
+                <td>
+                    <!-- Form for deleting an item -->
+                    <form action="/cart/delete" method="POST" style="display:inline;" id="{{this.MACTMON}}">
+                        <input type="hidden" name="MACTMON" value="{{this.MACTMON}}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <!-- Add the Create Order Button -->
+    <form action="/cart/create-order" method="POST" id="create-order-form">
+        <!-- Hidden input to include selected items -->
+        <input type="hidden" name="selectedItems" id="selectedItems">
+        <button type="submit" style="margin-top: 20px;">Create Order</button>
     </form>
-    {{else}}
-    <p>Your cart is empty.</p>
-    {{/if}}
 
     <script>
+        // Add event listeners to the delete forms
+        document.querySelectorAll('form[action="/cart/delete"]').forEach((form) => {
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Prevent the default form submission
+                const formData = new FormData(form);
+                const MACTMON = formData.get('MACTMON');
+
+                try {
+                    const response = await fetch('/cart/delete', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ MACTMON }),
+                    });
+
+                    if (response.ok) {
+                        alert("Item deleted successfully.");
+                        window.location.reload(); // Reload the page to reflect the changes
+                    } else {
+                        const errorData = await response.json();
+                        alert(`Error: ${errorData.message}`);
+                    }
+                } catch (error) {
+                    console.error("Network error:", error);
+                    alert("Failed to delete the item. Please try again.");
+                }
+            });
+        });
+
         // Add event listeners to checkboxes
         document.querySelectorAll('.cart-checkbox').forEach((checkbox) => {
             checkbox.addEventListener('change', async function () {
                 const MACTMON = this.getAttribute('data-mactmon');
                 const isChecked = this.checked;
+                const cartItemsLeft = document.querySelectorAll('.cart-checkbox').length;
+
+                if (cartItemsLeft === 0) {
+                    alert('No items left in the cart');
+                    return;
+                }
 
                 try {
                     const response = await fetch('/cart/select', {
                         method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
                         body: JSON.stringify({ MACTMON, SELECTED: isChecked ? 1 : 0 })
                     });
 
@@ -75,6 +115,22 @@
                     console.error('Network error:', error);
                 }
             });
+        });
+
+        // Update the hidden input with selected items when creating an order
+        document.getElementById('create-order-form').addEventListener('submit', (event) => {
+            const selectedItems = [];
+            document.querySelectorAll('.cart-checkbox:checked').forEach((checkbox) => {
+                selectedItems.push(checkbox.value);
+            });
+
+            if (selectedItems.length === 0) {
+                alert('Please select at least one item to create an order.');
+                event.preventDefault(); // Prevent form submission
+                return;
+            }
+
+            document.getElementById('selectedItems').value = JSON.stringify(selectedItems);
         });
     </script>
 </body>
