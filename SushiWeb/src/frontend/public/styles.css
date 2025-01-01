@@ -10,30 +10,31 @@ body.authen-page {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-}
-
-header, footer {
-    width: 100%;
-    position: fixed;
-    left: 0;
 }
 
 header {
+    width: 100%;
+    left: 0;
     top: 0;
     background-color: #ffffff;
-    padding: 0;
+    padding: 20px 80px;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
 footer {
+    left: 0;
     bottom: 0;
     background-color: #EA252C;
     color: #ffffff;
-    text-align: center;
-    padding: 20px 0;
+    padding: 40px 0;
     border-top: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    gap: 30px;
+    width: 100%;
 }
 
 /* Authentication */
@@ -47,8 +48,8 @@ footer {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     z-index: 1;
-    margin-top: 80px;
-    margin-bottom: 80px;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 /* Logo Section */
@@ -90,17 +91,20 @@ footer {
 }
 
 /* Buttons */
+
 button {
     width: 100%;
     padding: 10px;
-    background-color: #007bff;
+    background-color: #EA252C;
+    border-style: solid;
     color: #ffffff;
-    border: none;
+    border-width: 1px;
+    border-color: white;
     border-radius: 4px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.5s, color 0.5s, border-color 0.5s;
 }
 
 button:disabled {
@@ -109,24 +113,43 @@ button:disabled {
 }
 
 button:hover:not(:disabled) {
-    background-color: #0056b3;
+    background-color: #ffffff;
+    border-color: #EA252C;
+    color: #EA252C;
+}
+
+button:active:not(:disabled) {
+    background-color: #EA252C;
+    border-color: #ffffff;
+    color: #ffffff;
 }
 
 .secondary-button {
     display: block;
     text-align: center;
-    background-color: #6c757d;
+    background-color: #353535;
     color: #ffffff;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #353535;
     padding: 10px;
     border-radius: 4px;
     text-decoration: none;
     font-size: 16px;
     margin-top: 10px;
-    transition: background-color 0.3s;
+    transition: background-color 0.5s, color 0.5s, border-color 0.5s;
 }
 
 .secondary-button:hover {
-    background-color: #5a6268;
+    background-color: #ffffff;
+    border-color: #353535;
+    color: #353535;
+}
+
+.secondary-button:active {
+    background-color: #353535;
+    border-color: #ffffff;
+    color: #ffffff;
 }
 
 .button-red {

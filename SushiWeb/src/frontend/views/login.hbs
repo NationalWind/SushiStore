@@ -8,32 +8,34 @@
     <link rel="stylesheet" href="../public/styles.css">
 </head>
 
-<body class="authen-page">
-    <div class="container">
-        <!-- Form đăng nhập -->
-        <form action="/login" class="form" method="POST" onsubmit="handleSubmit(event)">
-            <div class="logo-container">
-                <img src="../public/sushi.png" alt="Logo" class="logo">
-                <p class="title">Sign in with your account!</p>
-            </div>
+<body>
+    <div class="authen-page">
+        <div class="container">
+            <!-- Form đăng nhập -->
+            <form action="/login" class="form" method="POST" onsubmit="handleSubmit(event)">
+                <div class="logo-container">
+                    <img src="../public/sushi.png" alt="Logo" class="logo">
+                    <p class="title">Log in with your account!</p>
+                </div>
 
-            <div class="input-group">
-                <input type="text" id="username" name="username" placeholder="*Username" required>
-            </div>
-            <div class="input-group">
-                <input type="password" id="password" name="password" placeholder="*Password" required>
-            </div>
+                <div class="input-group">
+                    <input type="text" id="username" name="username" placeholder="*Username" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" name="password" placeholder="*Password" required>
+                </div>
 
-            <button type="submit" id="submitButton" disabled>Sign in</button>
+                <button type="submit" id="submitButton" disabled>Log in</button>
 
-            <a href="#" class="link">Forget password</a>
+                <a href="#" class="link">Forget password</a>
 
-            <div class="divider">
-                <span>Or</span>
-            </div>
+                <div class="divider">
+                    <span>Or</span>
+                </div>
 
-            <a href="/signup" class="secondary-button">Sign up</a>
-        </form>
+                <a href="/signup" class="secondary-button">Sign up</a>
+            </form>
+        </div>
     </div>
 
     <script>

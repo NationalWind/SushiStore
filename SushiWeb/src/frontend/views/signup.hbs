@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="../public/styles.css">
 </head>
 
-<body class="authen-page">
-    <div class="container">
+<body>
+    <div class="authen-page">
+        <div class="container">
         <!-- Form đăng ký -->
         <form action="/signup" class="form" method="POST" onsubmit="handleSubmit(event)">
             <div class="logo-container">
@@ -55,10 +56,10 @@
             </div>
 
             <!-- Redirect to login page -->
-            <a href="/login" class="secondary-button">Sign in</a>
+            <a href="/login" class="secondary-button">Log in</a>
         </form>
+        </div>
     </div>
-
     <script>
         const passwordInput = document.getElementById('password');
         const usernameInput = document.getElementById('username');
