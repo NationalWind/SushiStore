@@ -235,9 +235,6 @@
             try {
                 const postResponse = await fetch('/menu/switch-branch', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
                     body: JSON.stringify({ branchId }),
                 });
 

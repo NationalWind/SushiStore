@@ -79,13 +79,13 @@
         // Handle form submission asynchronously
         async function handleSubmit(event) {
             event.preventDefault(); // Prevent form from submitting normally
-
             const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
 
             try {
                 const response = await fetch('/signup', {
                     method: 'POST',
-                    body: formData,
+                    body: JSON.stringify(data),
                 });
 
                 if (response.ok) {

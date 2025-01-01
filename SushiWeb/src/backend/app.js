@@ -13,6 +13,7 @@ import staffRoutes from "./routes/staff_routes.js";
 import adminRoutes from "./routes/admin_routes.js";
 import menuRoutes from "./routes/menu_routes.js";
 import cartRoutes from "./routes/cart_routes.js"
+import orderRoutes from "./routes/order_routes.js"
 
 dotenv.config();
 
@@ -44,6 +45,7 @@ app.use("/staff", staffRoutes);
 app.use("/admin", adminRoutes);
 app.use("/menu", menuRoutes);
 app.use("/cart", cartRoutes);
+app.use("/order", orderRoutes);
 
 // Start server
 const PORT = process.env.PORT;
