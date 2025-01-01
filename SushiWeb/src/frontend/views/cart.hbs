@@ -14,11 +14,13 @@
     <p style="color: red;">{{errorMessage}}</p>
     {{/if}}
 
+    {{#if cartItems.length}}
     <table border="1">
         <thead>
             <tr>
                 <th>Select</th>
                 <th>Item Code (MACTMON)</th>
+                <th>Item Name </th>
                 <th>Quantity (SOLUONG)</th>
                 <th>Total Price (DONGIATONG)</th>
                 <th>Actions</th>
@@ -34,6 +36,7 @@
                     </form>
                 </td>
                 <td>{{this.MACTMON}}</td>
+                <td>{{this.ITEM_NAME}}</td>
                 <td>{{this.SOLUONG}}</td>
                 <td>{{this.DONGIATONG}}</td>
                 <td>
@@ -133,6 +136,10 @@
             document.getElementById('selectedItems').value = JSON.stringify(selectedItems);
         });
     </script>
+
+    {{else}}
+    <p>Your cart is empty.</p>
+    {{/if}}
 </body>
 
 </html>

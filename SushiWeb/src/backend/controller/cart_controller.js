@@ -35,10 +35,17 @@ export const getCartItems = async (req, res) => {
                     TEMP_CART.MACTMON,
                     TEMP_CART.SELECTED, 
                     CHITIETMONAN.SOLUONG, 
-                    CHITIETMONAN.DONGIATONG
+                    CHITIETMONAN.DONGIATONG,
+                    (CASE 
+                        WHEN MENU.MAMON IS NULL THEN COMBOMONAN.TENCOMBO
+                        ELSE MONAN.TENMON
+                    END) AS ITEM_NAME
                 FROM TEMP_CART
                 JOIN CHITIETMONAN ON TEMP_CART.MACTMON = CHITIETMONAN.MACTMON
-                WHERE TEMP_CART.MAKH = @MAKH
+                LEFT JOIN MENU ON CHITIETMONAN.MAMENU = MENU.MAMENU
+                LEFT JOIN MONAN ON MENU.MAMON = MONAN.MAMON
+                LEFT JOIN COMBOMONAN ON MENU.MACOMBO = COMBOMONAN.MACOMBO
+                WHERE TEMP_CART.MAKH = @MAKH;
             `);
 
         // If no items found
@@ -142,14 +149,12 @@ export const deleteCartItem = async (req, res) => {
 
 export const createOrder = async (req, res) => {
     try {
-        // Extract token from cookies or Authorization header
         const token = req.cookies.authToken;
 
         if (!token) {
             return res.status(401).json({ message: "Authentication token is missing." });
         }
 
-        // Decode the token to get the user's MAKH (customer ID)
         const decoded = jwt.verify(token, SECRET_KEY);
         const MAKH = decoded.MAKH;
 
@@ -157,29 +162,32 @@ export const createOrder = async (req, res) => {
             return res.status(401).json({ message: "Customer ID not found in token." });
         }
 
-        // Extract selected cart items from the request body
-        const { selectedItems } = req.body;
+        let { selectedItems } = req.body;
 
-        if (!selectedItems || selectedItems.length === 0) {
+        // Ensure selectedItems is parsed as an array
+        if (typeof selectedItems === "string") {
+            selectedItems = JSON.parse(selectedItems);
+        }
+
+        if (!Array.isArray(selectedItems) || selectedItems.length === 0) {
             return res.status(400).json({ message: "No items selected to create an order." });
         }
 
-        // Connect to the database
         const pool = await connectToDatabase();
 
-        // Generate a new order ID (MADON)
+        // Generate new order ID
         const resultMaDon = await pool.request()
             .query("SELECT TOP 1 MADON FROM DONDATMON ORDER BY MADON DESC");
 
-        let newMADON = 'DONDAT0001'; // Default if no records exist
+        let newMADON = "DONDAT0001";
         if (resultMaDon.recordset.length > 0) {
             const lastMADON = resultMaDon.recordset[0].MADON;
-            const lastNumber = parseInt(lastMADON.substring(6)); // Get the numeric part
-            const newNumber = lastNumber + 1; // Increment it
-            newMADON = `DONDAT${String(newNumber).padStart(4, '0')}`; // Format to "DONDAT0001"
+            const lastNumber = parseInt(lastMADON.substring(6));
+            const newNumber = lastNumber + 1;
+            newMADON = `DONDAT${String(newNumber).padStart(4, "0")}`;
         }
 
-        // Insert a new order into the DONDATMON table
+        // Insert the new order
         await pool.request()
             .input("MADON", sql.Char, newMADON)
             .input("KHACHHANGDAT", sql.Char, MAKH)
@@ -188,11 +196,11 @@ export const createOrder = async (req, res) => {
                 VALUES (@MADON, @KHACHHANGDAT, N'Online order', GETDATE(), CONVERT(TIME(0),GETDATE()), N'Processing')
             `);
 
-        // Update selected items into the CTMONAN table
+        // Update items in the order
         for (const item of selectedItems) {
-            const updateResult = await pool.request()
+            await pool.request()
                 .input("MADON", sql.Char, newMADON)
-                .input("MACTMON", sql.Char, item.MACTMON)
+                .input("MACTMON", sql.Char, item)
                 .query(`
                     UPDATE CHITIETMONAN
                     SET MADONDATMON = @MADON
@@ -200,19 +208,22 @@ export const createOrder = async (req, res) => {
                 `);
 
             await pool.request()
-                .input("MACTMON", sql.Char, item.MACTMON)
+                .input("MACTMON", sql.Char, item)
                 .query(`
                     DELETE FROM TEMP_CART
                     WHERE MACTMON = @MACTMON
                 `);
-
-
-            if (updateResult.rowsAffected[0] === 0) {
-                console.warn(`No rows updated for MACTMON: ${item.MACTMON}`);
-            }
         }
 
-        // Redirect to /order after successful creation
+        // Execute the stored procedure to calculate order cost
+        const costResult = await pool.request()
+            .input("MADON", sql.Char, newMADON)
+            .execute("sp_TINHTHANHTIEN_DONDATMON");
+
+        // Log the cost result for debugging (optional)
+        console.log("Order cost result:", costResult.recordset);
+
+        // Redirect to the orders page
         res.redirect(`/order`);
     } catch (error) {
         console.error("Error creating order:", error);

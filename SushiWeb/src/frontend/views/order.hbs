@@ -14,7 +14,7 @@
     <p style="color: red;">{{errorMessage}}</p>
     {{/if}}
 
-    {{#if cartItems.length}}
+    {{#if orderItems.length}}
     <table border="1">
         <thead>
             <tr>
@@ -27,10 +27,11 @@
                 <th>Delivery Status (TRANGTHAIGIAO)</th>
                 <th>Branch (MACHINHANH)</th>
                 <th>Table (SOBAN)</th>
+                <th>Order Cost (THANHTIEN)</th>
             </tr>
         </thead>
         <tbody>
-            {{#each cartItems}}
+            {{#each orderItems}}
             <tr>
                 <td>{{this.MADON}}</td>
                 <td>{{this.NGAYDAT}}</td>
@@ -41,12 +42,13 @@
                 <td>{{this.DATHANGTRUCTUYEN_TRANGTHAIGIAO}}</td>
                 <td>{{this.MACHINHANH}}</td>
                 <td>{{this.SOBAN}}</td>
+                <td>{{this.THANHTIEN}}</td>
             </tr>
             {{/each}}
         </tbody>
     </table>
     {{else}}
-
+    <p>There is no order.</p>
     {{/if}}
 
 </body>
