@@ -28,7 +28,6 @@ footer {
     text-align: center;
     padding: 30px 0;
     border-top: 1px solid #ddd;
-    margin-top: 20px;
 }
 
 /* Authentication */
@@ -121,6 +120,127 @@ button:hover:not(:disabled) {
 }
 */
 
+.button-red {
+    width: 250px;
+    height: 70px;
+    border-color: #ffffff;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 10px;
+    background-color: #EA252C;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    text-decoration: none;
+    transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+}
+
+.button-red:hover {
+    border-color: #EA252C;
+    background-color: white;
+    color: #EA252C;
+}
+
+.button-red:active {
+    border-color: white;
+    background-color: #EA252C;
+    color: white;
+}
+
+.button-whitered {
+    width: 250px;
+    height: 70px;
+    border-color: #EA252C;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 10px;
+    background-color: white;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #EA252C;
+    font-weight: 700;
+    text-decoration: none;
+    transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+}
+
+.button-whitered:hover {
+    border-color: white;
+    background-color: #EA252C;
+    color: white;
+}
+
+.button-whitered:active {
+    border-color: #EA252C;
+    background-color: white;
+    color: #EA252C;
+}
+
+.button-gray {
+    width: 250px;
+    height: 70px;
+    border-color: #ffffff;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 10px;
+    background-color: #353535;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-weight: 700;
+    text-decoration: none;
+    transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+}
+
+.button-gray:hover {
+    border-color: #353535;
+    background-color: #ffffff;
+    color: #353535;
+}
+
+.button-gray:active {
+    border-color: #ffffff;
+    background-color: #353535;
+    color: #ffffff;
+}
+
+.button-whitegray {
+    width: 250px;
+    height: 70px;
+    border-color: #353535;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 10px;
+    background-color: #ffffff;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #353535;
+    font-weight: 700;
+    text-decoration: none;
+    transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+}
+
+.button-whitegray:hover {
+    border-color: white;
+    background-color: #353535;
+    color: white;
+}
+
+.button-whitegray:active {
+    border-color: #353535;
+    background-color: white;
+    color: #353535;
+}
+
+
 /* Links */
 .link {
     display: block;
@@ -157,4 +277,109 @@ button:hover:not(:disabled) {
     height: 1px;
     background: #ddd; /* Màu line nhẹ */
     margin: 0 10px;
+}
+
+/* Text */
+
+.logo-text-tokyo {
+    color: #353535;
+    font-size: 25px;
+    font-weight: light;
+    text-decoration: none;
+}
+
+.logo-text-deli {
+    color: #EA252C;
+    font-size: 25px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.logo-text-white {
+    color: #ffffff;
+    font-size: 25px;
+    font-weight: light;
+    text-decoration: none;
+}
+
+.large-title-tokyo {
+    color: #353535;
+    font-size: 100px;
+    font-weight: light;
+    text-decoration: none;
+}
+
+.large-title-deli {
+    color: #EA252C;
+    font-size: 100px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.large-title-white {
+    color: #ffffff;
+    font-size: 100px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.medium-title-tokyo {
+    color: #353535;
+    font-size: 50px;
+    font-weight: light;
+    text-decoration: none;
+}
+
+.medium-title-deli {
+    color: #EA252C;
+    font-size: 50px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.medium-title-white {
+    color: #ffffff;
+    font-size: 50px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.section-title-text-red {
+    color: #EA252C;
+    font-size: 50px;
+    font-weight: 700;
+}
+
+.section-title-text-gray {
+    color: #353535;
+    font-size: 50px;
+    font-weight: 700;
+}
+
+.section-title-text-white {
+    color: #ffffff;
+    font-size: 50px;
+    font-weight: 700;
+}
+
+.paragraph-text-left-gray {
+    font-size: 20px;
+    color: #353535;
+}
+
+.paragraph-text-center-gray {
+    font-size: 25px;
+    text-align: center;
+    color: #353535;
+}
+
+.paragraph-text-left-white {
+    font-size: 20px;
+    color: #ffffff;
+}
+
+.paragraph-text-center-white {
+    font-size: 25px;
+    text-align: center;
+    color: #ffffff;
 }
