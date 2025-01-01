@@ -5,6 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Orders</title>
+    <style>
+        .clickable-row {
+            cursor: pointer;
+        }
+
+        .selected {
+            background-color: #d3f8d3;
+            /* Light green to indicate selection */
+        }
+    </style>
 </head>
 
 <body>
@@ -14,43 +24,105 @@
     <p style="color: red;">{{errorMessage}}</p>
     {{/if}}
 
-    {{#if orderItems.length}}
+    <!-- Processing Orders -->
+    <h2>Processing Orders</h2>
+    {{#if processingOrders.length}}
+    <form id="processingOrdersForm" method="POST" action="/order/select-order">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Order ID (MADON)</th>
+                    <th>Order Datetime (NGAYDAT)</th>
+                    <th>Status (TRANGTHAI)</th>
+                    <th>Order Cost (THANHTIEN)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each processingOrders}}
+                <tr class="clickable-row" data-id="{{this.MADON}}">
+                    <td><input type="checkbox" name="selectedOrders" value="{{this.MADON}}" hidden></td>
+                    <td>{{this.MADON}}</td>
+                    <td>{{this.NGAYDAT}}</td>
+                    <td>{{this.DONDATMON_TRANGTHAI}}</td>
+                    <td>{{this.THANHTIEN}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <button type="submit">Confirm and make a payment</button>
+    </form>
+    {{else}}
+    <p>No processing orders.</p>
+    {{/if}}
+
+    <!-- Successful Orders -->
+    <h2>Successful Orders</h2>
+    {{#if successfulOrders.length}}
     <table border="1">
         <thead>
             <tr>
                 <th>Order ID (MADON)</th>
-                <th>Order Date (NGAYDAT)</th>
-                <th>Order Time (GIODAT)</th>
+                <th>Order Datetime (NGAYDAT)</th>
                 <th>Status (TRANGTHAI)</th>
-                <th>Delivery Time (THOIGIANGIAO)</th>
-                <th>Delivery Address (DIACHIGIAO)</th>
-                <th>Delivery Status (TRANGTHAIGIAO)</th>
-                <th>Branch (MACHINHANH)</th>
-                <th>Table (SOBAN)</th>
                 <th>Order Cost (THANHTIEN)</th>
             </tr>
         </thead>
         <tbody>
-            {{#each orderItems}}
+            {{#each successfulOrders}}
             <tr>
                 <td>{{this.MADON}}</td>
                 <td>{{this.NGAYDAT}}</td>
-                <td>{{this.GIODAT}}</td>
                 <td>{{this.DONDATMON_TRANGTHAI}}</td>
-                <td>{{this.THOIGIANGIAO}}</td>
-                <td>{{this.DIACHIGIAO}}</td>
-                <td>{{this.DATHANGTRUCTUYEN_TRANGTHAIGIAO}}</td>
-                <td>{{this.MACHINHANH}}</td>
-                <td>{{this.SOBAN}}</td>
                 <td>{{this.THANHTIEN}}</td>
             </tr>
             {{/each}}
         </tbody>
     </table>
     {{else}}
-    <p>There is no order.</p>
+    <p>No successful orders.</p>
     {{/if}}
 
+    <!-- Paid Orders -->
+    <h2>Paid Orders</h2>
+    {{#if paidOrders.length}}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Order ID (MADON)</th>
+                <th>Order Datetime (NGAYDAT)</th>
+                <th>Status (TRANGTHAI)</th>
+                <th>Order Cost (THANHTIEN)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each successfulOrders}}
+            <tr>
+                <td>{{this.MADON}}</td>
+                <td>{{this.NGAYDAT}}</td>
+                <td>{{this.DONDATMON_TRANGTHAI}}</td>
+                <td>{{this.THANHTIEN}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    {{else}}
+    <p>No paid orders.</p>
+    {{/if}}
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const rows = document.querySelectorAll(".clickable-row");
+
+            rows.forEach(row => {
+                row.addEventListener("click", () => {
+                    const checkbox = row.querySelector("input[type='checkbox']");
+                    checkbox.checked = !checkbox.checked;
+                    row.classList.toggle("selected", checkbox.checked);
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

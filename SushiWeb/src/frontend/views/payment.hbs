@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Records</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .error {
+            color: red;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Payment Records</h1>
+        {{#if errorMessage}}
+        <p class="error">{{errorMessage}}</p>
+        {{/if}}
+        {{#if payments.length}}
+        <table>
+            <thead>
+                <tr>
+                    <th>Invoice ID</th>
+                    <th>Datetime</th>
+                    <th>Status</th>
+                    <th>Payment Method</th>
+                    <th>Total Before Discount</th>
+                    <th>Total After Discount</th>
+                    <th>VAT</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each payments}}
+                <tr>
+                    <td>{{this.MAHOADON}}</td>
+                    <td>{{this.NGAYLAP}}</td>
+                    <td>{{this.TRANGTHAI}}</td>
+                    <td>{{this.PHUONGTHUC}}</td>
+                    <td>{{this.TONGTIENTRUOCKM}}</td>
+                    <td>{{this.TONGTIENSAUKM}}</td>
+                    <td>{{this.VAT}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        {{else}}
+        <p>No payment records available.</p>
+        {{/if}}
+    </div>
+</body>
+
+</html>

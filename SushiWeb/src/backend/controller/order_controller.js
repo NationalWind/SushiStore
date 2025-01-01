@@ -14,7 +14,11 @@ export const getOrders = async (req, res) => {
         const token = req.cookies.authToken;
 
         if (!token) {
-            return res.render('order', { orderItems: [], errorMessage: "No token provided." });
+            return res.render('order', {
+                processingOrders: [],
+                successfulOrders: [],
+                errorMessage: "No token provided."
+            });
         }
 
         // Decode the token to get the user's MAKH (customer ID)
@@ -22,7 +26,11 @@ export const getOrders = async (req, res) => {
         const MAKH = decoded.MAKH;
 
         if (!MAKH) {
-            return res.render('order', { orderItems: [], errorMessage: "Customer ID not found in token." });
+            return res.render('order', {
+                processingOrders: [],
+                successfulOrders: [],
+                errorMessage: "Customer ID not found in token."
+            });
         }
 
         // Connect to the database
@@ -53,15 +61,114 @@ export const getOrders = async (req, res) => {
                     DONDATMON.KHACHHANGDAT = @MAKH
             `);
 
-        // If no orders found
-        if (result.recordset.length === 0) {
-            return res.render('order', { orderItems: [], errorMessage: "There are no orders." });
+        // Separate orders into "Processing" and "Successful"
+        const processingOrders = result.recordset.filter(order => order.DONDATMON_TRANGTHAI === 'Processing');
+        const successfulOrders = result.recordset.filter(order => order.DONDATMON_TRANGTHAI === 'Successful');
+        const paidOrders = result.recordset.filter(order => order.DONDATMON_TRANGTHAI === 'Paid');
+
+        // If no orders are found
+        if (processingOrders.length === 0 && successfulOrders.length === 0) {
+            return res.render('order', {
+                processingOrders: [],
+                successfulOrders: [],
+                paidOrders: [],
+                errorMessage: "There are no orders."
+            });
         }
 
         // Render the orders to the view
-        res.render('order', { orderItems: result.recordset });
+        res.render('order', {
+            processingOrders,
+            successfulOrders,
+            paidOrders
+        });
     } catch (error) {
         console.error("Error fetching orders:", error);
-        res.render("order", { orderItems: [], errorMessage: "Internal server error." });
+        res.render("order", {
+            processingOrders: [],
+            successfulOrders: [],
+            errorMessage: "Internal server error."
+        });
+    }
+};
+
+
+export const selectOrder = async (req, res) => {
+    try {
+        const { selectedOrders } = req.body;
+
+        if (!selectedOrders || selectedOrders.length === 0) {
+            return res.status(400).json({ message: "No orders selected." });
+        }
+
+        const token = req.cookies.authToken || req.headers.authorization?.split(" ")[1];
+        if (!token) {
+            return res.status(401).json({ message: "Authentication token is missing." });
+        }
+
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const MAKH = decoded.MAKH;
+
+        if (!MAKH) {
+            return res.status(400).json({ message: "Customer ID not found in token." });
+        }
+
+        const pool = await connectToDatabase();
+
+        // Generate new MAHOADON
+        const result = await pool.request().query(`
+            SELECT TOP 1 MAHOADON 
+            FROM HOADON 
+            ORDER BY MAHOADON DESC
+        `);
+
+        let newMAHOADON = "HD00000001"; // Default if no records exist
+        if (result.recordset.length > 0) {
+            const currentMaxMAHOADON = result.recordset[0].MAHOADON;
+            const numericPart = parseInt(currentMaxMAHOADON.substring(2), 10);
+            newMAHOADON = `HD${(numericPart + 1).toString().padStart(8, "0")}`;
+        }
+
+        // Insert new invoice into HOADON table
+        await pool.request()
+            .input("MAHOADON", sql.Char(10), newMAHOADON)
+            .input("MAKHACHHANG", sql.Char(10), MAKH)
+            .input("TRANGTHAI", sql.NVarChar, "Unpaid")
+            .query(`
+                INSERT INTO HOADON (MAHOADON, TRANGTHAI, NGAYLAP, GIOLAP, MAKHACHHANG)
+                VALUES (@MAHOADON, @TRANGTHAI, GETDATE(), CONVERT(TIME(0),GETDATE()), @MAKHACHHANG)
+            `);
+
+        if (typeof selectedOrders === "string") {
+            selectedOrders = JSON.parse(selectedOrders);
+        }
+
+        if (!Array.isArray(selectedOrders) || selectedOrders.length === 0) {
+            return res.status(400).json({ message: "No items selected to create an order." });
+        }
+
+        // Update selected orders to "Successful" status
+        for (const MADON of selectedOrders) {
+            await pool.request()
+                .input("MAKH", sql.Char, MAKH)
+                .input("MADON", sql.Char, MADON)
+                .input("TRANGTHAI", sql.NVarChar, "Successful")
+                .input("MAHOADON", sql.Char, newMAHOADON)
+                .query(`
+                    UPDATE DONDATMON
+                    SET TRANGTHAI = @TRANGTHAI, HOADONLIENQUAN = @MAHOADON
+                    WHERE MADON = @MADON AND KHACHHANGDAT = @MAKH
+                `);
+        }
+
+        await pool.request()
+            .input("MAHOADON", sql.Char(10), newMAHOADON)
+            .execute("sp_TinhVaCapNhatTongTien");
+
+        // Redirect to payment page
+        res.redirect(`/payment`); // Pass the new invoice ID for payment processing
+    } catch (error) {
+        console.error("Error processing order selection:", error);
+        res.status(500).json({ message: "Internal server error." });
     }
 };

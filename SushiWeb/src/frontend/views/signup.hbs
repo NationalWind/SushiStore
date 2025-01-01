@@ -11,53 +11,53 @@
 <body>
     <div class="authen-page">
         <div class="container">
-        <!-- Form đăng ký -->
-        <form action="/signup" class="form" method="POST" onsubmit="handleSubmit(event)">
-            <div class="logo-container">
-                <img src="../public/sushi.png" alt="Logo" class="logo">
-                <p class="title">Sign up an account!</p>
-            </div>
+            <!-- Form đăng ký -->
+            <form action="/signup" class="form" method="POST" onsubmit="handleSubmit(event)">
+                <div class="logo-container">
+                    <img src="../public/sushi.png" alt="Logo" class="logo">
+                    <p class="title">Sign up an account!</p>
+                </div>
 
-            <!-- Username input -->
-            <div class="input-group">
-                <input type="text" id="username" name="username" placeholder="*Username" required>
-            </div>
+                <!-- Username input -->
+                <div class="input-group">
+                    <input type="text" id="username" name="username" placeholder="*Username" required>
+                </div>
 
-            <!-- Password input -->
-            <div class="input-group">
-                <input type="password" id="password" name="password" placeholder="*Password" required>
-            </div>
+                <!-- Password input -->
+                <div class="input-group">
+                    <input type="password" id="password" name="password" placeholder="*Password" required>
+                </div>
 
-            <!-- Full Name input -->
-            <div class="input-group">
-                <input type="text" id="hoten" name="hoten" placeholder="*Full Name" required>
-            </div>
+                <!-- Full Name input -->
+                <div class="input-group">
+                    <input type="text" id="hoten" name="hoten" placeholder="*Full Name" required>
+                </div>
 
-            <!-- Phone Number input -->
-            <div class="input-group">
-                <input type="text" id="sdt" name="sdt" placeholder="*Phone Number" required>
-            </div>
+                <!-- Phone Number input -->
+                <div class="input-group">
+                    <input type="text" id="sdt" name="sdt" placeholder="*Phone Number" required>
+                </div>
 
-            <!-- Email input -->
-            <div class="input-group">
-                <input type="email" id="email" name="email" placeholder="*Email" required>
-            </div>
+                <!-- Email input -->
+                <div class="input-group">
+                    <input type="email" id="email" name="email" placeholder="*Email" required>
+                </div>
 
-            <!-- CCCD input -->
-            <div class="input-group">
-                <input type="text" id="cccd" name="cccd" placeholder="*CCCD (ID number)" required>
-            </div>
+                <!-- CCCD input -->
+                <div class="input-group">
+                    <input type="text" id="cccd" name="cccd" placeholder="*CCCD (ID number)" required>
+                </div>
 
-            <!-- Submit Button -->
-            <button class="login-signup-button" type="submit" id="submitButton" disabled>Sign up</button>
+                <!-- Submit Button -->
+                <button class="login-signup-button" type="submit" id="submitButton" disabled>Sign up</button>
 
-            <div class="divider">
-                <span>Or</span>
-            </div>
+                <div class="divider">
+                    <span>Or</span>
+                </div>
 
-            <!-- Redirect to login page -->
-            <a href="/login" class="secondary-button">Log in</a>
-        </form>
+                <!-- Redirect to login page -->
+                <a href="/login" class="secondary-button">Log in</a>
+            </form>
         </div>
     </div>
     <script>
@@ -86,6 +86,9 @@
             try {
                 const response = await fetch('/signup', {
                     method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                     body: JSON.stringify(data),
                 });
 

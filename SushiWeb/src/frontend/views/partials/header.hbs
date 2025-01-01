@@ -6,7 +6,7 @@
         <div class="header_left">
             <img class="logo"
                 src="https://scontent.fsgn2-3.fna.fbcdn.net/v/t39.30808-6/448201804_845814457576232_3022944095576243187_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=kj0IUBtdNS4Q7kNvgHcLg8y&_nc_oc=Adi9JRyTbz1sXiIeTsNbFImYb-RIlvu33nwwak5ESn9lIXCUxJ36ocknALOSN8YEYW7o9bADeam6F_udEpGWojym&_nc_zt=23&_nc_ht=scontent.fsgn2-3.fna&_nc_gid=ADFrxNedtgJ7_KHknC2zN3F&oh=00_AYDQtxwv4jkBIhyFHp0Er-TjMk8asdV5aW36_1T0wI5sLg&oe=67773453"
-                alt="Sushi Logo"/>
+                alt="Sushi Logo" />
             <div>
                 <a class="header_left-text" href="/">
                     <span class="logo-text-tokyo">TOKYO</span><span class="logo-text-deli">DELI</span>
@@ -35,12 +35,16 @@
                         alt="Order Icon">
                 </button>
             </a>
+            <a href="/payment">
+                <button class="payment-button">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4827/4827568.png" alt="Payment Icon">
+                </button>
+            </a>
         </ul>
     </nav>
 </header>
 
 <style>
-
     .header_left {
         display: flex;
         flex-direction: row;
@@ -82,7 +86,8 @@
         transition: font-weight 0.5s, color 0.5s;
         justify-content: center;
         display: flex;
-        flex-direction: column;;
+        flex-direction: column;
+        ;
     }
 
     .nav-links a:hover {
@@ -95,8 +100,7 @@
         font-weight: 700;
     }
 
-    .nav-links li {
-    }
+    .nav-links li {}
 
     .header_container {
         display: flex;
@@ -105,7 +109,8 @@
     }
 
     .cart-button,
-    .order-button {
+    .order-button,
+    .payment-button {
         background-color: white;
         border: none;
         cursor: pointer;
@@ -116,19 +121,22 @@
     }
 
     .cart-button img,
-    .order-button img {
+    .order-button img,
+    .payment-button img {
         width: 60%;
         height: 60%;
         object-fit: contain;
     }
 
     .cart-button:hover,
-    .order-button:hover {
+    .order-button:hover,
+    .payment-button:hover {
         background-color: #EA252C;
     }
 
     .cart-button:hover,
-    .order-button:hover {
+    .order-button:hover,
+    .payment-button:hover {
         background-color: #bf0006;
     }
 </style>

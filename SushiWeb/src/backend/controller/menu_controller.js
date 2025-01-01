@@ -204,7 +204,7 @@ export const addToCart = async (req, res) => {
             // Extract the numeric part of the highest MACTMON and increment it
             const numberPart = parseInt(highestMACTMON.slice(3)) + 1;
             // Generate new MACTMON (pad the number with leading zeros to ensure the format is consistent)
-            newMACTMON = `CTMON${numberPart.toString().padStart(7, '0')}`;
+            newMACTMON = `CTM${numberPart.toString().padStart(7, '0')}`;
         }
 
         // Insert into CHITIETMONAN table with the new MACTMON

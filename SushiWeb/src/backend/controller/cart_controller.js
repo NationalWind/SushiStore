@@ -65,8 +65,6 @@ export const selectCartItem = async (req, res) => {
     try {
         const { MACTMON, SELECTED } = req.body;
 
-        console.log(MACTMON, SELECTED);
-
         if (!MACTMON || SELECTED === undefined) {
             return res.status(400).json({ message: "MACTMON and SELECTED are required." });
         }
@@ -184,7 +182,7 @@ export const createOrder = async (req, res) => {
             const lastMADON = resultMaDon.recordset[0].MADON;
             const lastNumber = parseInt(lastMADON.substring(3));
             const newNumber = lastNumber + 1;
-            newMADON = `DONDAT${String(newNumber).padStart(7, "0")}`;
+            newMADON = `DON${String(newNumber).padStart(7, "0")}`;
         }
 
         // Insert the new order
