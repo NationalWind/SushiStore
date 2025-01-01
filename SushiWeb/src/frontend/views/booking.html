@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt bàn</title>
+    <link rel="stylesheet" href="../public/booking.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <h1 class="page-title">Đặt bàn</h1>
+        <div class="container">
+            <div class="form-container">
+                <p>Quý khách vui lòng điền đầy đủ thông tin và yêu cầu đặt bàn.</p>
+                <form>
+                    <div class="form-group">
+                        <label for="name">Họ và tên (*)</label>
+                        <input type="text" id="name" placeholder="Nhập họ và tên">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Số điện thoại (*)</label>
+                        <input type="text" id="phone" placeholder="Nhập số điện thoại">
+                    </div>
+                    <div class="form-group">
+                        <label for="branch">Chọn chi nhánh (*)</label>
+                        <div class="branch-container">
+                            <select id="branch" name="branch">
+                                <option value="hcm">TP Hồ Chí Minh</option>
+                                <option value="hn">Hà Nội</option>
+                            </select>
+                            <select id="restaurant" name="restaurant">
+                                <option value="nhahang1">Nhà hàng 1</option>
+                                <option value="nhahang2">Nhà hàng 2</option>
+                                <option value="nhahang3">Nhà hàng 3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="guests">Số lượng khách</label>
+                        <input type="number" id="guests" placeholder="Nhập số lượng khách">
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Ngày</label>
+                        <input type="date" id="date">
+                        <input type="time" id="time">
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Ghi chú</label>
+                        <textarea id="notes" placeholder="Nhập ghi chú (nếu có)"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Gửi</button>
+                </form>
+            </div>
+
+            <div class="image-container">
+                <img src="../public/booking1.png" alt="Hình ảnh thực đơn">
+                <img src="../public/booking2.png" alt="Hình ảnh nhà hàng">
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
