@@ -38,7 +38,7 @@ export const getCreate = async (req, res) => {
 	}
 	const branchId = branchResult.recordset[0].CHINHANHLAMVIEC;
 	const danhmuc_list = ["Sushi", "Sashimi", "Tempura", "Ramen", "Dessert", "Drinks", "Combo"];
-	res.render('create-dish', { danhmuc_list, branchId });
+	res.render('create-dish', { danhmuc_list, branchId, name: req.username, role: req.role });
 }
 
 export const createDish = async (req, res) => {
@@ -207,7 +207,7 @@ export const getStaffMenu = async (req, res) => {
 				categoryName,
 				items
 			})),
-			errorMessage: null // No error
+			errorMessage: null, name: req.username, role: req.role // No error
 		});
 	} catch (error) {
 		console.error("Error fetching staff menu:", error);
