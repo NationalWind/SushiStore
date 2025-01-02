@@ -1,48 +1,64 @@
-<h1>{{title}}</h1>
+<!DOCTYPE html>
+<html lang="en">
 
-{{#if errorMessage}}
-  <div class="error">{{errorMessage}}</div>
-{{/if}}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Highest Revenue Generating Customers - Truy vấn J</title>
 
-<form action="/staff/top-revenue-customers" method="POST">
-  <div>
-    <label for="NgayBatDau">Start Date:</label>
-    <input type="date" name="NgayBatDau" id="NgayBatDau" required>
-  </div>
-  
-  <div>
-    <label for="NgayKetThuc">End Date:</label>
-    <input type="date" name="NgayKetThuc" id="NgayKetThuc" required>
-  </div>
-  
-  <div>
-    <label for="SoLuongTop">Number of Top Customers:</label>
-    <input type="number" name="SoLuongTop" id="SoLuongTop" required>
-  </div>
-  
-  <button type="submit">Get Top Customers</button>
-</form>
+    <link rel="stylesheet" href="../public/statistics.css">
+</head>
 
-{{#if statisticsItems}}
-  <h2>Top Revenue Customers</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Customer ID</th>
-        <th>Customer Name</th>
-        <th>Card Type</th>
-        <th>Total Revenue</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each statisticsItems}}
-        <tr>
-          <td>{{this.MaKhachHang}}</td>
-          <td>{{this.HoTen}}</td>
-          <td>{{this.LoaiThe}}</td>
-          <td>{{this.TongTienTichLuy}}</td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
-{{/if}}
+<body>
+    <div class="statistics_container">
+        <div class="medium-title-deli">Highest Revenue Generating Customers</div>
+        <form action="/staff/top-revenue-customers" method="POST" class="statistics_setup-input">
+          <div>
+            <label for="NgayBatDau" >Start Date:</label>
+            <input type="date" name="NgayBatDau" id="NgayBatDau" required class="statistics_date-input">
+          </div>
+          
+          <div>
+            <label for="NgayKetThuc">End Date:</label>
+            <input type="date" name="NgayKetThuc" id="NgayKetThuc" required class="statistics_date-input">
+          </div>
+          
+          <div>
+            <label for="SoLuongTop">Number of Top Customers:</label>
+            <input type="number" name="SoLuongTop" id="SoLuongTop" required class="statistics_date-input">
+          </div>
+          
+          <div class="statistics_setup-input">
+            <button type="submit" class="button-red">Get Top Customers</button>
+            <a class="button-gray" href="/staff/statistics">Back to Statistics</a>
+          </div>
+        </form>
+        {{#if errorMessage}}
+        <div class="error">{{errorMessage}}</div>
+        {{/if}}
+        {{#if statisticsItems}}
+        <table>
+          <thead>
+            <tr>
+              <th>Customer ID</th>
+              <th>Customer Name</th>
+              <th>Card Type</th>
+              <th>Total Revenue</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each statisticsItems}}
+              <tr>
+                <td>{{this.MaKhachHang}}</td>
+                <td>{{this.HoTen}}</td>
+                <td>{{this.LoaiThe}}</td>
+                <td>{{this.TongTienTichLuy}}</td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      {{/if}}
+    </div>
+</body>
+
+</html>

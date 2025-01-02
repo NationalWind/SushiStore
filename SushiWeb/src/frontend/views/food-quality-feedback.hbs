@@ -3,46 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
+    <title>Food Quality and Customer Feedback - Truy vấn F</title>
+
+    <link rel="stylesheet" href="../public/statistics.css">
 </head>
 <body>
-    <h1>{{title}}</h1>
-    
-    <form action="/staff/food-qualityandcustomerfeedback" method="POST">
-        <label for="NgayBatDau">Start Date:</label>
-        <input type="date" id="NgayBatDau" name="NgayBatDau" required>
+    <div class="statistics_container">
+        <div class="medium-title-deli">Food Quality and Customer Feedback</div>
         
-        <button type="submit">Generate Report</button>
-    </form>
+        <form action="/staff/food-qualityandcustomerfeedback" method="POST" class="statistics_setup-input">
+            <div>
+                <label for="NgayBatDau">Start Date:</label>
+                <input type="date" id="NgayBatDau" name="NgayBatDau" required class="statistics_date-input">
+            </div>
+            
+            <div class="statistics_setup-input">
+                <button type="submit" class="button-red">Generate Report</button>
+                <a class="button-gray" href="/staff/statistics">Back to Statistics</a>
+            </div>
+        </form>
 
-    {{#if errorMessage}}
-        <div style="color: red;">{{errorMessage}}</div>
-    {{/if}}
+        {{#if errorMessage}}
+            <div style="color: red;">{{errorMessage}}</div>
+        {{/if}}
 
-    {{#if statisticsItems}}
-        <h2>Food Quality and Customer Feedback Report</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Dish Name</th>
-                    <th>Rating Date</th>
-                    <th>Average Quality Score</th>
-                    <th>Average Price Score</th>
-                    <th>Number of Reviews</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each statisticsItems}}
+        {{#if statisticsItems}}
+            <h2>Food Quality and Customer Feedback Report</h2>
+            <table>
+                <thead>
                     <tr>
-                        <td>{{TENMON}}</td>
-                        <td>{{NGAY_DG}}</td>
-                        <td>{{DIEMCHATLUONG_TB}}</td>
-                        <td>{{DIEMGIACA_TB}}</td>
-                        <td>{{SO_LUONG_DANHGIA}}</td>
+                        <th>Dish Name</th>
+                        <th>Rating Date</th>
+                        <th>Average Quality Score</th>
+                        <th>Average Price Score</th>
+                        <th>Number of Reviews</th>
                     </tr>
-                {{/each}}
-            </tbody>
-        </table>
-    {{/if}}
+                </thead>
+                <tbody>
+                    {{#each statisticsItems}}
+                        <tr>
+                            <td>{{TENMON}}</td>
+                            <td>{{NGAY_DG}}</td>
+                            <td>{{DIEMCHATLUONG_TB}}</td>
+                            <td>{{DIEMGIACA_TB}}</td>
+                            <td>{{SO_LUONG_DANHGIA}}</td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        {{/if}}
+    </div>
 </body>
 </html>

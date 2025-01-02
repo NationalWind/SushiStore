@@ -21,7 +21,8 @@ import {
 	getCustomerOrderTrendsForm,
 	getCustomerOrderTrendsResults,
 	getOrderAndInvoiceDetails,
-	updateMembershipStatus
+	updateMembershipStatus,
+	createMembershipCard
 } from "../controller/staff_controller.js";
 import * as auth from "../middleware/auth_middleware.js";
 
@@ -65,9 +66,14 @@ router.get("/order/add-dish", auth.authenticateToken, auth.authorizeRole("Staff"
 router.post("/order/add-dish", auth.authenticateToken, auth.authorizeRole("Staff"), addDish);
 
 // Truy vấn A - Tạo khách hàng - Staff Dashboard
-router.get("/membership", (req, res) => {
-	res.render("truyvana", { title: "Create Membership" });
+// Membership Card creation route
+router.get("/create-membership", auth.authenticateToken, auth.authorizeRole("Staff"), (req, res) => {
+	res.render("create-membership", { title: "Create Membership" });
 });
+
+// POST route for creating/updating a membership card
+router.post("/create-membership", auth.authenticateToken, auth.authorizeRole("Staff"), createMembershipCard);
+
 
 // Truy vấn B - Cập nhật phân hạng - Staff Dashboard
 // Route for triggering the membership status update

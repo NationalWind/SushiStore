@@ -1,43 +1,69 @@
-{{!-- customer-order-trends.hbs --}}
-<h1>{{title}}</h1>
+<!DOCTYPE html>
+<html lang="en">
 
-{{#if errorMessage}}
-    <div class="error">{{errorMessage}}</div>
-{{/if}}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Order Trends of this Branch - Truy vấn D</title>
 
-{{#if trendsData}}
-    <table>
-        <thead>
-            <tr>
-                <th>Customer ID</th>
-                <th>Customer Name</th>
-                <th>Phone Number</th>
-                <th>Branch ID</th>
-                <th>Orders at the Branch</th>
-                <th>Online Orders</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each trendsData}}
-                <tr>
-                    <td>{{MAKHACHHANG}}</td>
-                    <td>{{HOTEN}}</td>
-                    <td>{{SDT}}</td>
-                    <td>{{MACHINHANH}}</td>
-                    <td>{{SO_LUONG_DH_TAI_CHO}}</td>
-                    <td>{{SO_LUONG_DH_TRUCTUYEN}}</td>
-                </tr>
-            {{/each}}
-        </tbody>
-    </table>
-{{/if}}
+    <link rel="stylesheet" href="../public/statistics.css">
+</head>
 
-<form method="POST" action="/staff/customer-order-trends">
-    <label for="NgayBatDau">Start Date</label>
-    <input type="date" id="NgayBatDau" name="NgayBatDau" required>
-    <label for="NgayKetThuc">End Date</label>
-    <input type="date" id="NgayKetThuc" name="NgayKetThuc" required>
-    <label for="MaChiNhanh">Branch ID</label>
-    <input type="text" id="MaChiNhanh" name="MaChiNhanh" required>
-    <button type="submit">Submit</button>
-</form>
+<body>
+    <div class="statistics_container">
+        <div class="medium-title-deli">Customer Order Trends of this Branch</div>
+
+        <form method="POST" action="/staff/customer-order-trends" class="statistics_setup-input">
+            <div>
+                <label for="NgayBatDau">Start Date</label>
+                <input type="date" id="NgayBatDau" name="NgayBatDau" required class="statistics_date-input">
+            </div>
+            
+            <div>
+                <label for="NgayKetThuc">End Date</label>
+                <input type="date" id="NgayKetThuc" name="NgayKetThuc" required class="statistics_date-input">
+            </div>
+
+            <div>
+                <label for="MaChiNhanh">Branch ID</label>
+                <input type="text" id="MaChiNhanh" name="MaChiNhanh" required class="statistics_date-input">
+            </div>
+            
+            <div class="statistics_setup-input">
+                <button type="submit" class="button-red">Get Customer Trends</button>
+                <a class="button-gray" href="/staff/statistics">Back to Statistics</a>
+            </div>
+        </form>
+
+        {{#if errorMessage}}
+            <div class="error">{{errorMessage}}</div>
+        {{/if}}
+
+        {{#if trendsData}}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Customer ID</th>
+                        <th>Customer Name</th>
+                        <th>Phone Number</th>
+                        <th>Branch ID</th>
+                        <th>Orders at the Branch</th>
+                        <th>Online Orders</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each trendsData}}
+                        <tr>
+                            <td>{{MAKHACHHANG}}</td>
+                            <td>{{HOTEN}}</td>
+                            <td>{{SDT}}</td>
+                            <td>{{MACHINHANH}}</td>
+                            <td>{{SO_LUONG_DH_TAI_CHO}}</td>
+                            <td>{{SO_LUONG_DH_TRUCTUYEN}}</td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        {{/if}}
+    </div>
+</body>
