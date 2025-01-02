@@ -15,6 +15,11 @@
 </head>
 
 <body>
+    {{#if (eq role "Staff")}}
+        {{> staff-header}}
+    {{else}}
+        {{> header}}
+    {{/if}}
     <main>
         {{{body}}} <!-- Render page-specific content -->
     </main>

@@ -28,6 +28,11 @@ app.engine("hbs", engine({
     defaultLayout: "main",
     layoutsDir: path.resolve("src/frontend/views/"),
     partialsDir: path.resolve("src/frontend/views/partials"),
+    helpers: {
+        eq: function (a, b) {
+            return a === b;
+        }
+    }
 }));
 app.set("view engine", "hbs");
 app.set("views", path.resolve("src/frontend/views"));
