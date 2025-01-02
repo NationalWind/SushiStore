@@ -3,40 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
+    <title>Branch Revenue - Truy vấn H</title>
+
+    <link rel="stylesheet" href="../public/statistics.css">
 </head>
 <body>
-    <h1>{{title}}</h1>
+    <div class="statistics_container">
+        <div class="medium-title-deli">Branch Revenue</div>
+        <!-- Form for branch revenue statistics -->
+        <form action="/staff/branch-revenue" method="POST" class="statistics_setup-input">
+            <div>
+                <label for="branchId">Branch ID:</label>
+                <input type="text" id="branchId" name="branchId" required class="statistics_date-input">
+            </div>
+            <div>
+                <label for="startDate">Start Date:</label>
+                <input type="date" id="startDate" name="startDate" required class="statistics_date-input">
+            </div>
+            <div>
+                <label for="endDate">End Date:</label>
+                <input type="date" id="endDate" name="endDate" required class="statistics_date-input">
+            </div>
+            
+            <div class="statistics_setup-input">
+                <button type="submit" class="button-red">Get Revenue</button>
+                <a class="button-gray" href="/staff/statistics">Back to Statistics</a>
+            </div>
+        </form>
+            <!-- Error Message -->
+        {{#if errorMessage}}
+            <div style="color: red;">
+                <strong>{{errorMessage}}</strong>
+            </div>
+        {{/if}}
 
-    <!-- Error Message -->
-    {{#if errorMessage}}
-        <div style="color: red;">
-            <strong>{{errorMessage}}</strong>
-        </div>
-    {{/if}}
-
-    <!-- Revenue Display -->
-    {{#if revenue}}
-        <div>
-            <h2>Total Revenue: {{revenue}} VND</h2>
-        </div>
-    {{/if}}
-
-    <!-- Form for branch revenue statistics -->
-    <form action="/staff/branch-revenue" method="POST">
-        <label for="branchId">Branch ID:</label>
-        <input type="text" id="branchId" name="branchId" required>
-        <br>
-
-        <label for="startDate">Start Date:</label>
-        <input type="date" id="startDate" name="startDate" required>
-        <br>
-
-        <label for="endDate">End Date:</label>
-        <input type="date" id="endDate" name="endDate" required>
-        <br>
-
-        <button type="submit">Get Revenue</button>
-    </form>
+        <!-- Revenue Display -->
+        {{#if revenue}}
+            <div>
+                <h2>Total Revenue: {{revenue}} VND</h2>
+            </div>
+        {{/if}}
+    </div>
 </body>
 </html>
