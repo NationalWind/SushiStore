@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<header alt="staff-header" style="background-color: #1b1b1b">
+    <nav class="staff-header_container">
+        <div class="header_left">
+            <img class="logo"
+                src="https://scontent.fsgn2-3.fna.fbcdn.net/v/t39.30808-6/448201804_845814457576232_3022944095576243187_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=kj0IUBtdNS4Q7kNvgHcLg8y&_nc_oc=Adi9JRyTbz1sXiIeTsNbFImYb-RIlvu33nwwak5ESn9lIXCUxJ36ocknALOSN8YEYW7o9bADeam6F_udEpGWojym&_nc_zt=23&_nc_ht=scontent.fsgn2-3.fna&_nc_gid=ADFrxNedtgJ7_KHknC2zN3F&oh=00_AYDQtxwv4jkBIhyFHp0Er-TjMk8asdV5aW36_1T0wI5sLg&oe=67773453"
+                alt="Sushi Logo" />
+            <div>
+                <a class="header_left-text" href="/">
+                    <span class="logo-text-white">TOKYO</span><span class="logo-text-deli">DELI</span>
+                </a>
+            </div>
+        </div>
+        <ul class="staff-nav-links">
+            <a href="/staff">DASHBOARD</a>
+            <a href="/staffmenu">MENU</a>
+            <a href="/staff/create-dish">CREATE DISH</a>
+            <a href="/stafforder">ORDER</a>
+            <a href="/staffstatistics">STATISTICS</a>
+        </ul>
+    </nav>
+</header>
+
+<style>
+    .header_left {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .header_left-text {
+        text-decoration: none;
+    }
+
+    .logo {
+        width: 80px;
+        height: 40px;
+        overflow: hidden;
+        position: relative;
+        object-fit: cover;
+    }
+
+    .logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .staff-nav-links {
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        font-weight: 400;
+        font-size: 15px;
+    }
+
+    .staff-nav-links a {
+        color: #ffffff;
+        text-decoration: none;
+        transition: font-weight 0.5s, color 0.5s;
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        ;
+    }
+
+    .staff-nav-links a:hover {
+        color: #EA252C;
+        font-weight: 700;
+    }
+
+    .staff-nav-links a:active {
+        color: #bf0006;
+        font-weight: 700;
+    }
+
+    .nav-links li {}
+
+    .staff-header_container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #1b1b1b;
+    }
+</style>
+
+</html>
