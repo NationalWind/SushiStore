@@ -6,6 +6,7 @@ import path from "path";
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from "dotenv";
+import moment from "moment";
 import authRoutes from "./routes/auth_routes.js";
 import branchManagerRoutes from "./routes/branch_manager_routes.js";
 import departmentManagerRoutes from "./routes/department_manager_routes.js";
@@ -32,7 +33,13 @@ app.engine("hbs", engine({
     helpers: {
         eq: function (a, b) {
             return a === b;
-        }
+        },
+        cobaiDoxe: function (value) {
+            return value ? "Yes" : "No";
+        },
+        formatTime: function (time) {
+            return moment(time).format("hh:mm A");  // Formats time to "hh:mm AM/PM"
+        },
     }
 }));
 app.set("view engine", "hbs");
@@ -66,6 +73,26 @@ router.get("/membership", (req, res) => {
 
 router.get("/booking", (req, res) => {
     res.render("booking", { title: "Booking" });
+});
+
+router.get("/promotion", (req, res) => {
+    res.render("promotion", { title: "Promotion" });
+});
+
+router.get("/stores", async (req, res) => {
+    try {
+        // Get database connection
+        const pool = await connectToDatabase();
+        
+        // Execute the SELECT query
+        const result = await pool.request().query("SELECT * FROM CHINHANH");
+        
+        // Send the result to the view, pass it as 'stores' to be used in the template
+        res.render("stores", { title: "Stores", stores: result.recordset });
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        res.status(500).send("Error fetching data from the database");
+    }
 });
 
 app.use(router);

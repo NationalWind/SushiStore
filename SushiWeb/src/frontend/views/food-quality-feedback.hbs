@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+</head>
+<body>
+    <h1>{{title}}</h1>
+    
+    <form action="/staff/food-qualityandcustomerfeedback" method="POST">
+        <label for="NgayBatDau">Start Date:</label>
+        <input type="date" id="NgayBatDau" name="NgayBatDau" required>
+        
+        <button type="submit">Generate Report</button>
+    </form>
+
+    {{#if errorMessage}}
+        <div style="color: red;">{{errorMessage}}</div>
+    {{/if}}
+
+    {{#if statisticsItems}}
+        <h2>Food Quality and Customer Feedback Report</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Dish Name</th>
+                    <th>Rating Date</th>
+                    <th>Average Quality Score</th>
+                    <th>Average Price Score</th>
+                    <th>Number of Reviews</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each statisticsItems}}
+                    <tr>
+                        <td>{{TENMON}}</td>
+                        <td>{{NGAY_DG}}</td>
+                        <td>{{DIEMCHATLUONG_TB}}</td>
+                        <td>{{DIEMGIACA_TB}}</td>
+                        <td>{{SO_LUONG_DANHGIA}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    {{/if}}
+</body>
+</html>

@@ -1,0 +1,13 @@
+<h1>Update Membership Status</h1>
+
+{{#if successMessage}}
+    <div class="alert alert-success">{{successMessage}}</div>
+{{/if}}
+
+{{#if errorMessage}}
+    <div class="alert alert-danger">{{errorMessage}}</div>
+{{/if}}
+
+<form action="/staff/update-membership-status" method="POST">
+    <button type="submit" class="btn btn-primary">Update Membership Status</button>
+</form>

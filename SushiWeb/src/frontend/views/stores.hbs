@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stores</title>
+
+    <link rel="stylesheet" href="../public/styles.css">
+    <style>
+        .stores_container {
+            padding: 50px 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="stores_container">
+        <h1 class="medium-title-tokyo">Stores</h1>
+    <table>
+        <thead>
+                <tr>
+                    <th>Branch ID</th>
+                    <th>Branch Name</th>
+                    <th>Address</th>
+                    <th>Region</th>
+                    <th>Opening Time</th>
+                    <th>Closing Time</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Parking Lot Available</th>
+                    <th>Manager Employee ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each stores}}
+                    <tr>
+                        <td>{{this.MACHINHANH}}</td>
+                        <td>{{this.TENCHINHANH}}</td>
+                        <td>{{this.DIACHI}}</td>
+                        <td>{{this.KHUVUC}}</td>
+                        <td>{{formatTime this.THOIGIANMOCUA}}</td>
+                        <td>{{formatTime this.THOIGIANDONGCUA}}</td>
+                        <td>{{this.SDT}}</td>
+                        <td>{{this.EMAIL}}</td>
+                        <td>{{cobaiDoxe this.COBAIDOXE}}</td>
+                        <td>{{this.NHANVIENQUANLY}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Dish</title>
-    <link rel="stylesheet" href="/styles.css"> <!-- Optional: Add your CSS file -->
+    <link rel="stylesheet" href="../public/styles.css"> 
+    <link rel="stylesheet" href="../public/booking.css">
+    <!-- Optional: Add your CSS file -->
     <script>
         // Function to toggle the visibility of the Combo Description field
         function toggleComboDescription() {
@@ -25,17 +27,19 @@
 </head>
 
 <body>
-    <h1>Create New Dish</h1>
+    <div class="wrapper">
+        <h1 class="page-title-dish">Create New Dish</h1>
+    <main>
+        <div class="container">
+        {{#if success}}
+        <div class="alert success">{{success}}</div>
+        {{/if}}
 
-    {{#if success}}
-    <div class="alert success">{{success}}</div>
-    {{/if}}
+        {{#if error}}
+        <div class="alert error">{{error}}</div>
+        {{/if}}
 
-    {{#if error}}
-    <div class="alert error">{{error}}</div>
-    {{/if}}
-
-    <form action="/staff/create-dish" method="POST">
+        <form action="/staff/create-dish" method="POST">
         <div class="form-group">
             <label for="TenMon">Dish Name:</label>
             <input type="text" id="TenMon" name="TenMon" required>
@@ -76,8 +80,13 @@
             <textarea id="MoTaCombo" name="MoTaCombo" rows="4"></textarea>
         </div>
 
-        <button type="submit">Create Dish</button>
-    </form>
+        <div class="form-group">
+             <button type="submit" class="submit-btn">Create Dish</button>
+        </div>
+        </form>
+        </div>
+    </main>
+    </div>
 </body>
 
 </html>

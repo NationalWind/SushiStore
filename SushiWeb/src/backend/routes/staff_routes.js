@@ -7,7 +7,21 @@ import {
 	createOrder,
 	formOrder,
 	showDish,
-	addDish
+	addDish,
+	getTopRevenueCustomersResults,
+	getTopRevenueCustomersForm,
+	getTopSellingDishesForm,
+	getTopSellingDishesResults,
+	getBranchRevenue,
+	postBranchRevenue,
+	getFoodQualityAndCustomerFeedbackResults,
+	getFoodQualityAndCustomerFeedbackForm,
+	getStaffReviewsForm,
+	getStaffReviewsResults,
+	getCustomerOrderTrendsForm,
+	getCustomerOrderTrendsResults,
+	getOrderAndInvoiceDetails,
+	updateMembershipStatus
 } from "../controller/staff_controller.js";
 import * as auth from "../middleware/auth_middleware.js";
 
@@ -56,43 +70,67 @@ router.get("/membership", (req, res) => {
 });
 
 // Truy vấn B - Cập nhật phân hạng - Staff Dashboard
-router.get("/updatemembership", (req, res) => {
-	res.render("truyvanb", { title: "Update Membership" });
+// Route for triggering the membership status update
+router.get("/update-membership-status", auth.authenticateToken, auth.authorizeRole("Staff"), (req, res) => {
+	res.render('update-membership-status', { name: req.username, role: req.role });
 });
+
+// Trigger stored procedure for membership status update
+router.post("/update-membership-status", auth.authenticateToken, auth.authorizeRole("Staff"), updateMembershipStatus);
+
 
 // Truy vấn C
-router.get("/ordersandinvoices", (req, res) => {
-	res.render("truyvanc", { title: "Orders and Invoices" });
+// Route for showing the form and handling results
+router.get('/order-invoice', auth.authenticateToken, auth.authorizeRole("Staff"), (req, res) => {
+	res.render("order-invoice", { title: "Orders and Invoices" });
 });
+
+// Route for fetching and displaying the results based on the date
+router.post('/order-invoice', auth.authenticateToken, auth.authorizeRole("Staff"), getOrderAndInvoiceDetails);
+
 
 // Truy vấn D
-router.get("/customerordertrendsofthisbranch", (req, res) => {
-	res.render("truyvand", { title: "Customer Order Trends of this Branch" });
-});
+// Route for showing the form to input data
+router.get("/customer-order-trends", auth.authenticateToken, auth.authorizeRole("Staff"), getCustomerOrderTrendsForm);
+
+// Route for fetching and displaying the results
+router.post('/customer-order-trends', auth.authenticateToken, auth.authorizeRole("Staff"), getCustomerOrderTrendsResults);
+
 
 // Truy vấn E
-router.get("/staffandcorrespondingreviews", (req, res) => {
-	res.render("truyvane", { title: "Staff and Corresponding Reviews" });
-});
+// Route for rendering the staff reviews form and showing the data
+router.get('/staff-reviews-form', auth.authenticateToken, auth.authorizeRole("Staff"), getStaffReviewsForm);
+
+// Route for fetching and displaying the results of the reviews
+router.post('/staff-reviews-form', auth.authenticateToken, auth.authorizeRole("Staff"), getStaffReviewsResults);
 
 // Truy vấn F
-router.get("/foodqualityandcustomerfeedback", (req, res) => {
-	res.render("truyvanf", { title: "Food Quality and Customer Feedback" });
-});
+// Route for showing the form
+router.get("/food-qualityandcustomerfeedback", auth.authenticateToken, auth.authorizeRole("Staff"), getFoodQualityAndCustomerFeedbackForm);
+
+// Route for fetching and displaying the results
+router.post('/food-qualityandcustomerfeedback', auth.authenticateToken, auth.authorizeRole("Staff"), getFoodQualityAndCustomerFeedbackResults);
+
 
 // Truy vấn H
-router.get("/branchrevenue", (req, res) => {
-	res.render("truyvanh", { title: "Branch Revenue" });
-});
+router.get("/branch-revenue", auth.authenticateToken, auth.authorizeRole("Staff"), getBranchRevenue);
+router.post("/branch-revenue", auth.authenticateToken, auth.authorizeRole("Staff"), postBranchRevenue);
+
 
 // Truy vấn I
-router.get("/topsellingdishes", (req, res) => {
-	res.render("truyvani", { title: "Top-Selling Dishes" });
-});
+// Route for showing the form for top-selling dishes
+router.get("/top-selling-dishes", auth.authenticateToken, auth.authorizeRole("Staff"), getTopSellingDishesForm);
+
+// Route for fetching and displaying the results
+router.post('/top-selling-dishes', auth.authenticateToken, auth.authorizeRole("Staff"), getTopSellingDishesResults);
+
 
 // Truy vấn J
-router.get("/highestrevenuegeneratingcustomers", (req, res) => {
-	res.render("truyvanj", { title: "Highest Revenue Generating Customers" });
-});
+// Route for showing the form
+router.get("/top-revenue-customers", auth.authenticateToken, auth.authorizeRole("Staff"), getTopRevenueCustomersForm);
+
+// Route for fetching and displaying the results
+router.post('/top-revenue-customers', auth.authenticateToken, auth.authorizeRole("Staff"), getTopRevenueCustomersResults);
+
 
 export default router;
