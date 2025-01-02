@@ -74,22 +74,95 @@ END;
 
 
 -- Tạo món ăn
-CREATE PROCEDURE sp_TaoMonAn
-	@MaMon CHAR(10),
-	@TenMon NVARCHAR(50),
-	@DanhMuc NVARCHAR(50)
+CREATE or alter PROCEDURE sp_TaoMonAn
+    @TenMon NVARCHAR(50),
+    @DanhMuc NVARCHAR(50),
+    @MaChiNhanh CHAR(10),          -- Branch ID
+    @GiaHienTai FLOAT,             -- Price for the dish at the branch
+    @TrangThaiPhucVu NVARCHAR(20)  -- Status for the dish (Available, Out of stock, Discontinued)
 AS
 BEGIN
-	SET NOCOUNT ON;
+    SET NOCOUNT ON;
 
-	INSERT INTO MONAN (MAMON, TENMON, DANHMUC)
-	VALUES (@MaMon, @TenMon, @DanhMuc)
+    DECLARE @MaMon CHAR(10);
+    DECLARE @MaMenu CHAR(10);
+
+    -- Generate the next MAMON by incrementing the highest existing MAMON in MONAN table
+    SELECT @MaMon = 'MON' + RIGHT('0000000' + CAST(CAST(SUBSTRING(MAX(MAMON), 4, 7) AS INT) + 1 AS VARCHAR(7)), 7)
+    FROM MONAN;
+
+    -- Insert into MONAN table
+    INSERT INTO MONAN (MAMON, TENMON, DANHMUC)
+    VALUES (@MaMon, @TenMon, @DanhMuc);
+
+    -- Generate the next MAMENU by incrementing the highest existing MAMENU in MENU table
+    SELECT @MaMenu = 'MENU' + RIGHT('000000' + CAST(CAST(SUBSTRING(MAX(MAMENU), 5, 6) AS INT) + 1 AS VARCHAR(6)), 6)
+    FROM MENU;
+
+    -- Insert into MENU table
+    INSERT INTO MENU (MAMENU, MACHINHANH, MAMON, MACOMBO, GIAHIENTAI, TRANGTHAIPHUCVU)
+    VALUES 
+    (
+        @MaMenu,           -- Newly generated MAMENU
+        @MaChiNhanh,       -- Branch ID passed as parameter
+        @MaMon,            -- MAMON from the new dish
+        NULL,              -- No combo in this case
+        @GiaHienTai,       -- Price passed as parameter
+        @TrangThaiPhucVu   -- Status passed as parameter
+    );
 END;
 GO
 
-EXEC sp_TaoMonAn 'MON9000001', N'Salmon Nigiri', 'Nigiri';
+
+EXEC sp_TaoMonAn N'Salmon Nigiri', 'Nigiri', 'CN00000006', 1000000, 'Available';
+select * from menu where MACHINHANH = 'CN00000006'
 EXEC sp_TaoMonAn 'MON9000002', N'Tuna Nigiri', 'Nigiri';
 GO
+select * from MONAN
+-- Cap nhat trang thai mon an
+CREATE PROCEDURE sp_UpdateDishStatus
+    @MAMON CHAR(10),
+    @TrangThaiPhucVu NVARCHAR(20)
+AS
+BEGIN
+    UPDATE MONAN
+    SET TRANGTHAIPHUCVU = @TrangThaiPhucVu
+    WHERE MAMON = @MAMON
+    AND TRANGTHAIPHUCVU IN (N'Available', N'Out of stock', N'Discontinued');
+END
+go
+
+CREATE PROCEDURE sp_UpdateDishStatus
+    @MAMON CHAR(10),                -- Dish code
+    @TRANGTHAIPHUCVU NVARCHAR(20),   -- New status (Available, Out of stock, Discontinued)
+    @MACHINHANH CHAR(10)            -- Branch ID
+AS
+BEGIN
+    -- Check if the status is valid
+    IF @TRANGTHAIPHUCVU NOT IN (N'Available', N'Out of stock', N'Discontinued')
+    BEGIN
+        PRINT 'Invalid status value';
+        RETURN;
+    END
+
+    -- Start a transaction to ensure atomicity
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- Update the status of the dish in the MENU table for the given branch
+        UPDATE MENU
+        SET TRANGTHAIPHUCVU = @TRANGTHAIPHUCVU
+        WHERE MAMON = @MAMON AND MACHINHANH = @MACHINHANH;
+
+        -- Commit the transaction
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- If an error occurs, rollback the transaction
+        ROLLBACK TRANSACTION;
+        PRINT 'An error occurred while updating the status.';
+    END CATCH
+END
 
 
 -- Tạo chi tiết món ăn cho menu

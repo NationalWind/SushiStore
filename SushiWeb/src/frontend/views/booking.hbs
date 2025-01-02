@@ -9,47 +9,46 @@
 </head>
 
 <body>
-    {{> header}} <!-- Include the header -->
     <div class="wrapper">
         <h1 class="page-title">Booking</h1>
+
+        <!-- Thông báo lỗi hoặc thành công -->
+        {{#if errorMessage}}
+        <div class="error">{{errorMessage}}</div>
+        {{/if}}
+
+        {{#if successMessage}}
+        <div class="success">{{successMessage}}</div>
+        {{/if}}
+
         <div class="booking_container">
             <div class="form-container">
                 <p class="form-container-note">Please fill in all of your personal and booking information.</p>
-                <form>
+                <form action="/booking" method="POST">
                     <div class="form-group">
                         <label for="name">Full Name (*)</label>
-                        <input type="text" id="name" placeholder="Your full name">
+                        <input type="text" id="name" name="HoTen" placeholder="Your full name" required>
                     </div>
                     <div class="form-group">
                         <label for="phone">Phone Number (*)</label>
-                        <input type="text" id="phone" placeholder="Your phone number">
+                        <input type="text" id="phone" name="SDT" placeholder="Your phone number" required>
                     </div>
                     <div class="form-group">
                         <label for="branch">Branch to Book (*)</label>
                         <div class="branch-container">
-                            <select id="branch" name="branch">
-                                <option value="hcm">TP Hồ Chí Minh</option>
-                                <option value="hn">Hà Nội</option>
-                            </select>
-                            <select id="restaurant" name="restaurant">
-                                <option value="nhahang1">Nhà hàng 1</option>
-                                <option value="nhahang2">Nhà hàng 2</option>
-                                <option value="nhahang3">Nhà hàng 3</option>
+                            <select id="branch-select" name="MaChiNhanh" required>
+                                <option>Loading branches...</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="guests">Number of Guests</label>
-                        <input type="number" id="guests" placeholder="Your number of guests to book">
+                        <input type="number" id="guests" name="SoLuongKhach" placeholder="Your number of guests to book" required>
                     </div>
                     <div class="form-group">
                         <label for="date">Date and Time</label>
-                        <input type="date" id="date">
-                        <input type="time" id="time">
-                    </div>
-                    <div class="form-group">
-                        <label for="notes">Notes</label>
-                        <textarea id="notes" placeholder="Your notes (if any)"></textarea>
+                        <input type="date" id="date" name="NgayDen" required>
+                        <input type="time" id="time" name="GioDen" required>
                     </div>
                     <button type="submit" class="submit-btn">Submit Booking</button>
                 </form>
@@ -61,6 +60,33 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Fetch branch data when the page loads
+        fetch('/booking/branches') // Call the backend API endpoint for branches
+            .then(response => response.json())
+            .then(data => {
+                const branchSelect = document.getElementById('branch-select');
+                
+                // If branches are found, populate the dropdown
+                if (data && data.length > 0) {
+                    data.forEach(branch => {
+                        const option = document.createElement('option');
+                        option.value = branch.MACHINHANH; // value is the branch code
+                        option.textContent = branch.TENCHINHANH; // text is the branch name
+                        branchSelect.appendChild(option);
+                    });
+                } else {
+                    // If no branches are available, show a "no branches" option
+                    branchSelect.innerHTML = '<option>No branches available</option>';
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching branches:", error);
+                const branchSelect = document.getElementById('branch-select');
+                branchSelect.innerHTML = '<option>Error loading branches</option>';
+            });
+    </script>
 </body>
 
 </html>

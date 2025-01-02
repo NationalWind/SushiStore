@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics</title>
+
+    <style>
+      .staff-statistics_main-homepage {
+        padding: 100px 100px 100px 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 100px;
+        position: relative;
+        min-height: 100vh;
+      }
+
+      .staff-statistics_buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 50px;
+        z-index: 4;
+        position: relative;
+        justify-content: center;
+        align-items: center;
+      }
+
+    .staff-statistics_button {
+        width: 300px;
+        height: 100px;
+        padding: 20px;
+        border-color: #ffffff;
+        border-width: 2px;
+        border-style: solid;
+        border-radius: 10px;
+        background-color: #353535;
+        font-size: 20px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-weight: 700;
+        text-decoration: none;
+        transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+        z-index: 2;
+    }
+
+    .staff-statistics_button:hover {
+        border-color: #353535;
+        background-color: #ffffff;
+        color: #353535;
+    }
+
+    .staff-statistics_button:active {
+        border-color: #ffffff;
+        background-color: #353535;
+        color: #ffffff;
+    }
+    </style>
+</head>
+
+<body>
+  <div class="staff-statistics_main-homepage">
+    <div class="medium-title-deli">
+      Statistics
+    </div>
+    <div class="staff-statistics_buttons">
+      <a class="staff-statistics_button" href="/staff/ordersandinvoices">Orders and Invoices</a>
+      <a class="staff-statistics_button" href="/staff/customerordertrendsofthisbranch">Customer Order Trends of this Branch</a>
+      <a class="staff-statistics_button" href="/staff/staffandcorrespondingreviews">Staff and Corresponding Reviews</a>
+      <a class="staff-statistics_button" href="/staff/foodqualityandcustomerfeedback">Food Quality and Customer Feedback</a>
+      <a class="staff-statistics_button" href="/staff/branchrevenue">Branch Revenue</a>
+      <a class="staff-statistics_button" href="/staff/topsellingdishes">Top-Selling Dishes</a>
+      <a class="staff-statistics_button" href="/staff/highestrevenuegeneratingcustomers">Highest Revenue Generating Customers</a>
+    </div>
+  </div>
+</body>
+
+</html>
