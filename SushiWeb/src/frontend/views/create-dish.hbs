@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Dish</title>
+    <link rel="stylesheet" href="/styles.css"> <!-- Optional: Add your CSS file -->
+</head>
+<body>
+
+    <h1>Create New Dish</h1>
+
+    {{#if success}}
+        <div class="alert success">{{success}}</div>
+    {{/if}}
+
+    {{#if error}}
+        <div class="alert error">{{error}}</div>
+    {{/if}}
+
+    <form action="/staff/create-dish" method="POST">
+        <div class="form-group">
+            <label for="TenMon">Dish Name:</label>
+            <input type="text" id="TenMon" name="TenMon" required>
+        </div>
+
+        <div class="form-group">
+            <label for="DanhMuc">Category:</label>
+            <input type="text" id="DanhMuc" name="DanhMuc" required>
+        </div>
+
+        <div class="form-group">
+            <label for="MaChiNhanh">Branch ID:</label>
+            <input type="text" id="MaChiNhanh" name="MaChiNhanh" required>
+        </div>
+
+        <div class="form-group">
+            <label for="GiaHienTai">Price:</label>
+            <input type="number" id="GiaHienTai" name="GiaHienTai" step="0.01" required>
+        </div>
+
+        <div class="form-group">
+            <label for="TrangThaiPhucVu">Status:</label>
+            <select id="TrangThaiPhucVu" name="TrangThaiPhucVu" required>
+                <option value="Available">Available</option>
+                <option value="Out of stock">Out of stock</option>
+                <option value="Discontinued">Discontinued</option>
+            </select>
+        </div>
+
+        <button type="submit">Create Dish</button>
+    </form>
+</body>
+</html>
