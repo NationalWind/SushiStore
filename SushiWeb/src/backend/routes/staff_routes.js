@@ -1,13 +1,15 @@
 import express from "express";
+import { createDish } from "../controller/staff_controller.js";
 import { authenticateToken, authenticateUser } from "../middleware/auth_middleware.js";
 
 const router = express.Router();
 
-router.get("/", authenticateToken, (req, res) => {
-    if (req.role !== "Staff") {
-        return res.status(403).send("Access Denied");
-    }
-    res.render("staff", { title: "Staff Dashboard", name: req.username });
+// GET route to display the form for creating a new dish
+router.get('/create-dish', (req, res) => {
+  res.render('staff');
 });
+
+// POST route for creating a new dish
+router.post("/create-dish", createDish); // Ensure the request is authenticated
 
 export default router;

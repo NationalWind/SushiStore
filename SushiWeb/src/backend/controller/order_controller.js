@@ -95,10 +95,20 @@ export const getOrders = async (req, res) => {
 
 export const selectOrder = async (req, res) => {
     try {
-        const { selectedOrders } = req.body;
+        let { selectedOrders } = req.body;
 
         if (!selectedOrders || selectedOrders.length === 0) {
             return res.status(400).json({ message: "No orders selected." });
+        }
+
+        // If selectedOrders is a string, wrap it in an array to ensure it is always an array
+        if (typeof selectedOrders === "string") {
+            selectedOrders = [selectedOrders];  // Wrap the string in an array
+        }
+
+        // Ensure selectedOrders is an array
+        if (!Array.isArray(selectedOrders)) {
+            return res.status(400).json({ message: "Invalid format for selected orders." });
         }
 
         const token = req.cookies.authToken || req.headers.authorization?.split(" ")[1];
@@ -138,14 +148,6 @@ export const selectOrder = async (req, res) => {
                 INSERT INTO HOADON (MAHOADON, TRANGTHAI, NGAYLAP, GIOLAP, MAKHACHHANG)
                 VALUES (@MAHOADON, @TRANGTHAI, GETDATE(), CONVERT(TIME(0),GETDATE()), @MAKHACHHANG)
             `);
-
-        if (typeof selectedOrders === "string") {
-            selectedOrders = JSON.parse(selectedOrders);
-        }
-
-        if (!Array.isArray(selectedOrders) || selectedOrders.length === 0) {
-            return res.status(400).json({ message: "No items selected to create an order." });
-        }
 
         // Update selected orders to "Successful" status
         for (const MADON of selectedOrders) {
