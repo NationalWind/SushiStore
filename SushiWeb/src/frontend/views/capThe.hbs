@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up</title>
+    <link rel="stylesheet" href="../public/styles.css">
+</head>
+
+<body>
+    <div class="authen-page">
+        <div class="container">
+            <!-- Form đăng ký -->
+            <form action="#" class="form" method="POST" onsubmit="handleSubmit(event)">
+                <div class="logo-container">
+                    <img src="../public/sushi.png" alt="Logo" class="logo">
+                    <p class="title">Create Membership Card!</p>
+                </div>
+
+                <!-- MaKH input -->
+                <div class="input-group">
+                    <input type="text" id="username" name="username" placeholder="*CustomerID" required>
+                </div>
+
+                <!-- Full Name input -->
+                <div class="input-group">
+                    <input type="text" id="hoten" name="hoten" placeholder="*Full Name" required>
+                </div>
+
+                <!-- Phone Number input -->
+                <div class="input-group">
+                    <input type="text" id="sdt" name="sdt" placeholder="*Phone Number" required>
+                </div>
+
+                <!-- Email input -->
+                <div class="input-group">
+                    <input type="email" id="email" name="email" placeholder="*Email" required>
+                </div>
+
+                <!-- CCCD input -->
+                <div class="input-group">
+                    <input type="text" id="cccd" name="cccd" placeholder="*CCCD (ID number)" required>
+                </div>
+
+                <!-- Redirect to login page -->
+                <a href="#" class="secondary-button">Submit</a>
+            </form>
+        </div>
+    </div>
+    <script>
+        const passwordInput = document.getElementById('password');
+        const usernameInput = document.getElementById('username');
+        const submitButton = document.getElementById('submitButton');
+        const fullNameInput = document.getElementById('hoten');
+        const cccdInput = document.getElementById('cccd');
+
+        // Enable submit button only when all required fields are filled
+        usernameInput.addEventListener('input', toggleSubmitButton);
+        passwordInput.addEventListener('input', toggleSubmitButton);
+        fullNameInput.addEventListener('input', toggleSubmitButton);
+        cccdInput.addEventListener('input', toggleSubmitButton);
+
+        function toggleSubmitButton() {
+            submitButton.disabled = !(usernameInput.value.trim() && passwordInput.value.trim() && fullNameInput.value.trim() && cccdInput.value.trim());
+        }
+
+        // Handle form submission asynchronously
+        async function handleSubmit(event) {
+            event.preventDefault(); // Prevent form from submitting normally
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                if (response.ok) {
+                    alert("Sign up successful! You will be redirected to the login page.");
+                    window.location.href = "/login"; // Redirect to login page
+                } else {
+                    const data = await response.json();
+                    alert(data.message || "Error during signup. Please try again.");
+                }
+            } catch (error) {
+                alert("Error during signup. Please try again.");
+            }
+        }
+    </script>
+</body>
+
+</html>
