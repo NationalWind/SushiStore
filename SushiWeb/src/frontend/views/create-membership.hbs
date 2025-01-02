@@ -8,37 +8,31 @@
 <body>
     <h1>{{title}}</h1>
 
-    <!-- Show error message if any -->
+    {{#if successMessage}}
+        <p style="color: green;">{{successMessage}}</p>
+    {{/if}}
     {{#if errorMessage}}
         <p style="color: red;">{{errorMessage}}</p>
     {{/if}}
 
-    <!-- Show success message if any -->
-    {{#if successMessage}}
-        <p style="color: green;">{{successMessage}}</p>
-    {{/if}}
-
-    <!-- Form for creating/updating customer membership -->
-    <form action="/staff/create-membership" method="POST">
+    <form method="POST" action="/staff/create-membership">
         <label for="MAKHACHHANG">Customer ID:</label>
-        <input type="text" id="MAKHACHHANG" name="MAKHACHHANG" required><br><br>
+        <input type="text" name="MAKHACHHANG" required><br>
 
         <label for="HOTEN">Full Name:</label>
-        <input type="text" id="HOTEN" name="HOTEN" required><br><br>
+        <input type="text" name="HOTEN" required><br>
 
         <label for="SDT">Phone Number:</label>
-        <input type="text" id="SDT" name="SDT" required><br><br>
+        <input type="text" name="SDT" required><br>
 
         <label for="EMAIL">Email:</label>
-        <input type="email" id="EMAIL" name="EMAIL" required><br><br>
+        <input type="email" name="EMAIL" required><br>
 
-        <label for="CCCD">ID Card Number:</label>
-        <input type="text" id="CCCD" name="CCCD" required><br><br>
+        <label for="CCCD">ID Card (CCCD):</label>
+        <input type="text" name="CCCD" required><br>
 
-        <button type="submit">Submit</button>
+        <button type="submit">Create/Update Membership</button>
     </form>
 
-    <br>
-    <a href="/">Back to Dashboard</a>
 </body>
 </html>

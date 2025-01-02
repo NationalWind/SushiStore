@@ -739,3 +739,63 @@ export const updateMembershipStatus = async (req, res) => {
 	}
 };
 
+
+export const createMembershipCard = async (req, res) => {
+	try {
+		const { MAKHACHHANG, HOTEN, SDT, EMAIL, CCCD } = req.body;
+
+		// Check if all required fields are provided
+		if (!MAKHACHHANG || !HOTEN || !SDT || !EMAIL || !CCCD) {
+			return res.status(400).json({ error: "All fields are required" });
+		}
+
+		const token = req.cookies.authToken;
+
+		if (!token) {
+			return res.render("create-membership", { categories: [], errorMessage: "No token provided." });
+		}
+
+		// Decode the token to get the user's username
+		const decoded = jwt.verify(token, SECRET_KEY);
+		const username = decoded.username;
+
+		// Connect to the database
+		const pool = await connectToDatabase();
+
+		// Fetch the staff ID (MANHANVIEN) for the logged-in user
+		const staffQuery = `
+			SELECT NV.MANHANVIEN 
+			FROM NHANVIEN NV
+			INNER JOIN ACCOUNT ACC ON NV.ACCOUNT_ID = ACC.ID
+			WHERE ACC.USERNAME = @username
+		`;
+
+		const staffResult = await pool.request()
+			.input("username", sql.NVarChar, username)
+			.query(staffQuery);
+
+		if (staffResult.recordset.length === 0) {
+			return res.render("create-membership", { categories: [], errorMessage: "Staff not found or unauthorized." });
+		}
+
+		const staffId = staffResult.recordset[0].MANHANVIEN;
+
+		// Insert into the database using a stored procedure for creating/updating the membership card
+		await pool.request()
+			.input('MAKHACHHANG', sql.Char(10), MAKHACHHANG)
+			.input('HOTEN', sql.NVarChar(50), HOTEN)
+			.input('SDT', sql.Char(10), SDT)
+			.input('EMAIL', sql.NVarChar(50), EMAIL)
+			.input('CCCD', sql.NVarChar(20), CCCD)
+			.input('NHANVIENTAOLAP', sql.Char(10), staffId) // Use staffId instead of username
+			.execute('SP_TaoVaCapThe'); // Executes the stored procedure for membership card creation
+
+		// Render success message after membership card is created
+		res.render("create-membership", {
+			successMessage: "Membership card created/updated successfully!"
+		});
+	} catch (error) {
+		console.error(error);
+		res.render("create-membership", { errorMessage: "An error occurred while creating/updating the membership card." });
+	}
+};
