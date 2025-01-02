@@ -23,7 +23,8 @@ export const getBranchMenu = async (req, res) => {
             FROM MENU
             LEFT JOIN MONAN ON MENU.MAMON = MONAN.MAMON
             LEFT JOIN COMBOMONAN ON MENU.MACOMBO = COMBOMONAN.MACOMBO
-            WHERE MENU.MACHINHANH = @branchId`;
+            WHERE MENU.MACHINHANH = @branchId
+            AND MENU.TRANGTHAIPHUCVU = N'Available'`;
 
         const result = await pool.request()
             .input('branchId', sql.Char, branchId)
@@ -60,11 +61,12 @@ export const getBranchMenu = async (req, res) => {
 // Get items in a specific category for a branch
 export const getCategoryItems = async (req, res) => {
     const { branchId, category } = req.params;
+    const { q } = req.query;  // Capture search query parameter
 
     try {
         const pool = await connectToDatabase();
 
-        // Query to handle "Combo" category separately
+        // Start building the query
         let query = `
             SELECT MENU.MAMENU, 
                    ISNULL(MONAN.TENMON, COMBOMONAN.TENCOMBO) AS TENMON,
@@ -76,17 +78,25 @@ export const getCategoryItems = async (req, res) => {
             LEFT JOIN COMBOMONAN ON MENU.MACOMBO = COMBOMONAN.MACOMBO
             WHERE MENU.MACHINHANH = @branchId AND MENU.TRANGTHAIPHUCVU = 'Available'`;
 
-        // Adjust the query to filter by category
+        // Add category filter
         if (category !== 'Combo') {
             query += ` AND MONAN.DANHMUC = @category`;  // Filter by category in MONAN table
         } else {
-            // If the category is "Combo", ensure we're fetching only combo items
             query += ` AND COMBOMONAN.TENCOMBO IS NOT NULL`;  // Only fetch combo items
         }
 
+        // If a search query (`q`) is provided, filter by item name or description
+        if (q && q.trim() !== '') {
+            query += `
+                AND (MONAN.TENMON LIKE @searchQuery OR COMBOMONAN.TENCOMBO LIKE @searchQuery)
+            `;
+        }
+
+        // Execute the query with inputs
         const result = await pool.request()
             .input('branchId', sql.Char, branchId)
             .input('category', sql.NVarChar, category)
+            .input('searchQuery', sql.NVarChar, `%${q}%`)  // Use search query as a wildcard match
             .query(query);
 
         res.status(200).json(result.recordset);
@@ -257,6 +267,7 @@ export const searchBranchMenu = async (req, res) => {
             LEFT JOIN MONAN ON MENU.MAMON = MONAN.MAMON
             LEFT JOIN COMBOMONAN ON MENU.MACOMBO = COMBOMONAN.MACOMBO
             WHERE MENU.MACHINHANH = @branchId
+            AND MENU.TRANGTHAIPHUCVU = N'Available'
             AND (MONAN.TENMON LIKE '%' + @query + '%' 
                  OR COMBOMONAN.TENCOMBO LIKE '%' + @query + '%')`;
 
@@ -279,10 +290,11 @@ export const searchBranchMenu = async (req, res) => {
             categorizedMenu[category].push(item);
         });
 
+        //console.log(categorizedMenu);
         // Pass the data to the Handlebars template for rendering
         res.render('menu', {
             branchId,
-            searchQuery: q,
+            q,
             categories: Object.entries(categorizedMenu).map(([categoryName, items]) => ({
                 categoryName,
                 items
@@ -292,4 +304,17 @@ export const searchBranchMenu = async (req, res) => {
         console.error('Error searching branch menu:', error);
         res.status(500).send("Internal server error.");
     }
+};
+
+export const sendSearchQuery = async (req, res) => {
+    const branchId = req.params.branchId;
+    const query = req.body.query.trim();
+
+    if (!query) {
+        // If the query is empty, redirect back to the same branch page
+        return res.redirect(`/branch/${branchId}`);
+    }
+
+    // Redirect to the search results page with the query parameter
+    res.redirect(`/menu/branch/${branchId}/search?q=${encodeURIComponent(query)}`);
 };

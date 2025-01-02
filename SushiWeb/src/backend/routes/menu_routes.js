@@ -6,7 +6,8 @@ import {
     getFirstBranchId,
     getBranches,
     addToCart,
-    searchBranchMenu
+    searchBranchMenu,
+    sendSearchQuery
 } from '../controller/menu_controller.js';
 
 import { authenticateToken, authenticateUser } from "../middleware/auth_middleware.js";
@@ -31,6 +32,8 @@ router.get('/branch/:branchId', getBranchMenu);
 
 //Router to get search menu
 router.get('/branch/:branchId/search', searchBranchMenu);
+
+router.post('/branch/:branchId/search', sendSearchQuery);
 
 // Route to get items of a specific category in a branch
 router.get('/branch/:branchId/category/:category', getCategoryItems);
