@@ -67,7 +67,7 @@ export const getOrders = async (req, res) => {
         const paidOrders = result.recordset.filter(order => order.DONDATMON_TRANGTHAI === 'Paid');
 
         // If no orders are found
-        if (processingOrders.length === 0 && successfulOrders.length === 0) {
+        if (processingOrders.length === 0 && successfulOrders.length === 0 && paidOrders.length === 0) {
             return res.render('order', {
                 processingOrders: [],
                 successfulOrders: [],
