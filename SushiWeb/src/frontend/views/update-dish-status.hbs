@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Dish Status</title>
+    <link rel="stylesheet" href="/styles.css"> <!-- Optional: Add your CSS file -->
+</head>
+<body>
+
+    <h1>Update Dish Status</h1>
+
+    {{#if success}}
+        <div class="alert success">{{success}}</div>
+    {{/if}}
+
+    {{#if error}}
+        <div class="alert error">{{error}}</div>
+    {{/if}}
+
+    <!-- Form for updating the dish status -->
+    <form action="/staff/update-dish-status" method="POST">
+        <div class="form-group">
+            <label for="MAMON">Dish Code:</label>
+            <input type="text" id="MAMON" name="MAMON" required placeholder="Enter dish code">
+        </div>
+
+        <div class="form-group">
+            <label for="TRANGTHAIPHUCVU">Status:</label>
+            <select id="TRANGTHAIPHUCVU" name="TRANGTHAIPHUCVU" required>
+                <option value="Available">Available</option>
+                <option value="Out of stock">Out of stock</option>
+                <option value="Discontinued">Discontinued</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="MACHINHANH">Branch ID:</label>
+            <input type="text" id="MACHINHANH" name="MACHINHANH" required placeholder="Enter branch ID">
+        </div>
+
+        <button type="submit">Update Status</button>
+    </form>
+
+</body>
+</html>
