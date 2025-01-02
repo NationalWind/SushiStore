@@ -232,3 +232,64 @@ export const addToCart = async (req, res) => {
         res.status(500).json({ message: "Internal server error." });
     }
 };
+
+export const searchBranchMenu = async (req, res) => {
+    console.log('Search request received:', req.params, req.query);
+    const { branchId } = req.params;
+    const { q } = req.query; // Get the search query from the request
+
+    console.log(q);
+
+    if (!q || q.trim() === '') {
+        return res.status(400).send("Search query is required.");
+    }
+
+    try {
+        const pool = await connectToDatabase();
+        const query = `
+            SELECT MENU.MAMENU, 
+                   ISNULL(MONAN.TENMON, COMBOMONAN.TENCOMBO) AS TENMON, 
+                   ISNULL(MONAN.DANHMUC, N'Combo') AS DANHMUC, 
+                   ISNULL(MONAN.IMAGE_LINK, COMBOMONAN.IMAGE_LINK) AS IMAGE_LINK, 
+                   MENU.GIAHIENTAI, 
+                   MENU.TRANGTHAIPHUCVU
+            FROM MENU
+            LEFT JOIN MONAN ON MENU.MAMON = MONAN.MAMON
+            LEFT JOIN COMBOMONAN ON MENU.MACOMBO = COMBOMONAN.MACOMBO
+            WHERE MENU.MACHINHANH = @branchId
+            AND (MONAN.TENMON LIKE '%' + @query + '%' 
+                 OR COMBOMONAN.TENCOMBO LIKE '%' + @query + '%')`;
+
+        const result = await pool.request()
+            .input('branchId', sql.Char, branchId)
+            .input('query', sql.NVarChar, q) // Use `NVarChar` for Unicode support
+            .query(query);
+
+        if (result.recordset.length === 0) {
+            return res.status(404).send("No matching menu items found.");
+        }
+
+        // Group data by DANHMUC
+        const categorizedMenu = {};
+        result.recordset.forEach(item => {
+            const category = item.DANHMUC;
+            if (!categorizedMenu[category]) {
+                categorizedMenu[category] = [];
+            }
+            categorizedMenu[category].push(item);
+        });
+
+        // Pass the data to the Handlebars template for rendering
+        res.render('menu', {
+            branchId,
+            searchQuery: q,
+            categories: Object.entries(categorizedMenu).map(([categoryName, items]) => ({
+                categoryName,
+                items
+            }))
+        });
+    } catch (error) {
+        console.error('Error searching branch menu:', error);
+        res.status(500).send("Internal server error.");
+    }
+};

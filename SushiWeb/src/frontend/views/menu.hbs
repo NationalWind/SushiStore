@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -124,27 +121,28 @@
                     tab.classList.add('active');
                 }
             });
+
+            // Hide search bar when category is selected
+            if (category) {
+                document.querySelector('.search-bar').style.display = 'none';
+            }
         }
 
         async function fetchBranches() {
-            try {
-                const response = await fetch('/menu/branches');
-                const branches = await response.json();
+            const response = await fetch('/menu/branches');
+            const branches = await response.json();
 
-                const selectElement = document.querySelector('.branch-selector select');
-                selectElement.innerHTML = ''; // Clear any existing options
+            const selectElement = document.querySelector('.branch-selector select');
+            selectElement.innerHTML = ''; // Clear any existing options
 
-                branches.forEach(branch => {
-                    const option = document.createElement('option');
-                    option.value = branch.branchId;
-                    option.textContent = branch.branchName;
-                    selectElement.appendChild(option);
-                });
+            branches.forEach(branch => {
+                const option = document.createElement('option');
+                option.value = branch.branchId;
+                option.textContent = branch.branchName;
+                selectElement.appendChild(option);
+            });
 
-                selectElement.value = '{{branchId}}';
-            } catch (error) {
-                console.error('Error fetching branches:', error);
-            }
+            selectElement.value = '{{branchId}}';
         }
 
         async function switchBranch(event) {
@@ -154,6 +152,7 @@
             try {
                 const postResponse = await fetch('/menu/switch-branch', {
                     method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ branchId }),
                 });
 
@@ -168,6 +167,31 @@
                 alert('An error occurred while switching the branch');
             }
         }
+
+        // Show the search bar when the "Search" tab is clicked
+        function showSearchBar() {
+            const searchBar = document.querySelector('.search-bar');
+            const itemsContainer = document.querySelector('.items-container');
+            searchBar.style.display = 'block';
+            itemsContainer.innerHTML = ''; // Clear the items container
+            setActiveCategory(null); // Clear active category selection
+        }
+
+        // Search items function
+        async function searchItems() {
+            const branchId = '{{branchId}}';
+            const query = document.getElementById('searchInput').value.trim();
+
+            if (query) {
+                const response = await fetch(`/menu/branch/${branchId}/search?q=${encodeURIComponent(query)}`);
+                window.location.href = `/menu/branch/${branchId}/search?q=${encodeURIComponent(query)}`
+
+                // Attach event listeners to the new items
+                setupCartControls();
+            } else {
+                alert('Please enter a search query.');
+            }
+        }
     </script>
 </head>
 
@@ -180,7 +204,8 @@
                 <label for="branchSelect">Select Branch: </label>
                 <select onchange="switchBranch(event)">
                     {{#each branches}}
-                    <option value="{{this.branchId}}" {{#if (eq this.branchId ../branchId)}}selected{{/if}}>{{this.branchName}}
+                    <option value="{{this.branchId}}" {{#if (eq this.branchId ../branchId)}}selected{{/if}}>
+                        {{this.branchName}}
                     </option>
                     {{/each}}
                 </select>
@@ -194,6 +219,17 @@
                 {{this.categoryName}}
             </div>
             {{/each}}
+
+            <!-- Search Tab -->
+            <div class="category-tab search-tab" onclick="showSearchBar();">
+                Search
+            </div>
+        </div>
+
+        <!-- Search Bar (Initially Hidden) -->
+        <div class="search-bar" style="display: none;">
+            <input type="text" id="searchInput" placeholder="Search for items..." />
+            <button onclick="searchItems()">Search</button>
         </div>
 
         <div class="items-container">
@@ -215,5 +251,3 @@
     </div>
 
 </body>
-
-</html>

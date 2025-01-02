@@ -5,7 +5,8 @@ import {
     getItemDetails,
     getFirstBranchId,
     getBranches,
-    addToCart
+    addToCart,
+    searchBranchMenu
 } from '../controller/menu_controller.js';
 
 import { authenticateToken, authenticateUser } from "../middleware/auth_middleware.js";
@@ -28,8 +29,12 @@ router.get("/", async (req, res) => {
 // Route to get the menu of a specific branch
 router.get('/branch/:branchId', getBranchMenu);
 
+//Router to get search menu
+router.get('/branch/:branchId/search', searchBranchMenu);
+
 // Route to get items of a specific category in a branch
 router.get('/branch/:branchId/category/:category', getCategoryItems);
+
 
 // Route to get details of a specific item or combo
 router.get('/branch/:branchId/category/:category/item/:itemId', getItemDetails);
