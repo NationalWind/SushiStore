@@ -5,13 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Order</title>
-    <link rel="stylesheet" href="/styles.css"> <!-- Optional: Add your CSS file -->
+    <link rel="stylesheet" href="../public/styles.css">
+     <!-- Optional: Add your CSS file -->
+    <link rel="stylesheet" href="../public/booking.css">
 </head>
 
 <body>
-
-    <h1>Create New Order</h1>
-
+    <div class="wrapper">
+        <h1 class="page-title-dish">Create New Order</h1>
+    <main>
+        <div class="container">
     {{#if success}}
     <div class="alert success">{{success}}</div>
     {{/if}}
@@ -38,9 +41,14 @@
             <label for="CHINHANHDAT">Branch ID:</label>
             <input type="text" id="CHINHANHDAT" name="CHINHANHDAT" value="{{branchId}}" readonly required>
         </div>
-
-        <button type="submit">Create Order</button>
+        <div class="form-group">
+            <button type="submit" class="submit-btn">Create Order</button>
+        </div>
+        
     </form>
+        </div>
+    </main>
+    </div>
 
 </body>
 
