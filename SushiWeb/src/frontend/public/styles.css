@@ -435,6 +435,7 @@ footer {
     font-size: 50px;
     font-weight: light;
     text-decoration: none;
+    font-weight: bold;
     z-index: 2;
 }
 
@@ -499,4 +500,36 @@ footer {
     text-align: center;
     color: #ffffff;
     z-index: 2;
+}
+
+
+/* Tables */
+
+table {
+    border-collapse: collapse; /* Ensures there are no double borders */
+    width: 100%; /* Makes the table responsive */
+}
+
+th {
+    background-color: #3c3a3a; /* Sets the background color of the header */
+    color: white; /* Sets the text color of the header */
+    padding: 10px; /* Adds some padding for better spacing */
+    text-align: left; /* Aligns text to the left */
+}
+
+td {
+    padding: 10px; /* Adds padding to table cells */
+    text-align: left; /* Aligns text to the left */
+}
+
+th, td {
+    border: 1px solid #ddd; /* Adds single borders */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Adds a light background color to even rows for readability */
+}
+
+tr:hover {
+    background-color: #f1f1f1; /* Highlights the row when hovered */
 }

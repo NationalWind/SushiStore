@@ -5,7 +5,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Orders</title>
+
     <style>
+        .order_container {
+            padding: 50px 120px;
+            display: flex;
+            align-items: column;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            min-height: 90vh;
+        }
+
+        .order_container-left {
+            display: flex;
+            align-items: column;
+            flex-direction: column;
+            align-items: left;
+            gap: 40px;
+        }
+
+        .order_processing-orders,
+        .order_successful-paid-orders {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .order_processing-orders-center-button {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .button-confirm {
+            width: 350px;
+            height: 70px;
+            border-color: #ffffff;
+            border-width: 2px;
+            border-style: solid;
+            border-radius: 10px;
+            background-color: #EA252C;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            text-decoration: none;
+            transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+            z-index: 2;
+            margin-top: 20px;
+        }
+
+        .button-confirm:hover {
+            border-color: #EA252C;
+            background-color: white;
+            color: #EA252C;
+        }
+
+        .button-confirm:active {
+            border-color: white;
+            background-color: #EA252C;
+            color: white;
+        }
+
         .clickable-row {
             cursor: pointer;
         }
@@ -18,111 +85,123 @@
 </head>
 
 <body>
-    <h1>Your Orders</h1>
+    <div class="order_container">
+        <div class="order_processing-orders-center-button">
+            <h1 class="medium-title-deli">Your Orders</h1>
+        </div>
+        {{#if errorMessage}}
+        <p style="color: red;">{{errorMessage}}</p>
+        {{/if}}
+        <div class="order_container-left">
+            <div class="order_processing-orders">
+                <!-- Processing Orders -->
+                <h2 class="logo-text-deli" style="width=100%">Processing Orders</h2>
+                {{#if processingOrders.length}}
+                <form id="processingOrdersForm" method="POST" action="/order/select-order">
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>Select</th>
+                                <th>Order ID (MADON)</th>
+                                <th>Order Datetime (NGAYDAT)</th>
+                                <th>Status (TRANGTHAI)</th>
+                                <th>Order Cost (THANHTIEN)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each processingOrders}}
+                            <tr class="clickable-row" data-id="{{this.MADON}}">
+                                <td><input type="checkbox" name="selectedOrders" value="{{this.MADON}}" hidden></td>
+                                <td>{{this.MADON}}</td>
+                                <td>{{this.NGAYDAT}}</td>
+                                <td>{{this.DONDATMON_TRANGTHAI}}</td>
+                                <td>{{this.THANHTIEN}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                    <div class="order_processing-orders-center-button">
+                        <button type="submit" class="button-confirm">Confirm and make a payment</button>
+                    </div>
+                </form>
+                {{else}}
+                <p>No processing orders.</p>
+                {{/if}}
+            </div>
 
-    {{#if errorMessage}}
-    <p style="color: red;">{{errorMessage}}</p>
-    {{/if}}
+            <div class="order_processing-orders">
+                <!-- Successful Orders -->
+                <h2 class="logo-text-deli" style="width=100%; text-align:left">Successful Orders</h2>
+                {{#if successfulOrders.length}}
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Order ID (MADON)</th>
+                            <th>Order Datetime (NGAYDAT)</th>
+                            <th>Status (TRANGTHAI)</th>
+                            <th>Order Cost (THANHTIEN)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each successfulOrders}}
+                        <tr>
+                            <td>{{this.MADON}}</td>
+                            <td>{{this.NGAYDAT}}</td>
+                            <td>{{this.DONDATMON_TRANGTHAI}}</td>
+                            <td>{{this.THANHTIEN}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+                {{else}}
+                <p>No successful orders.</p>
+                {{/if}}
+            </div>
 
-    <!-- Processing Orders -->
-    <h2>Processing Orders</h2>
-    {{#if processingOrders.length}}
-    <form id="processingOrdersForm" method="POST" action="/order/select-order">
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Select</th>
-                    <th>Order ID (MADON)</th>
-                    <th>Order Datetime (NGAYDAT)</th>
-                    <th>Status (TRANGTHAI)</th>
-                    <th>Order Cost (THANHTIEN)</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each processingOrders}}
-                <tr class="clickable-row" data-id="{{this.MADON}}">
-                    <td><input type="checkbox" name="selectedOrders" value="{{this.MADON}}" hidden></td>
-                    <td>{{this.MADON}}</td>
-                    <td>{{this.NGAYDAT}}</td>
-                    <td>{{this.DONDATMON_TRANGTHAI}}</td>
-                    <td>{{this.THANHTIEN}}</td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
-        <button type="submit">Confirm and make a payment</button>
-    </form>
-    {{else}}
-    <p>No processing orders.</p>
-    {{/if}}
+            <div class="order_successful-paid-orders">
+                <!-- Paid Orders -->
+                <h2 class="logo-text-deli">Paid Orders</h2>
+                {{#if paidOrders.length}}
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Order ID (MADON)</th>
+                            <th>Order Datetime (NGAYDAT)</th>
+                            <th>Status (TRANGTHAI)</th>
+                            <th>Order Cost (THANHTIEN)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each successfulOrders}}
+                        <tr>
+                            <td>{{this.MADON}}</td>
+                            <td>{{this.NGAYDAT}}</td>
+                            <td>{{this.DONDATMON_TRANGTHAI}}</td>
+                            <td>{{this.THANHTIEN}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+                {{else}}
+                <p>No paid orders.</p>
+                {{/if}}
+            </div>
+        </div>
 
-    <!-- Successful Orders -->
-    <h2>Successful Orders</h2>
-    {{#if successfulOrders.length}}
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Order ID (MADON)</th>
-                <th>Order Datetime (NGAYDAT)</th>
-                <th>Status (TRANGTHAI)</th>
-                <th>Order Cost (THANHTIEN)</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each successfulOrders}}
-            <tr>
-                <td>{{this.MADON}}</td>
-                <td>{{this.NGAYDAT}}</td>
-                <td>{{this.DONDATMON_TRANGTHAI}}</td>
-                <td>{{this.THANHTIEN}}</td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
-    {{else}}
-    <p>No successful orders.</p>
-    {{/if}}
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const rows = document.querySelectorAll(".clickable-row");
 
-    <!-- Paid Orders -->
-    <h2>Paid Orders</h2>
-    {{#if paidOrders.length}}
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Order ID (MADON)</th>
-                <th>Order Datetime (NGAYDAT)</th>
-                <th>Status (TRANGTHAI)</th>
-                <th>Order Cost (THANHTIEN)</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each successfulOrders}}
-            <tr>
-                <td>{{this.MADON}}</td>
-                <td>{{this.NGAYDAT}}</td>
-                <td>{{this.DONDATMON_TRANGTHAI}}</td>
-                <td>{{this.THANHTIEN}}</td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
-    {{else}}
-    <p>No paid orders.</p>
-    {{/if}}
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const rows = document.querySelectorAll(".clickable-row");
-
-            rows.forEach(row => {
-                row.addEventListener("click", () => {
-                    const checkbox = row.querySelector("input[type='checkbox']");
-                    checkbox.checked = !checkbox.checked;
-                    row.classList.toggle("selected", checkbox.checked);
+                rows.forEach(row => {
+                    row.addEventListener("click", () => {
+                        const checkbox = row.querySelector("input[type='checkbox']");
+                        checkbox.checked = !checkbox.checked;
+                        row.classList.toggle("selected", checkbox.checked);
+                    });
                 });
             });
-        });
-    </script>
+        </script>
+    </div>
 </body>
 
 </html>

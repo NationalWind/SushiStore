@@ -5,141 +5,184 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart</title>
+
+    <style>
+        .cart_container {
+            padding: 50px 80px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap: 40px;
+            min-height: 90vh;
+        }
+
+        .button-delete {
+            font-size: 16px;
+            padding: 7px 20px;
+            border-color: #ffffff;
+            border-width: 2px;
+            border-style: solid;
+            border-radius: 10px;
+            background-color: #353535;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 700;
+            text-decoration: none;
+            transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+            z-index: 2;
+        }
+
+        .button-delete:hover {
+            border-color: #353535;
+            background-color: #ffffff;
+            color: #353535;
+        }
+
+        .button-delete:active {
+            border-color: #ffffff;
+            background-color: #353535;
+            color: #ffffff;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Your Cart</h1>
+    <div class="cart_container">
+        <div class="medium-title-deli">Your Cart</div>
 
-    {{#if errorMessage}}
-    <p style="color: red;">{{errorMessage}}</p>
-    {{/if}}
+        {{#if errorMessage}}
+        <p style="color: red;">{{errorMessage}}</p>
+        {{/if}}
 
-    {{#if cartItems.length}}
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Select</th>
-                <th>Item Code (MACTMON)</th>
-                <th>Item Name </th>
-                <th>Quantity (SOLUONG)</th>
-                <th>Total Price (DONGIATONG)</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each cartItems}}
-            <tr>
-                <td>
-                    <form action="/cart/select" method="POST" id="cart-form">
-                        <input type="checkbox" name="MACTMON[]" value="{{this.MACTMON}}" class="cart-checkbox"
-                            data-mactmon="{{this.MACTMON}}" {{#if this.SELECTED}}checked{{/if}}>
-                    </form>
-                </td>
-                <td>{{this.MACTMON}}</td>
-                <td>{{this.ITEM_NAME}}</td>
-                <td>{{this.SOLUONG}}</td>
-                <td>{{this.DONGIATONG}}</td>
-                <td>
-                    <!-- Form for deleting an item -->
-                    <form action="/cart/delete" method="POST" style="display:inline;" id="{{this.MACTMON}}">
-                        <input type="hidden" name="MACTMON" value="{{this.MACTMON}}">
-                        <button type="submit">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
+        {{#if cartItems.length}}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Item Code (MACTMON)</th>
+                    <th>Item Name </th>
+                    <th>Quantity (SOLUONG)</th>
+                    <th>Total Price (DONGIATONG)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each cartItems}}
+                <tr>
+                    <td>
+                        <form action="/cart/select" method="POST" id="cart-form">
+                            <input type="checkbox" name="MACTMON[]" value="{{this.MACTMON}}" class="cart-checkbox"
+                                data-mactmon="{{this.MACTMON}}" {{#if this.SELECTED}}checked{{/if}}>
+                        </form>
+                    </td>
+                    <td>{{this.MACTMON}}</td>
+                    <td>{{this.ITEM_NAME}}</td>
+                    <td>{{this.SOLUONG}}</td>
+                    <td>{{this.DONGIATONG}}</td>
+                    <td>
+                        <!-- Form for deleting an item -->
+                        <form action="/cart/delete" method="POST" style="display:inline;" id="{{this.MACTMON}}">
+                            <input type="hidden" name="MACTMON" value="{{this.MACTMON}}">
+                            <button type="submit" class="button-delete">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
 
-    <!-- Add the Create Order Button -->
-    <form action="/cart/create-order" method="POST" id="create-order-form">
-        <!-- Hidden input to include selected items -->
-        <input type="hidden" name="selectedItems" id="selectedItems">
-        <button type="submit" style="margin-top: 20px;">Create Order</button>
-    </form>
+        <!-- Add the Create Order Button -->
+        <form action="/cart/create-order" method="POST" id="create-order-form">
+            <!-- Hidden input to include selected items -->
+            <input type="hidden" name="selectedItems" id="selectedItems">
+            <button type="submit" class="button-red">Create Order</button>
+        </form>
 
-    <script>
-        // Add event listeners to the delete forms
-        document.querySelectorAll('form[action="/cart/delete"]').forEach((form) => {
-            form.addEventListener('submit', async (event) => {
-                event.preventDefault(); // Prevent the default form submission
-                const formData = new FormData(form);
-                const MACTMON = formData.get('MACTMON');
+        <script>
+            // Add event listeners to the delete forms
+            document.querySelectorAll('form[action="/cart/delete"]').forEach((form) => {
+                form.addEventListener('submit', async (event) => {
+                    event.preventDefault(); // Prevent the default form submission
+                    const formData = new FormData(form);
+                    const MACTMON = formData.get('MACTMON');
 
-                try {
-                    const response = await fetch('/cart/delete', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ MACTMON }),
-                    });
+                    try {
+                        const response = await fetch('/cart/delete', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ MACTMON }),
+                        });
 
-                    if (response.ok) {
-                        alert("Item deleted successfully.");
-                        window.location.reload(); // Reload the page to reflect the changes
-                    } else {
-                        const errorData = await response.json();
-                        alert(`Error: ${errorData.message}`);
+                        if (response.ok) {
+                            alert("Item deleted successfully.");
+                            window.location.reload(); // Reload the page to reflect the changes
+                        } else {
+                            const errorData = await response.json();
+                            alert(`Error: ${errorData.message}`);
+                        }
+                    } catch (error) {
+                        console.error("Network error:", error);
+                        alert("Failed to delete the item. Please try again.");
                     }
-                } catch (error) {
-                    console.error("Network error:", error);
-                    alert("Failed to delete the item. Please try again.");
-                }
+                });
             });
-        });
 
-        // Add event listeners to checkboxes
-        document.querySelectorAll('.cart-checkbox').forEach((checkbox) => {
-            checkbox.addEventListener('change', async function () {
-                const MACTMON = this.getAttribute('data-mactmon');
-                const isChecked = this.checked;
-                const cartItemsLeft = document.querySelectorAll('.cart-checkbox').length;
+            // Add event listeners to checkboxes
+            document.querySelectorAll('.cart-checkbox').forEach((checkbox) => {
+                checkbox.addEventListener('change', async function () {
+                    const MACTMON = this.getAttribute('data-mactmon');
+                    const isChecked = this.checked;
+                    const cartItemsLeft = document.querySelectorAll('.cart-checkbox').length;
 
-                if (cartItemsLeft === 0) {
-                    alert('No items left in the cart');
+                    if (cartItemsLeft === 0) {
+                        alert('No items left in the cart');
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch('/cart/select', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ MACTMON, SELECTED: isChecked ? 1 : 0 })
+                        });
+
+                        if (response.ok) {
+                            console.log('Item selection updated');
+                        } else {
+                            const errorData = await response.json();
+                            console.error('Error:', errorData.message);
+                        }
+                    } catch (error) {
+                        console.error('Network error:', error);
+                    }
+                });
+            });
+
+            // Update the hidden input with selected items when creating an order
+            document.getElementById('create-order-form').addEventListener('submit', (event) => {
+                const selectedItems = [];
+                document.querySelectorAll('.cart-checkbox:checked').forEach((checkbox) => {
+                    selectedItems.push(checkbox.value);
+                });
+
+                if (selectedItems.length === 0) {
+                    alert('Please select at least one item to create an order.');
+                    event.preventDefault(); // Prevent form submission
                     return;
                 }
 
-                try {
-                    const response = await fetch('/cart/select', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ MACTMON, SELECTED: isChecked ? 1 : 0 })
-                    });
-
-                    if (response.ok) {
-                        console.log('Item selection updated');
-                    } else {
-                        const errorData = await response.json();
-                        console.error('Error:', errorData.message);
-                    }
-                } catch (error) {
-                    console.error('Network error:', error);
-                }
+                document.getElementById('selectedItems').value = JSON.stringify(selectedItems);
             });
-        });
+        </script>
 
-        // Update the hidden input with selected items when creating an order
-        document.getElementById('create-order-form').addEventListener('submit', (event) => {
-            const selectedItems = [];
-            document.querySelectorAll('.cart-checkbox:checked').forEach((checkbox) => {
-                selectedItems.push(checkbox.value);
-            });
-
-            if (selectedItems.length === 0) {
-                alert('Please select at least one item to create an order.');
-                event.preventDefault(); // Prevent form submission
-                return;
-            }
-
-            document.getElementById('selectedItems').value = JSON.stringify(selectedItems);
-        });
-    </script>
-
-    {{else}}
-    <p>Your cart is empty.</p>
-    {{/if}}
+        {{else}}
+        <p>Your cart is empty.</p>
+        {{/if}}
+    </div>
 </body>
 
 </html>

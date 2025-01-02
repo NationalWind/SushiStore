@@ -11,6 +11,22 @@
 <body class="body">
     <div class="home_main-homepage">
         <div class="home_main-homepage-transparent"></div>
+        <div class="home_main-homepage-background">
+            <div id="background-slider">
+                <figure>
+                    <img
+                        src="https://images.unsplash.com/photo-1607301404882-06d3c9778bac?q=80&w=2091&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+                    <img
+                        src="https://images.unsplash.com/photo-1512132411229-c30391241dd8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+                    <img
+                        src="https://images.unsplash.com/photo-1455279032140-49a4bf46f343?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+                    <img
+                        src="https://images.unsplash.com/photo-1617196035154-1e7e6e28b0db?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+                    <img
+                        src="https://images.unsplash.com/photo-1514190051997-0f6f39ca5cde?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+                </figure>
+            </div>
+        </div>
         <div class="home_main-homepage-left">
             <div class="home_main-homepage-top">
                 <div class="home_main-homepage-title">
@@ -23,10 +39,8 @@
             <div class="home_main-homepage-bottom">
                 <!-- Conditional rendering based on whether the user is logged in -->
                 {{#if name}}
-                <div class="home_main-welcome">
-                    <div>Welcome back, {{name}}!</div>
-                    <a href="/logout" class="logout-btn">Logout</a>
-                </div>
+                <div class="home_main-homepage-description-two">Welcome back, {{name}}!</div>
+                <a href="/logout" class="button-transparent">LOGOUT</a>
                 {{else}}
                 <div class="home_main-homepage-description-two">
                     Already a customer?
@@ -81,15 +95,15 @@
         <div id="slider" class="home_menu-photos-carousel">
             <figure>
                 <img
-                    src="https://images.unsplash.com/photo-1611143669185-af224c5e3252?q=80&w=2064&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
-                <img
-                    src="https://images.unsplash.com/photo-1512132411229-c30391241dd8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+                    src="https://images.unsplash.com/photo-1617196034738-26c5f7c977ce?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
                 <img
                     src="https://images.unsplash.com/photo-1540648639573-8c848de23f0a?q=80&w=2156&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
                 <img
-                    src="https://images.unsplash.com/photo-1617196035154-1e7e6e28b0db?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+                    src="https://images.unsplash.com/photo-1635526910370-6881e1756fee?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
                 <img
-                    src="https://images.unsplash.com/photo-1514190051997-0f6f39ca5cde?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+                    src="https://images.unsplash.com/photo-1611143669185-af224c5e3252?q=80&w=2064&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+                <img
+                    src="https://images.unsplash.com/photo-1607246749173-7e1b6d9b25ba?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
             </figure>
         </div>
     </div>
