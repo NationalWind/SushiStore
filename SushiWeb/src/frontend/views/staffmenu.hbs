@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Menu for Branch {{branchId}}</title>
+    <link rel="stylesheet" href="/public/styles.css">
+    <link rel="stylesheet" href="/public/menu.css">
+    <script>
+        function setActiveCategory(category) {
+            const tabs = document.querySelectorAll('.category-tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.dataset.category === category) {
+                    tab.classList.add('active');
+                }
+            });
+        }
+
+        async function loadCategoryItems(branchId, category) {
+            const url = `/menu/branch/${branchId}/category/${category}`;
+            const response = await fetch(url);
+            const items = await response.json();
+
+            const itemsContainer = document.querySelector('.items-container');
+            itemsContainer.innerHTML = '';
+
+            items.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'item';
+                itemDiv.innerHTML = `
+                    <img src="${item.IMAGE_LINK || 'placeholder.jpg'}" alt="${item.TENMON}">
+                    <div class="item-info">
+                        <div class="item-title">${item.TENMON}</div>
+                        <div class="item-price">Price: ${item.GIAHIENTAI} VND</div>
+                        <label for="status-${item.MAMENU}">Status:</label>
+                        <select class="item-status" id="status-${item.MAMENU}" data-id="${item.MAMENU}">
+                            <option value="Available" ${item.TRANGTHAIPHUCVU === 'Available' ? 'selected' : ''}>Available</option>
+                            <option value="Out of stock" ${item.TRANGTHAIPHUCVU === 'Out of stock' ? 'selected' : ''}>Out of stock</option>
+                            <option value="Discontinued" ${item.TRANGTHAIPHUCVU === 'Discontinued' ? 'selected' : ''}>Discontinued</option>
+                        </select>
+                    </div>
+                `;
+
+                itemsContainer.appendChild(itemDiv);
+            });
+
+            setupStatusDropdowns();
+        }
+
+        function setupStatusDropdowns() {
+            const statusDropdowns = document.querySelectorAll('.item-status');
+
+            statusDropdowns.forEach(dropdown => {
+                dropdown.addEventListener('change', async (event) => {
+                    const itemId = dropdown.dataset.id;
+                    const newStatus = event.target.value;
+
+                    const response = await fetch(`/staff/update-dish-status`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ id: itemId, status: newStatus })
+                    });
+
+                    if (!response.ok) {
+                        alert('Failed to update status. Please try again.');
+                    } else {
+                        alert('Status updated successfully.');
+                    }
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstCategory = document.querySelector('.category-tab');
+            if (firstCategory) {
+                const branchId = '{{branchId}}';
+                const category = firstCategory.dataset.category;
+                setActiveCategory(category);
+                loadCategoryItems(branchId, category);
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <div class="menu_container">
+        <div class="menu_container-choose">
+            <div class="medium-title-deli">Staff Menu for Branch {{branchId}}</div>
+        </div>
+
+        <!-- Button to navigate to the create-dish form -->
+        <div class="actions">
+            <a href="/staff/create-dish">
+                <button class="create-dish-button">Create Dish</button>
+            </a>
+        </div>
+
+        <div class="categories">
+            {{#each categories}}
+            <div class="category-tab" data-category="{{this.categoryName}}"
+                onclick="setActiveCategory('{{this.categoryName}}'); loadCategoryItems('{{../branchId}}', '{{this.categoryName}}');">
+                {{this.categoryName}}
+            </div>
+            {{/each}}
+        </div>
+
+        <div class="items-container">
+            <!-- Items will be dynamically loaded here -->
+        </div>
+    </div>
+</body>
+
+</html>

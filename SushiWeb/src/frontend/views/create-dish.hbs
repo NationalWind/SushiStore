@@ -1,20 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Dish</title>
     <link rel="stylesheet" href="/styles.css"> <!-- Optional: Add your CSS file -->
+    <script>
+        // Function to toggle the visibility of the Combo Description field
+        function toggleComboDescription() {
+            const categorySelect = document.getElementById('DanhMuc');
+            const comboDescription = document.getElementById('MoTaComboContainer');
+            if (categorySelect.value === 'Combo') {
+                comboDescription.style.display = 'block'; // Show the combo description field
+            } else {
+                comboDescription.style.display = 'none'; // Hide the combo description field
+            }
+        }
+
+        // Call the function on page load to handle default selection
+        window.onload = toggleComboDescription;
+
+    </script>
 </head>
+
 <body>
     <h1>Create New Dish</h1>
 
     {{#if success}}
-        <div class="alert success">{{success}}</div>
+    <div class="alert success">{{success}}</div>
     {{/if}}
 
     {{#if error}}
-        <div class="alert error">{{error}}</div>
+    <div class="alert error">{{error}}</div>
     {{/if}}
 
     <form action="/staff/create-dish" method="POST">
@@ -25,12 +43,17 @@
 
         <div class="form-group">
             <label for="DanhMuc">Category:</label>
-            <input type="text" id="DanhMuc" name="DanhMuc" required>
+            <select id="DanhMuc" name="DanhMuc" required onchange="toggleComboDescription()">
+                <!-- Dynamic options will be injected here -->
+                {{#each danhmuc_list}}
+                <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
         </div>
 
         <div class="form-group">
             <label for="MaChiNhanh">Branch ID:</label>
-            <input type="text" id="MaChiNhanh" name="MaChiNhanh" required>
+            <input type="text" id="MaChiNhanh" name="MaChiNhanh" value="{{branchId}}" readonly required>
         </div>
 
         <div class="form-group">
@@ -47,7 +70,14 @@
             </select>
         </div>
 
+        <!-- Combo Description field -->
+        <div id="MoTaComboContainer" class="form-group" style="display: none;">
+            <label for="MoTaCombo">Combo Description:</label>
+            <textarea id="MoTaCombo" name="MoTaCombo" rows="4"></textarea>
+        </div>
+
         <button type="submit">Create Dish</button>
     </form>
 </body>
+
 </html>

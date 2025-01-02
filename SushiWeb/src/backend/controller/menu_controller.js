@@ -76,7 +76,7 @@ export const getCategoryItems = async (req, res) => {
             FROM MENU
             LEFT JOIN MONAN ON MENU.MAMON = MONAN.MAMON
             LEFT JOIN COMBOMONAN ON MENU.MACOMBO = COMBOMONAN.MACOMBO
-            WHERE MENU.MACHINHANH = @branchId AND MENU.TRANGTHAIPHUCVU = 'Available'`;
+            WHERE MENU.MACHINHANH = @branchId`;
 
         // Add category filter
         if (category !== 'Combo') {

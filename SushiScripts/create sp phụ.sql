@@ -3,6 +3,76 @@ USE SushiDB
 GO
 
 
+CREATE PROCEDURE sp_TaoMonAnCombo
+    @TenMon NVARCHAR(50),
+    @DanhMuc NVARCHAR(50),
+    @MaChiNhanh CHAR(10),          -- Branch ID
+    @GiaHienTai FLOAT,             -- Price for the dish/combo
+    @TrangThaiPhucVu NVARCHAR(20), -- Status for the dish/combo (Available, Out of stock, Discontinued)
+    @MoTaCombo NVARCHAR(MAX) = NULL -- Description for the combo (only applicable for combos)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @MaMon CHAR(10);
+    DECLARE @MaMenu CHAR(10);
+    DECLARE @MaCombo CHAR(10);
+
+    IF @DanhMuc <> 'Combo'
+    BEGIN
+        -- Generate the next MAMON by incrementing the highest existing MAMON in MONAN table
+        SELECT @MaMon = 'MON' + RIGHT('0000000' + CAST(CAST(SUBSTRING(MAX(MAMON), 4, 7) AS INT) + 1 AS VARCHAR(7)), 7)
+        FROM MONAN;
+
+        -- Insert into MONAN table
+        INSERT INTO MONAN (MAMON, TENMON, DANHMUC)
+        VALUES (@MaMon, @TenMon, @DanhMuc);
+
+        -- Generate the next MAMENU by incrementing the highest existing MAMENU in MENU table
+        SELECT @MaMenu = 'MENU' + RIGHT('000000' + CAST(CAST(SUBSTRING(MAX(MAMENU), 5, 6) AS INT) + 1 AS VARCHAR(6)), 6)
+        FROM MENU;
+
+        -- Insert into MENU table
+        INSERT INTO MENU (MAMENU, MACHINHANH, MAMON, MACOMBO, GIAHIENTAI, TRANGTHAIPHUCVU)
+        VALUES 
+        (
+            @MaMenu,           -- Newly generated MAMENU
+            @MaChiNhanh,       -- Branch ID passed as parameter
+            @MaMon,            -- MAMON from the new dish
+            NULL,              -- No combo for regular dishes
+            @GiaHienTai,       -- Price passed as parameter
+            @TrangThaiPhucVu   -- Status passed as parameter
+        );
+    END
+    ELSE
+    BEGIN
+        -- Generate the next MACOMBO by incrementing the highest existing MACOMBO in COMBOMONAN table
+        SELECT @MaCombo = 'COMBO' + RIGHT('00000' + CAST(CAST(SUBSTRING(MAX(MACOMBO), 6, 6) AS INT) + 1 AS VARCHAR(5)), 5)
+		FROM COMBOMONAN;
+
+        -- Insert into COMBOMONAN table
+        INSERT INTO COMBOMONAN (MACOMBO, TENCOMBO, MOTACOMBO)
+        VALUES (@MaCombo, @TenMon, @MoTaCombo);
+
+        -- Generate the next MAMENU by incrementing the highest existing MAMENU in MENU table
+        SELECT @MaMenu = 'MENU' + RIGHT('000000' + CAST(CAST(SUBSTRING(MAX(MAMENU), 5, 6) AS INT) + 1 AS VARCHAR(6)), 6)
+        FROM MENU;
+
+        -- Insert into MENU table
+        INSERT INTO MENU (MAMENU, MACHINHANH, MAMON, MACOMBO, GIAHIENTAI, TRANGTHAIPHUCVU)
+        VALUES 
+        (
+            @MaMenu,           -- Newly generated MAMENU
+            @MaChiNhanh,       -- Branch ID passed as parameter
+            NULL,              -- No dish ID for combos
+            @MaCombo,          -- MACOMBO from the new combo
+            @GiaHienTai,       -- Price passed as parameter
+            @TrangThaiPhucVu   -- Status passed as parameter
+        );
+    END
+END;
+
+
 -- Tạo món ăn
 CREATE or alter PROCEDURE sp_TaoMonAn
     @TenMon NVARCHAR(50),
