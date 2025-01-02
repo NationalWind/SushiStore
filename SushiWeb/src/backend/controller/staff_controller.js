@@ -90,7 +90,7 @@ export const createDish = async (req, res) => {
 		}
 		const branchId = branchResult.recordset[0].CHINHANHLAMVIEC;
 		const danhmuc_list = ["Sushi", "Sashimi", "Tempura", "Ramen", "Dessert", "Drinks", "Combo"];
-		res.render('create-dish', { branchId, danhmuc_list, success: "Dish created successfully!" });
+		res.render('create-dish', { branchId, danhmuc_list, success: "Dish created successfully!", name: req.username, role: req.role });
 
 	} catch (error) {
 		console.error(error);
@@ -590,7 +590,7 @@ export const getTopRevenueCustomersResults = async (req, res) => {
 		// Render the results in the view
 		res.render('top-revenue-customers', {
 			statisticsItems: result.recordset,
-			errorMessage: null
+			errorMessage: null, name: req.username, role: req.role
 		});
 	} catch (error) {
 		console.error("Error fetching top revenue customers:", error);
@@ -603,7 +603,7 @@ export const getTopRevenueCustomersResults = async (req, res) => {
 
 // Get the input form for top-selling dishes
 export const getTopSellingDishesForm = (req, res) => {
-	res.render('top-selling-dishes', { title: "Top-Selling Dishes" });
+	res.render('top-selling-dishes', { title: "Top-Selling Dishes", name: req.username, role: req.role });
 };
 
 // Get the results of top-selling dishes
@@ -637,7 +637,7 @@ export const getTopSellingDishesResults = async (req, res) => {
 		// Render the results in the view
 		res.render('top-selling-dishes', {
 			statisticsItems: result.recordset,
-			errorMessage: null
+			errorMessage: null, name: req.username, role: req.role
 		});
 	} catch (error) {
 		console.error("Error fetching top-selling dishes:", error);
@@ -652,7 +652,7 @@ export const getTopSellingDishesResults = async (req, res) => {
 // Method to show the form and handle the revenue statistics
 export const getBranchRevenue = async (req, res) => {
 	try {
-		res.render('branch-revenue', { title: "Branch Revenue", errorMessage: null, revenue: null });
+		res.render('branch-revenue', { title: "Branch Revenue", name: req.username, role: req.role, errorMessage: null, revenue: null });
 	} catch (error) {
 		console.error(error);
 		res.render('branch-revenue', { errorMessage: "An error occurred while fetching the data.", revenue: null });
@@ -688,7 +688,7 @@ export const postBranchRevenue = async (req, res) => {
 		res.render('branch-revenue', {
 			title: "Branch Revenue",
 			revenue,
-			errorMessage: null
+			errorMessage: null, name: req.username, role: req.role
 		});
 	} catch (error) {
 		console.error("Error fetching branch revenue:", error);
@@ -700,7 +700,7 @@ export const postBranchRevenue = async (req, res) => {
 };
 
 export const getFoodQualityAndCustomerFeedbackForm = (req, res) => {
-	res.render('food-quality-feedback', { title: "Food Quality and Customer Feedback" });
+	res.render('food-quality-feedback', { title: "Food Quality and Customer Feedback", name: req.username, role: req.role });
 };
 
 export const getFoodQualityAndCustomerFeedbackResults = async (req, res) => {
@@ -731,7 +731,7 @@ export const getFoodQualityAndCustomerFeedbackResults = async (req, res) => {
 		// Render the results in the view
 		res.render('food-quality-feedback', {
 			statisticsItems: result.recordset,
-			errorMessage: null
+			errorMessage: null, name: req.username, role: req.role
 		});
 	} catch (error) {
 		console.error("Error fetching food quality and customer feedback:", error);
@@ -745,7 +745,7 @@ export const getFoodQualityAndCustomerFeedbackResults = async (req, res) => {
 // Controller function to render the form and handle the results
 export const getStaffReviewsForm = (req, res) => {
 	// Render the form (this can be a button or just an action to fetch data)
-	res.render('staff-reviews-form', { title: "Staff and Corresponding Reviews" });
+	res.render('staff-reviews-form', { title: "Staff and Corresponding Reviews", name: req.username, role: req.role });
 };
 
 export const getStaffReviewsResults = async (req, res) => {
@@ -766,7 +766,7 @@ export const getStaffReviewsResults = async (req, res) => {
 		// Render the results in the view
 		res.render('staff-reviews-form', {
 			statisticsItems: result.recordset,
-			errorMessage: null
+			errorMessage: null, name: req.username, role: req.role
 		});
 
 	} catch (error) {
@@ -779,7 +779,7 @@ export const getStaffReviewsResults = async (req, res) => {
 };
 
 export const getCustomerOrderTrendsForm = (req, res) => {
-	res.render('customer-order-trends', { title: "Customer Order Trends" });
+	res.render('customer-order-trends', { title: "Customer Order Trends", name: req.username, role: req.role });
 };
 
 export const getCustomerOrderTrendsResults = async (req, res) => {
@@ -812,7 +812,7 @@ export const getCustomerOrderTrendsResults = async (req, res) => {
 		// Render the results in the view
 		res.render('customer-order-trends', {
 			trendsData: result.recordset,
-			errorMessage: null
+			errorMessage: null, name: req.username, role: req.role
 		});
 	} catch (error) {
 		console.error("Error fetching customer order trends:", error);
@@ -849,7 +849,7 @@ export const getOrderAndInvoiceDetails = async (req, res) => {
 		// Render the result
 		res.render('order-invoice', {
 			orders: result.recordset,
-			errorMessage: null
+			errorMessage: null, name: req.username, role: req.role
 		});
 
 	} catch (error) {
@@ -871,7 +871,7 @@ export const updateMembershipStatus = async (req, res) => {
 
 		// Render the success message with a success status
 		res.render('update-membership-status', {
-			successMessage: "Membership status updated successfully!"
+			successMessage: "Membership status updated successfully!", name: req.username, role: req.role
 		});
 
 	} catch (error) {
@@ -935,7 +935,7 @@ export const createMembershipCard = async (req, res) => {
 
 		// Render success message after membership card is created
 		res.render("create-membership", {
-			successMessage: "Membership card created/updated successfully!"
+			successMessage: "Membership card created/updated successfully!", name: req.username, role: req.role
 		});
 	} catch (error) {
 		console.error(error);
