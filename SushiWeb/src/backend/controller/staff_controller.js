@@ -214,3 +214,202 @@ export const getStaffMenu = async (req, res) => {
 		res.render("staffmenu", { categories: [], errorMessage: "Internal server error." });
 	}
 };
+
+export const formOrder = async (req, res) => {
+	try {
+		// Extract token from cookies
+		const token = req.cookies.authToken;
+
+		if (!token) {
+			return res.render("staffmenu", { categories: [], errorMessage: "No token provided." });
+		}
+
+		// Decode the token to get the user's username
+		const decoded = jwt.verify(token, SECRET_KEY);
+		const username = decoded.username;
+		// Connect to the database
+		const pool = await connectToDatabase();
+
+		// Fetch the branch ID (`CHINHANHLAMVIEC`) for the staff member
+		const branchQuery = `
+            SELECT NV.CHINHANHLAMVIEC 
+            FROM NHANVIEN NV
+            INNER JOIN ACCOUNT ACC ON NV.ACCOUNT_ID = ACC.ID
+            WHERE ACC.USERNAME = @username
+        `;
+
+		const branchResult = await pool.request()
+			.input("username", sql.NVarChar, username)
+			.query(branchQuery);
+
+		if (branchResult.recordset.length === 0) {
+			return res.render("staffmenu", { categories: [], errorMessage: "Staff not found or unauthorized." });
+		}
+
+		const branchId = branchResult.recordset[0].CHINHANHLAMVIEC;
+
+		// Render the form page and pass the branch IDs and any other required data
+		res.render('stafforder', { branchId, name: req.username, role: req.role });
+	} catch (err) {
+		console.error(err);
+		res.status(500).send("Error fetching branch IDs.");
+	}
+};
+
+// Create Order Controller
+export const createOrder = async (req, res) => {
+	try {
+		const pool = await connectToDatabase();
+
+		// Generate new order ID
+		const resultMaDon = await pool.request()
+			.query("SELECT TOP 1 MADON FROM DONDATMON ORDER BY MADON DESC");
+
+		let newMADON = "DON0000001";
+		if (resultMaDon.recordset.length > 0) {
+			const lastMADON = resultMaDon.recordset[0].MADON;
+			const lastNumber = parseInt(lastMADON.substring(3));
+			const newNumber = lastNumber + 1;
+			newMADON = `DON${String(newNumber).padStart(7, "0")}`;
+		}
+
+		// Extract customer data from the request body
+		const { MAKH, LOAIDONDATMON, CHINHANHDAT } = req.body; // Assuming MAKH (Customer ID), LOAIDONDATMON (Order Type), CHINHANHDAT (Branch)
+
+		// Insert the new order into DONDATMON table
+		await pool.request()
+			.input("MADON", sql.Char, newMADON)
+			.input("KHACHHANGDAT", sql.Char, MAKH)
+			.input("LOAIDONDATMON", sql.NVarChar, LOAIDONDATMON)
+			.input("CHINHANHDAT", sql.Char, CHINHANHDAT)
+			.query(`
+                INSERT INTO DONDATMON (MADON, KHACHHANGDAT, LOAIDONDATMON, NGAYDAT, GIODAT, TRANGTHAI)
+                VALUES (@MADON, @KHACHHANGDAT, @LOAIDONDATMON, GETDATE(), CONVERT(TIME(0), GETDATE()), N'Processing')
+            `);
+
+		// Send a success response
+		res.redirect('/staff/order/add-dish');
+	} catch (err) {
+		console.error(err);
+		res.status(500).send("Error processing the order.");
+	}
+};
+
+export const showDish = async (req, res) => {
+	try {
+		// Extract token from cookies
+		const token = req.cookies.authToken;
+
+		if (!token) {
+			return res.render("staffmenu", { categories: [], errorMessage: "No token provided." });
+		}
+
+		// Decode the token to get the user's username
+		const decoded = jwt.verify(token, SECRET_KEY);
+		const username = decoded.username;
+		// Connect to the database
+		const pool = await connectToDatabase();
+
+		// Fetch the branch ID (`CHINHANHLAMVIEC`) for the staff member
+		const branchQuery = `
+            SELECT NV.CHINHANHLAMVIEC 
+            FROM NHANVIEN NV
+            INNER JOIN ACCOUNT ACC ON NV.ACCOUNT_ID = ACC.ID
+            WHERE ACC.USERNAME = @username
+        `;
+
+		const branchResult = await pool.request()
+			.input("username", sql.NVarChar, username)
+			.query(branchQuery);
+
+		if (branchResult.recordset.length === 0) {
+			return res.render("staffmenu", { categories: [], errorMessage: "Staff not found or unauthorized." });
+		}
+
+		const branchId = branchResult.recordset[0].CHINHANHLAMVIEC;
+
+		// Fetch categories for the branch
+		const categoryQuery = `
+            SELECT MENU.MAMENU, 
+                   ISNULL(MONAN.TENMON, COMBOMONAN.TENCOMBO) AS TENMON, 
+                   ISNULL(MONAN.DANHMUC, N'Combo') AS DANHMUC, 
+                   ISNULL(MONAN.IMAGE_LINK, COMBOMONAN.IMAGE_LINK) AS IMAGE_LINK, 
+                   MENU.GIAHIENTAI, 
+                   MENU.TRANGTHAIPHUCVU
+            FROM MENU
+            LEFT JOIN MONAN ON MENU.MAMON = MONAN.MAMON
+            LEFT JOIN COMBOMONAN ON MENU.MACOMBO = COMBOMONAN.MACOMBO
+            WHERE MENU.MACHINHANH = @branchId
+            AND MENU.TRANGTHAIPHUCVU = N'Available'
+        `;
+		const result = await pool.request()
+			.input("branchId", sql.Char, branchId)
+			.query(categoryQuery);
+
+		const categorizedMenu = {};
+		result.recordset.forEach(item => {
+			const category = item.DANHMUC;
+			if (!categorizedMenu[category]) {
+				categorizedMenu[category] = [];
+			}
+			categorizedMenu[category].push(item);
+		});
+
+		// Pass the data to the Handlebars template for rendering
+		res.render('staffadddish', {
+			branchId,
+			categories: Object.entries(categorizedMenu).map(([categoryName, items]) => ({
+				categoryName,
+				items
+			})), name: req.username, role: req.role
+		});
+	} catch (error) {
+		console.error("Error in showDish:", error);
+		res.status(500).send("An error occurred while loading the menu.");
+	}
+}
+
+export const addDish = async (req, res) => {
+	try {
+		const { MADON, dishes } = req.body;
+
+		if (!MADON || !Array.isArray(dishes) || dishes.length === 0) {
+			return res.status(400).json({ message: "Invalid order data." });
+		}
+
+		// Connect to the database
+		const pool = await connectToDatabase();
+
+		const itemResult = await pool.request()
+			.query("SELECT TOP 1 MACTMON FROM CHITIETMONAN ORDER BY MACTMON DESC");
+
+		let newMACTMON = 'CTM0000001';  // Default to the first ID if no records exist
+		let numberPart = 0;
+		if (itemResult.recordset.length > 0) {
+			const highestMACTMON = itemResult.recordset[0].MACTMON;
+			numberPart = parseInt(highestMACTMON.slice(3)) + 1;
+		}
+
+		console.log(dishes);
+		// Insert each dish into the order
+		for (const { MAMENU, quantity } of dishes) {
+			const insertQuery = `
+                INSERT INTO CHITIETMONAN (MACTMON, MAMENU, SOLUONG, MADONDATMON)
+                VALUES (@MACTMON, @MAMENU, @quantity, @MADON)
+            `;
+			newMACTMON = `CTM${numberPart.toString().padStart(7, '0')}`;
+			await pool.request()
+				.input('MACTMON', sql.Char, newMACTMON)
+				.input('MADON', sql.Char, MADON)
+				.input('MAMENU', sql.Char, MAMENU)
+				.input('quantity', sql.Int, quantity)
+				.query(insertQuery);
+			numberPart += 1;
+		}
+
+		res.status(200).json({ message: "Order submitted successfully!" });
+	} catch (error) {
+		console.error("Error in addDish:", error);
+		res.status(500).json({ message: "An error occurred while submitting the order." });
+	}
+};

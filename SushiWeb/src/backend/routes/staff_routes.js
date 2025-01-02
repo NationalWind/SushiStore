@@ -3,7 +3,11 @@ import {
 	getCreate,
 	createDish,
 	updateDishStatus,
-	getStaffMenu
+	getStaffMenu,
+	createOrder,
+	formOrder,
+	showDish,
+	addDish
 } from "../controller/staff_controller.js";
 import * as auth from "../middleware/auth_middleware.js";
 
@@ -37,6 +41,14 @@ router.get("/menu", auth.authenticateToken, auth.authorizeRole("Staff"), getStaf
 router.get("/statistics", (req, res) => {
 	res.render("statistics", { title: "Statistics" });
 });
+
+// Order route
+router.get("/order", auth.authenticateToken, auth.authorizeRole("Staff"), formOrder);
+router.post("/order", auth.authenticateToken, auth.authorizeRole("Staff"), createOrder);
+
+// Order add dish
+router.get("/order/add-dish", auth.authenticateToken, auth.authorizeRole("Staff"), showDish);
+router.post("/order/add-dish", auth.authenticateToken, auth.authorizeRole("Staff"), addDish);
 
 // Truy vấn A - Tạo khách hàng - Staff Dashboard
 router.get("/membership", (req, res) => {
