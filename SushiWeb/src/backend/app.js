@@ -15,6 +15,7 @@ import menuRoutes from "./routes/menu_routes.js";
 import cartRoutes from "./routes/cart_routes.js"
 import orderRoutes from "./routes/order_routes.js"
 import paymentRoutes from "./routes/payment_routes.js"
+import bookingRoutes from "./routes/booking_routes.js"
 
 dotenv.config();
 
@@ -48,6 +49,7 @@ app.use("/menu", menuRoutes);
 app.use("/cart", cartRoutes);
 app.use("/order", orderRoutes);
 app.use("/payment", paymentRoutes);
+app.use("/booking", bookingRoutes);
 
 // Tạm thời
 // Membership and Booking routes
