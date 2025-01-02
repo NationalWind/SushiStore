@@ -3,7 +3,15 @@ import {
 	getCreate,
 	createDish,
 	updateDishStatus,
-	getStaffMenu
+	getStaffMenu,
+	getTopRevenueCustomersResults,
+	getTopRevenueCustomersForm,
+	getTopSellingDishesForm,
+	getTopSellingDishesResults,
+	getBranchRevenue,
+	postBranchRevenue,
+	getFoodQualityAndCustomerFeedbackResults,
+	getFoodQualityAndCustomerFeedbackForm
 } from "../controller/staff_controller.js";
 import * as auth from "../middleware/auth_middleware.js";
 
@@ -64,23 +72,32 @@ router.get("/staffandcorrespondingreviews", (req, res) => {
 });
 
 // Truy vấn F
-router.get("/foodqualityandcustomerfeedback", (req, res) => {
-	res.render("truyvanf", { title: "Food Quality and Customer Feedback" });
-});
+// Route for showing the form
+router.get("/food-qualityandcustomerfeedback", auth.authenticateToken, auth.authorizeRole("Staff"), getFoodQualityAndCustomerFeedbackForm);
+
+// Route for fetching and displaying the results
+router.post('/food-qualityandcustomerfeedback', auth.authenticateToken, auth.authorizeRole("Staff"), getFoodQualityAndCustomerFeedbackResults);
+
 
 // Truy vấn H
-router.get("/branchrevenue", (req, res) => {
-	res.render("truyvanh", { title: "Branch Revenue" });
-});
+router.get("/branch-revenue", auth.authenticateToken, auth.authorizeRole("Staff"), getBranchRevenue);
+router.post("/branch-revenue", auth.authenticateToken, auth.authorizeRole("Staff"), postBranchRevenue);
+
 
 // Truy vấn I
-router.get("/topsellingdishes", (req, res) => {
-	res.render("truyvani", { title: "Top-Selling Dishes" });
-});
+// Route for showing the form for top-selling dishes
+router.get("/top-selling-dishes", auth.authenticateToken, auth.authorizeRole("Staff"), getTopSellingDishesForm);
+
+// Route for fetching and displaying the results
+router.post('/top-selling-dishes', auth.authenticateToken, auth.authorizeRole("Staff"), getTopSellingDishesResults);
+
 
 // Truy vấn J
-router.get("/highestrevenuegeneratingcustomers", (req, res) => {
-	res.render("truyvanj", { title: "Highest Revenue Generating Customers" });
-});
+// Route for showing the form
+router.get("/top-revenue-customers", auth.authenticateToken, auth.authorizeRole("Staff"), getTopRevenueCustomersForm);
+
+// Route for fetching and displaying the results
+router.post('/top-revenue-customers', auth.authenticateToken, auth.authorizeRole("Staff"), getTopRevenueCustomersResults);
+
 
 export default router;

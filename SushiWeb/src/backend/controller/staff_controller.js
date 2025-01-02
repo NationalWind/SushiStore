@@ -214,3 +214,189 @@ export const getStaffMenu = async (req, res) => {
 		res.render("staffmenu", { categories: [], errorMessage: "Internal server error." });
 	}
 };
+
+export const getTopRevenueCustomersForm = (req, res) => {
+    res.render('top-revenue-customers', { title: "Top Revenue Customers" });
+};
+
+export const getTopRevenueCustomersResults = async (req, res) => {
+    try {
+        const { NgayBatDau, NgayKetThuc, SoLuongTop } = req.body;
+
+        // Validate inputs
+        if (!NgayBatDau || !NgayKetThuc || !SoLuongTop) {
+            return res.render('top-revenue-customers', { 
+                errorMessage: "Please provide all required fields (Start Date, End Date, and Number of Top Customers)." 
+            });
+        }
+
+        const pool = await connectToDatabase();
+
+        // Execute the stored procedure for top revenue customers
+        const result = await pool.request()
+            .input('NgayBatDau', sql.Date, NgayBatDau)
+            .input('NgayKetThuc', sql.Date, NgayKetThuc)
+            .input('TopBaoNhieu', sql.Int, SoLuongTop)
+            .execute('SP_ThongKe_Top_KhachHang');
+
+        if (result.recordset.length === 0) {
+            return res.render('top-revenue-customers', {
+                errorMessage: "No data found for the given period.",
+                statisticsItems: []
+            });
+        }
+
+        // Render the results in the view
+        res.render('top-revenue-customers', {
+            statisticsItems: result.recordset,
+            errorMessage: null
+        });
+    } catch (error) {
+        console.error("Error fetching top revenue customers:", error);
+        res.render('top-revenue-customers', {
+            errorMessage: "An error occurred while fetching the data. Please try again.",
+            statisticsItems: []
+        });
+    }
+};
+
+// Get the input form for top-selling dishes
+export const getTopSellingDishesForm = (req, res) => {
+    res.render('top-selling-dishes', { title: "Top-Selling Dishes" });
+};
+
+// Get the results of top-selling dishes
+export const getTopSellingDishesResults = async (req, res) => {
+    try {
+        const { NgayBatDau, NgayKetThuc, SoLuongTop } = req.body;
+
+        // Validate inputs
+        if (!NgayBatDau || !NgayKetThuc || !SoLuongTop) {
+            return res.render('top-selling-dishes', { 
+                errorMessage: "Please provide all required fields (Start Date, End Date, and Number of Top Dishes)." 
+            });
+        }
+
+        const pool = await connectToDatabase();
+
+        // Execute the stored procedure for top-selling dishes
+        const result = await pool.request()
+            .input('NgayBatDau', sql.Date, NgayBatDau)
+            .input('NgayKetThuc', sql.Date, NgayKetThuc)
+            .input('TopBaoNhieu', sql.Int, SoLuongTop)
+            .execute('SP_ThongKe_Top_MonAn');
+
+        if (result.recordset.length === 0) {
+            return res.render('top-selling-dishes', {
+                errorMessage: "No data found for the given period.",
+                statisticsItems: []
+            });
+        }
+
+        // Render the results in the view
+        res.render('top-selling-dishes', {
+            statisticsItems: result.recordset,
+            errorMessage: null
+        });
+    } catch (error) {
+        console.error("Error fetching top-selling dishes:", error);
+        res.render('top-selling-dishes', {
+            errorMessage: "An error occurred while fetching the data. Please try again.",
+            statisticsItems: []
+        });
+    }
+};
+
+
+// Method to show the form and handle the revenue statistics
+export const getBranchRevenue = async (req, res) => {
+    try {
+        res.render('branch-revenue', { title: "Branch Revenue", errorMessage: null, revenue: null });
+    } catch (error) {
+        console.error(error);
+        res.render('branch-revenue', { errorMessage: "An error occurred while fetching the data.", revenue: null });
+    }
+};
+
+export const postBranchRevenue = async (req, res) => {
+    try {
+        const { branchId, startDate, endDate } = req.body;
+
+        // Validate inputs
+        if (!branchId || !startDate || !endDate) {
+            return res.render('branch-revenue', { 
+                errorMessage: "Please provide all required fields (Branch, Start Date, End Date).", 
+                revenue: null 
+            });
+        }
+
+        // Connect to the database
+        const pool = await connectToDatabase();
+
+        // Execute the stored procedure to get the revenue
+        const result = await pool.request()
+            .input('MACHI_NHANH', sql.Char(10), branchId)
+            .input('NGAYBATDAU', sql.Date, startDate)
+            .input('NGAYKETTHUC', sql.Date, endDate)
+            .execute('sp_ThongKeDoanhThu');
+
+        // If there's no revenue, handle the case
+        const revenue = result.recordset[0]?.TONGDOANHTHU ?? 0;
+
+        // Render the result
+        res.render('branch-revenue', { 
+            title: "Branch Revenue", 
+            revenue, 
+            errorMessage: null 
+        });
+    } catch (error) {
+        console.error("Error fetching branch revenue:", error);
+        res.render('branch-revenue', { 
+            errorMessage: "An error occurred while fetching the data.", 
+            revenue: null 
+        });
+    }
+};
+
+export const getFoodQualityAndCustomerFeedbackForm = (req, res) => {
+    res.render('food-quality-feedback', { title: "Food Quality and Customer Feedback" });
+};
+
+export const getFoodQualityAndCustomerFeedbackResults = async (req, res) => {
+    try {
+        const { NgayBatDau } = req.body;
+
+        // Validate the input
+        if (!NgayBatDau) {
+            return res.render('food-quality-feedback', {
+                errorMessage: "Please provide the start date for the report."
+            });
+        }
+
+        const pool = await connectToDatabase();
+
+        // Execute the stored procedure for food quality and customer feedback
+        const result = await pool.request()
+            .input('NGAYBATDAU', sql.Date, NgayBatDau)
+            .execute('SP_THONGKE_CHATLUONG_MONAN');
+
+        if (result.recordset.length === 0) {
+            return res.render('food-quality-feedback', {
+                errorMessage: "No data found for the given period.",
+                statisticsItems: []
+            });
+        }
+
+        // Render the results in the view
+        res.render('food-quality-feedback', {
+            statisticsItems: result.recordset,
+            errorMessage: null
+        });
+    } catch (error) {
+        console.error("Error fetching food quality and customer feedback:", error);
+        res.render('food-quality-feedback', {
+            errorMessage: "An error occurred while fetching the data. Please try again.",
+            statisticsItems: []
+        });
+    }
+};
