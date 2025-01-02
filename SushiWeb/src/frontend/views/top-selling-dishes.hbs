@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Selling Dishes</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Top Selling Dishes</h1>
+
+        <!-- Input Form -->
+        <form action="/staff/top-selling-dishes" method="post">
+            <div class="form-group">
+                <label for="NgayBatDau">Start Date:</label>
+                <input type="date" id="NgayBatDau" name="NgayBatDau" required>
+            </div>
+            <div class="form-group">
+                <label for="NgayKetThuc">End Date:</label>
+                <input type="date" id="NgayKetThuc" name="NgayKetThuc" required>
+            </div>
+            <div class="form-group">
+                <label for="SoLuongTop">Top Number of Dishes:</label>
+                <input type="number" id="SoLuongTop" name="SoLuongTop" min="1" required>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+
+        <!-- Display Error or Success Messages -->
+        {{#if errorMessage}}
+        <div class="alert alert-danger">
+            <p>{{errorMessage}}</p>
+        </div>
+        {{/if}}
+
+        {{#if statisticsItems}}
+        <h2>Top Selling Dishes from {{NgayBatDau}} to {{NgayKetThuc}}:</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Dish Name</th>
+                    <th>Quantity Sold</th>
+                    <th>Total Revenue</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each statisticsItems}}
+                <tr>
+                    <td>{{TenMon}}</td>
+                    <td>{{TongSoLuong}}</td>
+                    <td>{{TongDoanhThu}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        {{/if}}
+    </div>
+</body>
+</html>
