@@ -67,7 +67,6 @@ export const signup = async (req, res) => {
 // User login controller
 export const login = async (req, res) => {
     const { username, password } = req.body;
-
     try {
         const pool = await connectToDatabase();
         const result = await pool.request()
@@ -80,7 +79,7 @@ export const login = async (req, res) => {
 
         const user = result.recordset[0];
         const isPasswordValid = await bcrypt.compare(password, user.PASSWORD);
-
+        console.log(isPasswordValid);
         if (!isPasswordValid) {
             return res.status(400).json({ message: "Invalid username or password" });
         }

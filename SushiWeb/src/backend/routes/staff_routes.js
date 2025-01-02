@@ -1,5 +1,6 @@
 import express from "express";
 import {
+	getCreate,
 	createDish,
 	updateDishStatus,
 	getStaffMenu
@@ -17,14 +18,12 @@ router.get('/', auth.authenticateToken, auth.authorizeRole("Staff"), (req, res) 
 });
 
 // GET route to display the form for creating a new dish
-router.get('/create-dish', (req, res) => {
-	res.render('create-dish');
-});
+router.get('/create-dish', auth.authenticateToken, auth.authorizeRole("Staff"), getCreate);
 
 // POST route for creating a new dish
 router.post("/create-dish", createDish); // Ensure the request is authenticated
 
-router.get('/update-dish-status', (req, res) => {
+router.get('/update-dish-status', auth.authenticateToken, auth.authorizeRole("Staff"), (req, res) => {
 	res.render('update-dish-status'); // This will render the update-dish-status.hbs page
 })
 
@@ -32,6 +31,6 @@ router.get('/update-dish-status', (req, res) => {
 router.post("/update-dish-status", updateDishStatus);  // Call the updateDishStatus function
 
 // route to get staff menu
-router.get("/menu", getStaffMenu);
+router.get("/menu", auth.authenticateToken, auth.authorizeRole("Staff"), getStaffMenu);
 
 export default router;
