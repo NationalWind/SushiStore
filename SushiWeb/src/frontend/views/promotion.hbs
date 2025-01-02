@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <link rel="stylesheet" href="../public/styles.css">
+</head>
+
+<style>
+    .promotion_container {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        padding: 80px 100px 150px 100px;
+        background-image: url('https://images.unsplash.com/photo-1562158147-f8d6fbcd76f8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        gap: 70px;
+        z-index: 0;
+        position: relative;
+        min-height: 100vh;
+    }
+
+    .promotion_container-transparent {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 1;
+    }
+
+    .promotion_content {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: 40px;
+        z-index: 5;
+    }
+</style>
+
+<body>
+    <div class="promotion_container">
+        <div class="promotion_container-transparent"></div>
+        <div class="medium-title-white">Promotion</div>
+        <div class="promotion_content">
+            <div class="paragraph-text-center-white">
+                Become a member here to earn amazing promotions!
+            </div>
+            <div class="promotion_gold-silver">
+                <div class="paragraph-text-center-white">
+                    <strong>SILVER</strong> members get a <strong>5% DISCOUNT</strong> for every receipt.
+                </div>
+                <div class="paragraph-text-center-white">
+                    <strong>GOLD</strong> members get a <strong>10% DISCOUNT</strong> for every receipt.
+                </div>
+            </div>
+                <div class="paragraph-text-center-white">
+                    And more promotions catered to every customers' loyalty.
+                </div>
+                <div class="logo-text-white" style="font-style: italic;">
+                    <strong>Increased rewards with every purchase, guaranteed.</strong>
+                </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -117,3 +117,24 @@
     font-size: 1rem;
     font-weight: bold;
 }
+
+.staff-create-dish-button {
+    width: 100%;
+    padding: 14px;
+    background-color: #EA252C;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border-color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+    margin-bottom: 20px;
+}
+
+.staff-create-dish-button:hover {
+    background-color: #ffffff;
+    color: #EA252C;
+    border-color: #EA252C;
+
+}

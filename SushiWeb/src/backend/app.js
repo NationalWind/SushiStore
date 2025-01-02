@@ -75,6 +75,10 @@ router.get("/booking", (req, res) => {
     res.render("booking", { title: "Booking" });
 });
 
+router.get("/promotion", (req, res) => {
+    res.render("promotion", { title: "Promotion" });
+});
+
 router.get("/stores", async (req, res) => {
     try {
         // Get database connection
