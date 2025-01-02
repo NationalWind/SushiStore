@@ -1,0 +1,15 @@
+.statistics_container {
+    padding: 50px 80px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 40px;
+    min-height: 100vh;
+}
+
+.statistics_setup-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 50px;
+}

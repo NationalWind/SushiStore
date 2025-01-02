@@ -34,16 +34,54 @@ router.post("/update-dish-status", updateDishStatus);  // Call the updateDishSta
 // route to get staff menu
 router.get("/menu", getStaffMenu);
 
-
-// TEMP
-// Membership Route
-router.get("/membership", (req, res) => {
-    res.render("capThe", { title: "Create Membership" });
-});
-
 // Statistics Route
 router.get("/statistics", (req, res) => {
     res.render("statistics", { title: "Statistics" });
+});
+
+// Truy vấn A - Tạo khách hàng - Staff Dashboard
+router.get("/membership", (req, res) => {
+    res.render("truyvana", { title: "Create Membership" });
+});
+
+// Truy vấn B - Cập nhật phân hạng - Staff Dashboard
+router.get("/updatemembership", (req, res) => {
+    res.render("truyvanb", { title: "Update Membership" });
+});
+
+// Truy vấn C
+router.get("/ordersandinvoices", (req, res) => {
+    res.render("truyvanc", { title: "Orders and Invoices" });
+});
+
+// Truy vấn D
+router.get("/customerordertrendsofthisbranch", (req, res) => {
+    res.render("truyvand", { title: "Customer Order Trends of this Branch" });
+});
+
+// Truy vấn E
+router.get("/staffandcorrespondingreviews", (req, res) => {
+    res.render("truyvane", { title: "Staff and Corresponding Reviews" });
+});
+
+// Truy vấn F
+router.get("/foodqualityandcustomerfeedback", (req, res) => {
+    res.render("truyvanf", { title: "Food Quality and Customer Feedback" });
+});
+
+// Truy vấn H
+router.get("/branchrevenue", (req, res) => {
+    res.render("truyvanh", { title: "Branch Revenue" });
+});
+
+// Truy vấn I
+router.get("/topsellingdishes", (req, res) => {
+    res.render("truyvani", { title: "Top-Selling Dishes" });
+});
+
+// Truy vấn J
+router.get("/highestrevenuegeneratingcustomers", (req, res) => {
+    res.render("truyvanj", { title: "Highest Revenue Generating Customers" });
 });
 
 export default router;
