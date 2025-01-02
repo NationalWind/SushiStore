@@ -11,5 +11,19 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 50px;
+    gap: 40px;
+}
+
+.statistics_date-input,
+.statistics_number-input {
+  width: 250px;
+  height: 40px;
+  border: 2px solid #cccccc;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 16px;
+  color: #333333;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
