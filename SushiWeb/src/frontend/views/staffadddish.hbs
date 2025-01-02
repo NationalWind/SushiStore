@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Add Dish</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .category {
+            margin-bottom: 30px;
+        }
+
+        .category h2 {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+
+        .dish {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .dish img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        .dish-details {
+            flex-grow: 1;
+        }
+
+        .dish-details h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .dish-details p {
+            margin: 5px 0;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-controls button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .quantity-controls input {
+            width: 40px;
+            text-align: center;
+        }
+
+        .error-message {
+            color: red;
+            text-align: center;
+        }
+
+        .submit-order {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .submit-order input {
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .submit-order button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Add Dish to Order</h1>
+
+        {{#if errorMessage}}
+        <p class="error-message">{{errorMessage}}</p>
+        {{/if}}
+
+        {{#each categories}}
+        <div class="category">
+            <h2>{{categoryName}}</h2>
+            {{#each items}}
+            <div class="dish">
+                <img src="{{IMAGE_LINK}}" alt="{{TENMON}}">
+                <div class="dish-details">
+                    <h3>{{TENMON}}</h3>
+                    <p>Price: {{GIAHIENTAI}} VND</p>
+                    <p>Status: {{TRANGTHAIPHUCVU}}</p>
+                    <div class="quantity-controls">
+                        <button class="decrease-btn" data-dish-id="{{MAMENU}}">-</button>
+                        <input type="number" value="0" min="0" data-dish-id="{{MAMENU}}">
+                        <button class="increase-btn" data-dish-id="{{MAMENU}}">+</button>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        {{/each}}
+
+        <div class="submit-order">
+            <input type="text" id="order-id" placeholder="Enter Order ID (MADON)">
+            <button id="submit-order">Submit Order</button>
+        </div>
+    </div>
+
+    <script>
+        // Manage quantities
+        document.querySelectorAll('.increase-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const input = document.querySelector(`input[data-dish-id="${button.getAttribute('data-dish-id')}"]`);
+                input.value = parseInt(input.value) + 1;
+            });
+        });
+
+        document.querySelectorAll('.decrease-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const input = document.querySelector(`input[data-dish-id="${button.getAttribute('data-dish-id')}"]`);
+                if (parseInt(input.value) > 0) {
+                    input.value = parseInt(input.value) - 1;
+                }
+            });
+        });
+
+        // Submit order
+        document.getElementById('submit-order').addEventListener('click', () => {
+            const orderId = document.getElementById('order-id').value.trim();
+            if (!orderId) {
+                alert("Please enter an Order ID (MADON).");
+                return;
+            }
+
+            const dishes = [];
+            document.querySelectorAll('input[data-dish-id]').forEach(input => {
+                const quantity = parseInt(input.value);
+                if (quantity > 0) {
+                    dishes.push({ MAMENU: input.getAttribute('data-dish-id'), quantity });
+                }
+            });
+
+            if (dishes.length === 0) {
+                alert("No dishes selected.");
+                return;
+            }
+
+            // Send POST request
+            fetch('/staff/order/add-dish', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ MADON: orderId, dishes })
+            })
+                .then(response => response.json())
+                .then(data => alert(data.message))
+                .catch(error => console.error("Error submitting order:", error));
+        });
+    </script>
+</body>
+
+</html>

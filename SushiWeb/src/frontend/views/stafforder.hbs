@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Order</title>
+    <link rel="stylesheet" href="/styles.css"> <!-- Optional: Add your CSS file -->
+</head>
+
+<body>
+
+    <h1>Create New Order</h1>
+
+    {{#if success}}
+    <div class="alert success">{{success}}</div>
+    {{/if}}
+
+    {{#if error}}
+    <div class="alert error">{{error}}</div>
+    {{/if}}
+
+    <form action="/staff/order" method="POST">
+        <div class="form-group">
+            <label for="MAKH">Customer ID:</label>
+            <input type="text" id="MAKH" name="MAKH" required>
+        </div>
+
+        <div class="form-group">
+            <label for="LOAIDONDATMON">Order Type:</label>
+            <select id="LOAIDONDATMON" name="LOAIDONDATMON" required>
+                <option value="Online order">Online Order</option>
+                <option value="In-store order">In-store Order</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="CHINHANHDAT">Branch ID:</label>
+            <input type="text" id="CHINHANHDAT" name="CHINHANHDAT" value="{{branchId}}" readonly required>
+        </div>
+
+        <button type="submit">Create Order</button>
+    </form>
+
+</body>
+
+</html>

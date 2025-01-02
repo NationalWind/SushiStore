@@ -4,6 +4,10 @@ import {
 	createDish,
 	updateDishStatus,
 	getStaffMenu,
+	createOrder,
+	formOrder,
+	showDish,
+	addDish,
 	getTopRevenueCustomersResults,
 	getTopRevenueCustomersForm,
 	getTopSellingDishesForm,
@@ -53,6 +57,14 @@ router.get("/statistics", (req, res) => {
 	res.render("statistics", { title: "Statistics" });
 });
 
+// Order route
+router.get("/order", auth.authenticateToken, auth.authorizeRole("Staff"), formOrder);
+router.post("/order", auth.authenticateToken, auth.authorizeRole("Staff"), createOrder);
+
+// Order add dish
+router.get("/order/add-dish", auth.authenticateToken, auth.authorizeRole("Staff"), showDish);
+router.post("/order/add-dish", auth.authenticateToken, auth.authorizeRole("Staff"), addDish);
+
 // Truy vấn A - Tạo khách hàng - Staff Dashboard
 // Membership Card creation route
 router.get("/create-membership", auth.authenticateToken, auth.authorizeRole("Staff"), (req, res) => {
@@ -66,7 +78,7 @@ router.post("/create-membership", auth.authenticateToken, auth.authorizeRole("St
 // Truy vấn B - Cập nhật phân hạng - Staff Dashboard
 // Route for triggering the membership status update
 router.get("/update-membership-status", auth.authenticateToken, auth.authorizeRole("Staff"), (req, res) => {
-    res.render('update-membership-status', { name: req.username, role: req.role });
+	res.render('update-membership-status', { name: req.username, role: req.role });
 });
 
 // Trigger stored procedure for membership status update
@@ -76,7 +88,7 @@ router.post("/update-membership-status", auth.authenticateToken, auth.authorizeR
 // Truy vấn C
 // Route for showing the form and handling results
 router.get('/order-invoice', auth.authenticateToken, auth.authorizeRole("Staff"), (req, res) => {
-    res.render("order-invoice", { title: "Orders and Invoices" });
+	res.render("order-invoice", { title: "Orders and Invoices" });
 });
 
 // Route for fetching and displaying the results based on the date
