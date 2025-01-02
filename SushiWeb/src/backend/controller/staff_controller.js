@@ -198,8 +198,6 @@ export const getStaffMenu = async (req, res) => {
 			}
 			categorizedMenu[category].push(item);
 		});
-
-		console.log(categorizedMenu);
 		// Render the staff menu view
 		res.render("staffmenu", {
 			branchId,
@@ -390,7 +388,6 @@ export const addDish = async (req, res) => {
 			numberPart = parseInt(highestMACTMON.slice(3)) + 1;
 		}
 
-		console.log(dishes);
 		// Insert each dish into the order
 		for (const { MAMENU, quantity } of dishes) {
 			const insertQuery = `
@@ -473,7 +470,6 @@ export const addPayment = async (req, res) => {
 
 		// Extract values from the request body (assumed to be a list of order IDs)
 		const { MAKHACHHANG, selectedOrders, TIENKHACHDUA, PHUONGTHUC } = req.body;
-		console.log(MAKHACHHANG, selectedOrders, TIENKHACHDUA, PHUONGTHUC);
 		// Validate required fields
 		if (!selectedOrders || !selectedOrders.length || !TIENKHACHDUA || !PHUONGTHUC || !MAKHACHHANG) {
 			return res.status(400).json({ error: "All fields are required" });
@@ -548,7 +544,6 @@ export const displayAllPayment = async (req, res) => {
             `);
 
 		const invoices = result.recordset;
-		console.log(invoices);
 		res.render("allPayments", { invoices, MAKHACHHANG, name: req.username, role: req.role });
 	} catch (error) {
 		console.error(error);

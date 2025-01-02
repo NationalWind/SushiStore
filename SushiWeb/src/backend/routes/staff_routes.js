@@ -57,7 +57,7 @@ router.get("/menu", auth.authenticateToken, auth.authorizeRole("Staff"), getStaf
 
 // Statistics Route
 router.get("/statistics", (req, res) => {
-	res.render("statistics", { title: "Statistics" });
+	res.render("statistics", { title: "Statistics", name: req.username, role: req.role });
 });
 
 // Order route

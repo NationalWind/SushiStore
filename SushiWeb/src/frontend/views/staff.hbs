@@ -2,78 +2,78 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Dashboard</title>
 
-    <style>
-      .staff-dashboard_main-homepage {
-        padding: 100px 100px 100px 120px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 100px;
-        background-image: url('https://images.unsplash.com/photo-1455279032140-49a4bf46f343?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-        background-size: cover;
-        background-position: bottom;
-        background-repeat: no-repeat;
-        position: relative;
-        min-height: 100vh;
-      }
+  <style>
+    .staff-dashboard_main-homepage {
+      padding: 100px 100px 100px 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 100px;
+      background-image: url('https://images.unsplash.com/photo-1455279032140-49a4bf46f343?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+      background-size: cover;
+      background-position: bottom;
+      background-repeat: no-repeat;
+      position: relative;
+      min-height: 100vh;
+    }
 
-      .staff-dashboard_main-homepage-transparent {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        background-color: rgba(0, 0, 0, 0.6);
-        z-index: 0;
-      }
+    .staff-dashboard_main-homepage-transparent {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 0;
+    }
 
-      .staff-dashboard_button-transparent {
-        width: 200px;
-        height: 100px;
-        border-color: #ffffff;
-        border-width: 2px;
-        border-style: solid;
-        border-radius: 10px;
-        background-color: transparent;
-        font-size: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #ffffff;
-        font-weight: 700;
-        text-decoration: none;
-        text-align: center;
-        transition: border-color 0.5s, background-color 0.5s, color 0.5s;
-        position: relative;
-        z-index: 2;
-      }
+    .staff-dashboard_button-transparent {
+      width: 200px;
+      height: 100px;
+      border-color: #ffffff;
+      border-width: 2px;
+      border-style: solid;
+      border-radius: 10px;
+      background-color: transparent;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 700;
+      text-decoration: none;
+      text-align: center;
+      transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+      position: relative;
+      z-index: 2;
+    }
 
-      .staff-dashboard_button-transparent:hover {
-          border-color: #ffffff;
-          background-color: #ffffff;
-          color: #353535;
-      }
+    .staff-dashboard_button-transparent:hover {
+      border-color: #ffffff;
+      background-color: #ffffff;
+      color: #353535;
+    }
 
-      .staff-dashboard_button-transparent:active {
-          border-color: #ffffff;
-          background-color: transparent;
-          color: #ffffff;
-      }
+    .staff-dashboard_button-transparent:active {
+      border-color: #ffffff;
+      background-color: transparent;
+      color: #ffffff;
+    }
 
-      .staff-dashboard_buttons {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 50px;
-        z-index: 4;
-        position: relative;
-        justify-content: center;
-        align-items: center;
-      }
-    </style>
+    .staff-dashboard_buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 50px;
+      z-index: 4;
+      position: relative;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
 </head>
 
 <body>
@@ -89,6 +89,8 @@
       <a class="staff-dashboard_button-transparent" href="/staff/updatemembership">Update Membership</a>
       <a class="staff-dashboard_button-transparent" href="/staff/statistics">See Statistics</a>
       <a class="staff-dashboard_button-transparent" href="/staff/order/add-dish">Add Dish</a>
+      <a class="staff-dashboard_button-transparent" href="/staff/order/add-payment">Add Payment</a>
+      <a class="staff-dashboard_button-transparent" href="/staff/payment">Search Payment</a>
     </div>
   </div>
 </body>
