@@ -551,8 +551,12 @@ export const displayAllPayment = async (req, res) => {
 	}
 };
 
+export const getStatistics = async (req, res) => {
+	res.render("statistics", { title: "Statistics", name: req.username, role: req.role });
+};
+
 export const getTopRevenueCustomersForm = (req, res) => {
-	res.render('top-revenue-customers', { title: "Top Revenue Customers" });
+	res.render('top-revenue-customers', { title: "Top Revenue Customers", name: req.username, role: req.role });
 };
 
 export const getTopRevenueCustomersResults = async (req, res) => {

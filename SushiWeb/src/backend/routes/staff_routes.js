@@ -21,6 +21,7 @@ import {
 	getCustomerOrderTrendsForm,
 	getCustomerOrderTrendsResults,
 	getOrderAndInvoiceDetails,
+	getStatistics,
 	updateMembershipStatus,
 	showPayment,
 	addPayment,
@@ -56,9 +57,7 @@ router.post("/update-dish-status", updateDishStatus);  // Call the updateDishSta
 router.get("/menu", auth.authenticateToken, auth.authorizeRole("Staff"), getStaffMenu);
 
 // Statistics Route
-router.get("/statistics", (req, res) => {
-	res.render("statistics", { title: "Statistics", name: req.username, role: req.role });
-});
+router.get("/statistics", auth.authenticateToken, auth.authorizeRole("Staff"), getStatistics);
 
 // Order route
 router.get("/order", auth.authenticateToken, auth.authorizeRole("Staff"), formOrder);
@@ -76,7 +75,7 @@ router.get("/payment", auth.authenticateToken, auth.authorizeRole("Staff"), disp
 // Truy vấn A - Tạo khách hàng - Staff Dashboard
 // Membership Card creation route
 router.get("/create-membership", auth.authenticateToken, auth.authorizeRole("Staff"), (req, res) => {
-	res.render("create-membership", { title: "Create Membership" });
+	res.render("create-membership", { title: "Create Membership", name: req.username, role: req.role });
 });
 
 // POST route for creating/updating a membership card
@@ -96,7 +95,7 @@ router.post("/update-membership-status", auth.authenticateToken, auth.authorizeR
 // Truy vấn C
 // Route for showing the form and handling results
 router.get('/order-invoice', auth.authenticateToken, auth.authorizeRole("Staff"), (req, res) => {
-	res.render("order-invoice", { title: "Orders and Invoices" });
+	res.render("order-invoice", { title: "Orders and Invoices", name: req.username, role: req.role });
 });
 
 // Route for fetching and displaying the results based on the date
