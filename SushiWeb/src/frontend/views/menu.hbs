@@ -6,8 +6,28 @@
     <link rel="stylesheet" href="/public/menu.css">
 
     <script>
-        async function loadCategoryItems(branchId, category) {
-            const response = await fetch(`/menu/branch/${branchId}/category/${category}`);
+        function setActiveCategory(category) {
+            const tabs = document.querySelectorAll('.category-tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.dataset.category === category) {
+                    tab.classList.add('active');
+                }
+            });
+
+            // Hide search bar when category is selected
+            if (category) {
+                document.querySelector('.search-bar').style.display = 'none';
+            }
+        }
+
+        async function loadCategoryItems(branchId, category, query = '') {
+            let url = `/menu/branch/${branchId}/category/${category}`;
+            if (query) {
+                url += `?q=${encodeURIComponent(query)}`;
+            }
+
+            const response = await fetch(url);
             const items = await response.json();
 
             const itemsContainer = document.querySelector('.items-container');
@@ -17,18 +37,18 @@
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'item';
                 itemDiv.innerHTML = `
-                    <img src="${item.IMAGE_LINK || 'placeholder.jpg'}" alt="${item.TENMON}">
-                    <div class="item-info">
-                        <div class="item-title">${item.TENMON}</div>
-                        <div class="item-price">Price: ${item.GIAHIENTAI} VND</div>
-                        <div class="cart-controls">
-                            <button class="decrement" data-id="${item.MAMENU}" disabled>-</button>
-                            <span class="item-count" id="count-${item.MAMENU}">0</span>
-                            <button class="increment" data-id="${item.MAMENU}">+</button>
-                            <button class="add-to-cart" data-id="${item.MAMENU}">Add to Cart</button>
-                        </div>
-                    </div>
-                `;
+            <img src="${item.IMAGE_LINK || 'placeholder.jpg'}" alt="${item.TENMON}">
+            <div class="item-info">
+                <div class="item-title">${item.TENMON}</div>
+                <div class="item-price">Price: ${item.GIAHIENTAI} VND</div>
+                <div class="cart-controls">
+                    <button class="decrement" data-id="${item.MAMENU}" disabled>-</button>
+                    <span class="item-count" id="count-${item.MAMENU}">0</span>
+                    <button class="increment" data-id="${item.MAMENU}">+</button>
+                    <button class="add-to-cart" data-id="${item.MAMENU}">Add to Cart</button>
+                </div>
+            </div>
+        `;
 
                 itemsContainer.appendChild(itemDiv);
             });
@@ -37,7 +57,6 @@
             setupCartControls();
         }
 
-        // Handle the "Add to Cart" button click
         function setupCartControls() {
             const incrementButtons = document.querySelectorAll('.increment');
             const decrementButtons = document.querySelectorAll('.decrement');
@@ -113,21 +132,6 @@
             });
         }
 
-        function setActiveCategory(category) {
-            const tabs = document.querySelectorAll('.category-tab');
-            tabs.forEach(tab => {
-                tab.classList.remove('active');
-                if (tab.dataset.category === category) {
-                    tab.classList.add('active');
-                }
-            });
-
-            // Hide search bar when category is selected
-            if (category) {
-                document.querySelector('.search-bar').style.display = 'none';
-            }
-        }
-
         async function fetchBranches() {
             const response = await fetch('/menu/branches');
             const branches = await response.json();
@@ -176,22 +180,6 @@
             itemsContainer.innerHTML = ''; // Clear the items container
             setActiveCategory(null); // Clear active category selection
         }
-
-        // Search items function
-        async function searchItems() {
-            const branchId = '{{branchId}}';
-            const query = document.getElementById('searchInput').value.trim();
-
-            if (query) {
-                const response = await fetch(`/menu/branch/${branchId}/search?q=${encodeURIComponent(query)}`);
-                window.location.href = `/menu/branch/${branchId}/search?q=${encodeURIComponent(query)}`
-
-                // Attach event listeners to the new items
-                setupCartControls();
-            } else {
-                alert('Please enter a search query.');
-            }
-        }
     </script>
 </head>
 
@@ -215,7 +203,7 @@
         <div class="categories">
             {{#each categories}}
             <div class="category-tab" data-category="{{this.categoryName}}"
-                onclick="setActiveCategory('{{this.categoryName}}'); loadCategoryItems('{{../branchId}}', '{{this.categoryName}}');">
+                onclick="setActiveCategory('{{this.categoryName}}'); loadCategoryItems('{{../branchId}}', '{{this.categoryName}}', '{{../q}}');">
                 {{this.categoryName}}
             </div>
             {{/each}}
@@ -228,8 +216,10 @@
 
         <!-- Search Bar (Initially Hidden) -->
         <div class="search-bar" style="display: none;">
-            <input type="text" id="searchInput" placeholder="Search for items..." />
-            <button onclick="searchItems()">Search</button>
+            <form id="searchForm" action="/menu/branch/{{branchId}}/search" method="POST">
+                <input type="text" id="searchInput" name="query" placeholder="Search for items..." />
+                <button type="submit">Search</button>
+            </form>
         </div>
 
         <div class="items-container">
