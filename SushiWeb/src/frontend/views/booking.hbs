@@ -1,68 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking Page</title>
-    <link rel="stylesheet" href="/styles.css">
+    <title>Booking</title>
+    <link rel="stylesheet" href="../public/booking.css">
 </head>
+
 <body>
+    <div class="wrapper">
+        <h1 class="page-title">Booking</h1>
 
-    <!-- Display any error or success messages -->
-    {{#if errorMessage}}
+        <!-- Thông báo lỗi hoặc thành công -->
+        {{#if errorMessage}}
         <div class="error">{{errorMessage}}</div>
-    {{/if}}
+        {{/if}}
 
-    {{#if successMessage}}
+        {{#if successMessage}}
         <div class="success">{{successMessage}}</div>
-    {{/if}}
+        {{/if}}
 
-    <!-- Booking Form -->
-    <h2>Make a Booking</h2>
-    <form action="/booking" method="POST">
-        <div>
-            <label for="NgayDen">Arrival Date:</label>
-            <input type="date" name="NgayDen" required>
+        <div class="booking_container">
+            <div class="form-container">
+                <p class="form-container-note">Please fill in all of your personal and booking information.</p>
+                <form action="/booking" method="POST">
+                    <div class="form-group">
+                        <label for="name">Full Name (*)</label>
+                        <input type="text" id="name" name="HoTen" placeholder="Your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number (*)</label>
+                        <input type="text" id="phone" name="SDT" placeholder="Your phone number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="branch">Branch to Book (*)</label>
+                        <div class="branch-container">
+                            <select id="branch-select" name="MaChiNhanh" required>
+                                <option>Loading branches...</option>
+                            </select>
+                            <select id="restaurant" name="MaNhaHang">
+                                <option value="nhahang1">Nhà hàng 1</option>
+                                <option value="nhahang2">Nhà hàng 2</option>
+                                <option value="nhahang3">Nhà hàng 3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="guests">Number of Guests</label>
+                        <input type="number" id="guests" name="SoLuongKhach" placeholder="Your number of guests to book" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date and Time</label>
+                        <input type="date" id="date" name="NgayDen" required>
+                        <input type="time" id="time" name="GioDen" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Notes</label>
+                        <textarea id="notes" name="GhiChu" placeholder="Your notes (if any)"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Booking</button>
+                </form>
+            </div>
+
+            <div class="image-container">
+                <img src="../public/booking1.png" alt="Hình ảnh thực đơn">
+                <img src="../public/booking2.png" alt="Hình ảnh nhà hàng">
+            </div>
         </div>
+    </div>
 
-        <div>
-            <label for="GioDen">Arrival Time:</label>
-            <input type="time" name="GioDen" required>
-        </div>
-
-        {{!-- <div>
-            <label for="GioDen">Arrival Time:</label>
-            <input type="text" name="GioDen" required>
-        </div> --}}
-
-        <div>
-            <label for="SoLuongKhach">Number of Guests:</label>
-            <input type="number" name="SoLuongKhach" required>
-        </div>
-
-        <div>
-            <label for="GhiChu">Notes (Your name will be inserted here):</label>
-            <input type="text" name="GhiChu" placeholder="Your name" required>
-        </div>
-
-        <div>
-            <label for="SDT">Phone Number:</label>
-            <input type="text" name="SDT" required>
-        </div>
-
-        <div>
-            <label for="MaChiNhanh">Branch:</label>
-            <select name="MaChiNhanh" id="branch-select" required>
-                <option>Loading branches...</option>
-            </select>
-        </div>
-
-        <button type="submit">Submit Booking</button>
-    </form>
-
-    <!-- Existing Bookings -->
     <script>
-        // Fetch the branch data when the page loads
+        // Fetch branch data when the page loads
         fetch('/booking/branches') // Call the backend API endpoint for branches
             .then(response => response.json())
             .then(data => {
@@ -87,6 +96,6 @@
                 branchSelect.innerHTML = '<option>Error loading branches</option>';
             });
     </script>
-
 </body>
+
 </html>
