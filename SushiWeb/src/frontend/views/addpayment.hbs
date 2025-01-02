@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .payment-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .payment-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .payment-form input,
+        .payment-form select,
+        .payment-form button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .payment-form button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .search-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .search-form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Search for Customer</h1>
+
+    <div class="search-form">
+        <form id="searchForm" onsubmit="searchCustomer(event)">
+            <label for="MAKHACHHANG">Customer ID</label>
+            <input type="text" id="MAKHACHHANG" name="MAKHACHHANG" required>
+
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <script>
+        function searchCustomer(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const customerID = document.getElementById('MAKHACHHANG').value.trim();
+
+            if (customerID) {
+                // Redirect to the payment page with the CustomerID as a query parameter
+                window.location.href = `/staff/order/add-payment?MAKHACHHANG=${customerID}`;
+            } else {
+                alert("Please enter a Customer ID.");
+            }
+        }
+
+        // Store selected rows
+        let selectedRows = [];
+
+        // Handle row click event
+        function toggleRowSelection(row) {
+            const orderId = row.getAttribute('data-order-id');
+            if (selectedRows.includes(orderId)) {
+                selectedRows = selectedRows.filter(id => id !== orderId);
+                row.style.backgroundColor = ''; // Remove highlight
+            } else {
+                selectedRows.push(orderId);
+                row.style.backgroundColor = '#e0f7fa'; // Highlight selected row
+            }
+        }
+    </script>
+
+    <h1>Orders for Customer: {{MAKHACHHANG}}</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Order Type</th>
+                <th>Booking ID</th>
+                <th>Branch ID</th>
+                <th>Staff ID</th>
+                <th>Total Cost</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each orders}}
+            <tr data-order-id="{{MADON}}" onclick="toggleRowSelection(this)">
+                <td>{{MADON}}</td>
+                <td>{{NGAYDAT}}</td>
+                <td>{{TRANGTHAI}}</td>
+                <td>{{LOAIDONDATMON}}</td>
+                <td>{{MADATCHO}}</td>
+                <td>{{CHINHANHDAT}}</td>
+                <td>{{NHANVIENTAOLAP}}</td>
+                <td>{{THANHTIEN}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <div class="payment-form">
+        <h2>Add Payment</h2>
+        <form action="/staff/order/add-payment" method="POST">
+            <input type="hidden" name="MAKHACHHANG" value="{{MAKHACHHANG}}">
+            <input type="hidden" name="selectedOrders" id="selectedOrders">
+
+            <label for="TIENKHACHDUA">Amount Paid</label>
+            <input type="number" id="TIENKHACHDUA" name="TIENKHACHDUA" required>
+
+            <label for="PHUONGTHUC">Payment Method</label>
+            <select id="PHUONGTHUC" name="PHUONGTHUC" required>
+                <option value="Cash">Cash</option>
+                <option value="Credit card">Credit card</option>
+                <option value="Bank transfer">Bank transfer</option>
+            </select>
+
+            <button type="submit" onclick="submitPayment()">Add Payment</button>
+        </form>
+    </div>
+
+    <script>
+        // Handle form submission and add selected order IDs
+        function submitPayment() {
+            const selectedOrdersInput = document.getElementById('selectedOrders');
+            selectedOrdersInput.value = selectedRows.join(',');
+
+            if (selectedRows.length === 0) {
+                alert("Please select at least one order.");
+                event.preventDefault(); // Prevent form submission if no order is selected
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -413,6 +413,149 @@ export const addDish = async (req, res) => {
 		res.status(500).json({ message: "An error occurred while submitting the order." });
 	}
 };
+
+export const showPayment = async (req, res) => {
+	try {
+		const { MAKHACHHANG } = req.query;
+
+		const pool = await connectToDatabase();
+
+		const result = await pool.request()
+			.input('MAKHACHHANG', MAKHACHHANG)
+			.query(`
+                SELECT MADON, NGAYDAT, TRANGTHAI, LOAIDONDATMON, HOADONLIENQUAN, MADATCHO, CHINHANHDAT, NHANVIENTAOLAP, THANHTIEN
+                FROM DONDATMON
+                WHERE KHACHHANGDAT = @MAKHACHHANG
+            `);
+
+		const orders = result.recordset;
+
+		res.render("addpayment", { orders, MAKHACHHANG, name: req.username, role: req.role });
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: "Error retrieving invoices" });
+	}
+};
+
+export const addPayment = async (req, res) => {
+	try {
+		// Extract token from cookies
+		const token = req.cookies.authToken;
+
+		if (!token) {
+			return res.render("staffmenu", { categories: [], errorMessage: "No token provided." });
+		}
+
+		// Decode the token to get the user's username
+		const decoded = jwt.verify(token, SECRET_KEY);
+		const username = decoded.username;
+
+		// Connect to the database
+		const pool = await connectToDatabase();
+
+		// Fetch the branch ID (`CHINHANHLAMVIEC`) for the staff member
+		const branchQuery = `
+            SELECT NV.CHINHANHLAMVIEC 
+            FROM NHANVIEN NV
+            INNER JOIN ACCOUNT ACC ON NV.ACCOUNT_ID = ACC.ID
+            WHERE ACC.USERNAME = @username
+        `;
+
+		const branchResult = await pool.request()
+			.input("username", sql.NVarChar, username)
+			.query(branchQuery);
+
+		if (branchResult.recordset.length === 0) {
+			return res.render("staffmenu", { categories: [], errorMessage: "Staff not found or unauthorized." });
+		}
+
+		const branchId = branchResult.recordset[0].CHINHANHLAMVIEC;
+
+		// Extract values from the request body (assumed to be a list of order IDs)
+		const { MAKHACHHANG, selectedOrders, TIENKHACHDUA, PHUONGTHUC } = req.body;
+		console.log(MAKHACHHANG, selectedOrders, TIENKHACHDUA, PHUONGTHUC);
+		// Validate required fields
+		if (!selectedOrders || !selectedOrders.length || !TIENKHACHDUA || !PHUONGTHUC || !MAKHACHHANG) {
+			return res.status(400).json({ error: "All fields are required" });
+		}
+
+		// Generate new MAHOADON
+		const result = await pool.request().query(`
+            SELECT TOP 1 MAHOADON 
+            FROM HOADON 
+            ORDER BY MAHOADON DESC
+        `);
+
+		let newMAHOADON = "HD00000001"; // Default if no records exist
+		if (result.recordset.length > 0) {
+			const currentMaxMAHOADON = result.recordset[0].MAHOADON;
+			const numericPart = parseInt(currentMaxMAHOADON.substring(2), 10);
+			newMAHOADON = `HD${(numericPart + 1).toString().padStart(8, "0")}`;
+		}
+
+		// Insert new invoice into the database
+		await pool.request()
+			.input('TIENKHACHDUA', TIENKHACHDUA)
+			.input('PHUONGTHUC', PHUONGTHUC)
+			.input('MAKHACHHANG', MAKHACHHANG)
+			.input('MACHINHANH', branchId)
+			.input('MAHOADON', newMAHOADON)
+			.input('TRANGTHAI', "Paid")
+			.query(`
+				INSERT INTO HOADON (MAHOADON, NGAYLAP, GIOLAP, TIENKHACHDUA, TRANGTHAI, PHUONGTHUC, MAKHACHHANG, MACHINHANH)
+				VALUES(@MAHOADON, GETDATE(), CONVERT(TIME(0),GETDATE()), @TIENKHACHDUA, @TRANGTHAI, @PHUONGTHUC, @MAKHACHHANG, @MACHINHANH)
+			`);
+
+		// Loop through each order and update its payment details
+		for (const order of selectedOrders) {
+			const { MADON } = order; // Extract the order ID (MADON)
+
+			// Update the order with the new MAHOADON as HOADONLIENQUAN
+			await pool.request()
+				.input('HOADONLIENQUAN', newMAHOADON)
+				.input('MADON', MADON)
+				.query(`
+					UPDATE DONDATMON
+					SET HOADONLIENQUAN = @HOADONLIENQUAN
+					WHERE MADON = @MADON
+				`);
+		}
+		await pool.request()
+			.input("MAHOADON", sql.Char(10), newMAHOADON)
+			.execute("sp_TinhVaCapNhatTongTien");
+
+		// Redirect to the staff page
+		res.redirect(`/staff`);
+	} catch (error) {
+		// Handle errors
+		console.error(error);
+		res.status(500).json({ error: "Error adding payment" });
+	}
+};
+
+export const displayAllPayment = async (req, res) => {
+	try {
+		const { MAKHACHHANG } = req.query;
+
+		const pool = await connectToDatabase();
+
+		const result = await pool.request()
+			.input('MAKHACHHANG', MAKHACHHANG)
+			.query(`
+                SELECT MAHOADON, NGAYLAP, TONGTIENTRUOCKM, TONGTIENSAUKM, TIENKHACHDUA, TRANGTHAI, PHUONGTHUC
+                FROM HOADON
+                WHERE MAKHACHHANG = @MAKHACHHANG
+            `);
+
+		const invoices = result.recordset;
+		console.log(invoices);
+		res.render("allPayments", { invoices, MAKHACHHANG, name: req.username, role: req.role });
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ error: "Error retrieving invoices" });
+	}
+};
+
 export const getTopRevenueCustomersForm = (req, res) => {
 	res.render('top-revenue-customers', { title: "Top Revenue Customers" });
 };

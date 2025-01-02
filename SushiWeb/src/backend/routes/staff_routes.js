@@ -21,7 +21,10 @@ import {
 	getCustomerOrderTrendsForm,
 	getCustomerOrderTrendsResults,
 	getOrderAndInvoiceDetails,
-	updateMembershipStatus
+	updateMembershipStatus,
+	showPayment,
+	addPayment,
+	displayAllPayment
 } from "../controller/staff_controller.js";
 import * as auth from "../middleware/auth_middleware.js";
 
@@ -63,6 +66,11 @@ router.post("/order", auth.authenticateToken, auth.authorizeRole("Staff"), creat
 // Order add dish
 router.get("/order/add-dish", auth.authenticateToken, auth.authorizeRole("Staff"), showDish);
 router.post("/order/add-dish", auth.authenticateToken, auth.authorizeRole("Staff"), addDish);
+
+// Add payment
+router.get("/order/add-payment", auth.authenticateToken, auth.authorizeRole("Staff"), showPayment);
+router.post("/order/add-payment", auth.authenticateToken, auth.authorizeRole("Staff"), addPayment);
+router.get("/payment", auth.authenticateToken, auth.authorizeRole("Staff"), displayAllPayment);
 
 // Truy vấn A - Tạo khách hàng - Staff Dashboard
 router.get("/membership", (req, res) => {
