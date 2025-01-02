@@ -104,6 +104,7 @@ footer {
     border-radius: 4px;
     font-size: 16px;
     font-weight: bold;
+    text-align: center;
     cursor: pointer;
     transition: background-color 0.5s, color 0.5s, border-color 0.5s;
     z-index: 2;
@@ -138,6 +139,7 @@ footer {
     border-radius: 4px;
     text-decoration: none;
     font-size: 16px;
+    text-align: center;
     margin-top: 10px;
     transition: background-color 0.5s, color 0.5s, border-color 0.5s;
     z-index: 2;
@@ -164,6 +166,7 @@ footer {
     border-radius: 10px;
     background-color: #EA252C;
     font-size: 20px;
+    text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -195,6 +198,7 @@ footer {
     border-radius: 10px;
     background-color: white;
     font-size: 20px;
+    text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -226,6 +230,7 @@ footer {
     border-radius: 10px;
     background-color: #353535;
     font-size: 20px;
+    text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -260,6 +265,7 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
     color: #353535;
     font-weight: 700;
     text-decoration: none;
@@ -291,10 +297,12 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
     color: #ffffff;
     font-weight: 700;
     text-decoration: none;
     transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+    position: relative;
     z-index: 2;
 }
 
@@ -318,6 +326,7 @@ footer {
     border-style: solid;
     border-radius: 10px;
     background-color: white;
+    text-align: center;
     font-size: 20px;
     display: flex;
     align-items: center;
@@ -386,7 +395,6 @@ footer {
 .logo-text-tokyo {
     color: #353535;
     font-size: 25px;
-    font-weight: light;
     text-decoration: none;
     z-index: 2;
 }
@@ -402,7 +410,6 @@ footer {
 .logo-text-white {
     color: #ffffff;
     font-size: 25px;
-    font-weight: light;
     text-decoration: none;
     z-index: 2;
 }
@@ -410,7 +417,6 @@ footer {
 .large-title-tokyo {
     color: #353535;
     font-size: 100px;
-    font-weight: light;
     text-decoration: none;
     z-index: 2;
 }

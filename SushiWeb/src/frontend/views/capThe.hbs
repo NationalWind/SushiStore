@@ -12,20 +12,15 @@
     <div class="authen-page">
         <div class="container">
             <!-- Form đăng ký -->
-            <form action="/signup" class="form" method="POST" onsubmit="handleSubmit(event)">
+            <form action="#" class="form" method="POST" onsubmit="handleSubmit(event)">
                 <div class="logo-container">
                     <img src="../public/sushi.png" alt="Logo" class="logo">
-                    <p class="title">Sign up an account!</p>
+                    <p class="title">Create Membership Card!</p>
                 </div>
 
-                <!-- Username input -->
+                <!-- MaKH input -->
                 <div class="input-group">
-                    <input type="text" id="username" name="username" placeholder="*Username" required>
-                </div>
-
-                <!-- Password input -->
-                <div class="input-group">
-                    <input type="password" id="password" name="password" placeholder="*Password" required>
+                    <input type="text" id="username" name="username" placeholder="*CustomerID" required>
                 </div>
 
                 <!-- Full Name input -->
@@ -48,15 +43,9 @@
                     <input type="text" id="cccd" name="cccd" placeholder="*CCCD (ID number)" required>
                 </div>
 
-                <!-- Submit Button -->
-                <button class="login-signup-button" type="submit" id="submitButton" disabled>Sign up</button>
+               <!-- Submit Button -->
+                <button class="login-signup-button" type="submit" id="submitButton">Create</button>
 
-                <div class="divider">
-                    <span>Or</span>
-                </div>
-
-                <!-- Redirect to login page -->
-                <a href="/login" class="secondary-button">Log in</a>
             </form>
         </div>
     </div>
