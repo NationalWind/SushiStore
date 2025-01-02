@@ -400,3 +400,144 @@ export const getFoodQualityAndCustomerFeedbackResults = async (req, res) => {
         });
     }
 };
+
+// Controller function to render the form and handle the results
+export const getStaffReviewsForm = (req, res) => {
+    // Render the form (this can be a button or just an action to fetch data)
+    res.render('staff-reviews-form', { title: "Staff and Corresponding Reviews" });
+};
+
+export const getStaffReviewsResults = async (req, res) => {
+    try {
+        // Connect to the database
+        const pool = await connectToDatabase();
+
+        // Execute the stored procedure to get staff and reviews data
+        const result = await pool.request().execute('SP_XemDanhSachDanhGiaNhanVien');
+
+        if (result.recordset.length === 0) {
+            return res.render('staff-reviews-form', {
+                errorMessage: "No data found.",
+                statisticsItems: []
+            });
+        }
+
+        // Render the results in the view
+        res.render('staff-reviews-form', {
+            statisticsItems: result.recordset,
+            errorMessage: null
+        });
+
+    } catch (error) {
+        console.error("Error fetching staff reviews:", error);
+        res.render('staff-reviews-form', {
+            errorMessage: "An error occurred while fetching the data. Please try again.",
+            statisticsItems: []
+        });
+    }
+};
+
+export const getCustomerOrderTrendsForm = (req, res) => {
+    res.render('customer-order-trends', { title: "Customer Order Trends" });
+};
+
+export const getCustomerOrderTrendsResults = async (req, res) => {
+    try {
+        const { NgayBatDau, NgayKetThuc, MaChiNhanh } = req.body;
+
+        // Validate inputs
+        if (!NgayBatDau || !NgayKetThuc || !MaChiNhanh) {
+            return res.render('customer-order-trends', { 
+                errorMessage: "Please provide all required fields (Start Date, End Date, and Branch ID)." 
+            });
+        }
+
+        const pool = await connectToDatabase();
+
+        // Execute the stored procedure for customer order trends
+        const result = await pool.request()
+            .input('NgayBatDau', sql.Date, NgayBatDau)
+            .input('NgayKetThuc', sql.Date, NgayKetThuc)
+            .input('MaChiNhanh', sql.Char(10), MaChiNhanh)
+            .execute('SP_THONGKE_XUHUONG_KHACHHANG');
+
+        if (result.recordset.length === 0) {
+            return res.render('customer-order-trends', {
+                errorMessage: "No data found for the given period and branch.",
+                trendsData: []
+            });
+        }
+
+        // Render the results in the view
+        res.render('customer-order-trends', {
+            trendsData: result.recordset,
+            errorMessage: null
+        });
+    } catch (error) {
+        console.error("Error fetching customer order trends:", error);
+        res.render('customer-order-trends', {
+            errorMessage: "An error occurred while fetching the data. Please try again.",
+            trendsData: []
+        });
+    }
+};
+
+export const getOrderAndInvoiceDetails = async (req, res) => {
+    try {
+        const { NgayDat } = req.body;
+
+        // Validate if the required input (NgayDat) is provided
+        if (!NgayDat) {
+            return res.render('order-invoice', { errorMessage: "Please provide a date." });
+        }
+
+        const pool = await connectToDatabase();
+
+        // Execute the stored procedure to fetch orders and invoices for the given date
+        const result = await pool.request()
+            .input('ngaydat', sql.Date, NgayDat)
+            .execute('SP_DS_DONDATMON_HOADON_THEONGAY');
+
+        if (result.recordset.length === 0) {
+            return res.render('order-invoice', {
+                errorMessage: "No orders or invoices found for the given date.",
+                orders: []
+            });
+        }
+
+        // Render the result
+        res.render('order-invoice', {
+            orders: result.recordset,
+            errorMessage: null
+        });
+
+    } catch (error) {
+        console.error("Error fetching order and invoice details:", error);
+        res.render('order-invoice', {
+            errorMessage: "An error occurred while fetching the data. Please try again.",
+            orders: []
+        });
+    }
+};
+
+export const updateMembershipStatus = async (req, res) => {
+    try {
+        const pool = await connectToDatabase();
+
+        // Execute the stored procedure for updating membership status
+        await pool.request()
+            .execute('SP_CapNhatHangThe'); // Executes the stored procedure
+
+        // Render the success message with a success status
+        res.render('update-membership-status', {
+            successMessage: "Membership status updated successfully!"
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.render('update-membership-status', {
+            errorMessage: "An error occurred while updating membership status."
+        });
+    }
+};
+

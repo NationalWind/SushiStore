@@ -11,7 +11,13 @@ import {
 	getBranchRevenue,
 	postBranchRevenue,
 	getFoodQualityAndCustomerFeedbackResults,
-	getFoodQualityAndCustomerFeedbackForm
+	getFoodQualityAndCustomerFeedbackForm,
+	getStaffReviewsForm,
+	getStaffReviewsResults,
+	getCustomerOrderTrendsForm,
+	getCustomerOrderTrendsResults,
+	getOrderAndInvoiceDetails,
+	updateMembershipStatus
 } from "../controller/staff_controller.js";
 import * as auth from "../middleware/auth_middleware.js";
 
@@ -52,24 +58,39 @@ router.get("/membership", (req, res) => {
 });
 
 // Truy vấn B - Cập nhật phân hạng - Staff Dashboard
-router.get("/updatemembership", (req, res) => {
-	res.render("truyvanb", { title: "Update Membership" });
+// Route for triggering the membership status update
+router.get("/update-membership-status", auth.authenticateToken, auth.authorizeRole("Staff"), (req, res) => {
+    res.render('update-membership-status', { name: req.username, role: req.role });
 });
+
+// Trigger stored procedure for membership status update
+router.post("/update-membership-status", auth.authenticateToken, auth.authorizeRole("Staff"), updateMembershipStatus);
+
 
 // Truy vấn C
-router.get("/ordersandinvoices", (req, res) => {
-	res.render("truyvanc", { title: "Orders and Invoices" });
+// Route for showing the form and handling results
+router.get('/order-invoice', auth.authenticateToken, auth.authorizeRole("Staff"), (req, res) => {
+    res.render("order-invoice", { title: "Orders and Invoices" });
 });
+
+// Route for fetching and displaying the results based on the date
+router.post('/order-invoice', auth.authenticateToken, auth.authorizeRole("Staff"), getOrderAndInvoiceDetails);
+
 
 // Truy vấn D
-router.get("/customerordertrendsofthisbranch", (req, res) => {
-	res.render("truyvand", { title: "Customer Order Trends of this Branch" });
-});
+// Route for showing the form to input data
+router.get("/customer-order-trends", auth.authenticateToken, auth.authorizeRole("Staff"), getCustomerOrderTrendsForm);
+
+// Route for fetching and displaying the results
+router.post('/customer-order-trends', auth.authenticateToken, auth.authorizeRole("Staff"), getCustomerOrderTrendsResults);
+
 
 // Truy vấn E
-router.get("/staffandcorrespondingreviews", (req, res) => {
-	res.render("truyvane", { title: "Staff and Corresponding Reviews" });
-});
+// Route for rendering the staff reviews form and showing the data
+router.get('/staff-reviews-form', auth.authenticateToken, auth.authorizeRole("Staff"), getStaffReviewsForm);
+
+// Route for fetching and displaying the results of the reviews
+router.post('/staff-reviews-form', auth.authenticateToken, auth.authorizeRole("Staff"), getStaffReviewsResults);
 
 // Truy vấn F
 // Route for showing the form
