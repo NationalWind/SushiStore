@@ -20,7 +20,7 @@
     bottom: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.6);
-    z-index: 0;
+    z-index: 2;
 }
 
 .home_main-homepage-left {
@@ -126,7 +126,7 @@
     margin: 0;
     position: relative;
     left: 0;
-    animation: slider 25s infinite;
+    animation: slider 20s infinite;
     height: 65vh;
 }
 
@@ -192,4 +192,59 @@
     flex-direction: column;
     gap: 30px;
     z-index: 2;
+}
+
+.home_main-homepage-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1; /* Place behind other elements */
+    overflow: hidden;
+}
+
+#background-slider {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#background-slider figure {
+    width: 500%; /* Adjust based on the number of slides */
+    margin: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    animation: background-slider 20s infinite;
+    height: 100%;
+}
+
+#background-slider figure img {
+    float: left;
+    width: 20%; /* Adjust based on the number of slides */
+    height: 100%;
+    object-fit: cover;
+}
+
+@keyframes background-slider {
+    0%, 20% {
+        left: 0; /* Show the 1st slide */
+    }
+    25%, 40% {
+        left: -100%; /* Show the 2nd slide */
+    }
+    45%, 60% {
+        left: -200%; /* Show the 3rd slide */
+    }
+    65%, 80% {
+        left: -300%; /* Show the 4th slide */
+    }
+    85%, 95% {
+        left: -400%; /* Show the 5th slide */
+    }
+    100% {
+        left: 0;
+    }
 }
