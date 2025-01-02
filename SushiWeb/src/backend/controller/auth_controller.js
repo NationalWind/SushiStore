@@ -115,6 +115,7 @@ export const login = async (req, res) => {
             res.cookie("authToken", token, { httpOnly: true, secure: true });
         }
 
+        console.log(role);
         // Redirect based on role
         switch (role) {
             // case "Branch Manager":
@@ -123,9 +124,9 @@ export const login = async (req, res) => {
             // case "Department Manager":
             //     res.redirect("/department-manager");
             //     break;
-            // case "Staff":
-            //     res.redirect("/staff");
-            //     break;
+            case "Staff":
+                res.redirect("/staff");
+                break;
             // case "Admin":
             //     res.redirect("/admin");
             //     break;

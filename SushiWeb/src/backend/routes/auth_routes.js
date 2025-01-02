@@ -23,14 +23,14 @@ router.get("/logout", (req, res) => {
 router.get("/home", authenticateToken, (req, res) => {
     res.render("home", {
         title: "Home",
-        name: req.username || null // Pass null if the user is not authenticated
+        name: req.username || null, role: req.role // Pass null if the user is not authenticated
     });
 });
 
 router.get("/", authenticateToken, (req, res) => {
     res.render("home", {
         title: "Home",
-        name: req.username || null // Pass null if the user is not authenticated
+        name: req.username || null, role: req.role // Pass null if the user is not authenticated
     });
 });
 

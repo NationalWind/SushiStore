@@ -1,9 +1,9 @@
 import express from "express";
-import { authenticateToken, authenticateUser } from "../middleware/auth_middleware.js";
+import * as auth from "../middleware/auth_middleware.js";
 
 const router = express.Router();
 
-router.get("/", authenticateToken, (req, res) => {
+router.get("/", auth.authenticateToken, (req, res) => {
     if (req.role !== "Department Manager") {
         return res.status(403).send("Access Denied");
     }
