@@ -6,7 +6,7 @@ const router = express.Router();
 
 // GET route to display the form for creating a new dish
 router.get('/create-dish', (req, res) => {
-  res.render('create-dish');
+  res.render('staff');
 });
 
 // POST route for creating a new dish
