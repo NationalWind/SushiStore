@@ -1,7 +1,9 @@
 import express from "express";
-import { createDish, updateDishStatus } from "../controller/staff_controller.js";
-import { authenticateToken, authenticateUser } from "../middleware/auth_middleware.js";
-import { createDish } from "../controller/staff_controller.js";
+import {
+	createDish,
+	updateDishStatus,
+	getStaffMenu
+} from "../controller/staff_controller.js";
 import * as auth from "../middleware/auth_middleware.js";
 
 const router = express.Router();
@@ -23,11 +25,13 @@ router.get('/create-dish', (req, res) => {
 router.post("/create-dish", createDish); // Ensure the request is authenticated
 
 router.get('/update-dish-status', (req, res) => {
-  res.render('update-dish-status'); // This will render the update-dish-status.hbs page
+	res.render('update-dish-status'); // This will render the update-dish-status.hbs page
 })
 
 // POST route for updating the status of a dish
 router.post("/update-dish-status", updateDishStatus);  // Call the updateDishStatus function
 
+// route to get staff menu
+router.get("/menu", getStaffMenu);
 
 export default router;

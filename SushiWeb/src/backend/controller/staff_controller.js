@@ -69,3 +69,7 @@ export const updateDishStatus = async (req, res) => {
     res.render('create-dish', { error: "An error occurred while updating the dish status." });
   }
 };
+
+export const getStaffMenu = async (req, res) => {
+
+}
