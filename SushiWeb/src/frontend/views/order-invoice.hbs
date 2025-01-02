@@ -1,63 +1,74 @@
 <!-- order-invoice.hbs -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{title}}</title>
+        <title>Orders and Invoices - Truy vấn C</title>
+
+        <link rel="stylesheet" href="../public/statistics.css">
+    </head>
+
 <body>
-    <h1>{{title}}</h1>
+    <div class="statistics_container">
+        <div class="medium-title-deli">Orders and Invoices</div>
 
-    {{#if errorMessage}}
-        <p style="color: red;">{{errorMessage}}</p>
-    {{/if}}
+        <!-- Form to enter the date -->
+        <form action="/staff/order-invoice" method="POST" class="statistics_setup-input">
+            <div>
+                <label for="NgayDat">Enter Date (YYYY-MM-DD):</label>
+                <input type="date" id="NgayDat" name="NgayDat" required class="statistics_date-input">
+            </div>
+            <div class="statistics_setup-input">
+                <button type="submit" class="button-red">Get Orders and Invoices</button>
+                <a class="button-gray" href="/staff/statistics">Back to Statistics</a>
+            </div>
+        </form>
 
-    <!-- Form to enter the date -->
-    <form action="/staff/order-invoice" method="POST">
-        <label for="NgayDat">Enter Date (YYYY-MM-DD):</label>
-        <input type="date" id="NgayDat" name="NgayDat" required>
-        <button type="submit">Submit</button>
-    </form>
+        {{#if errorMessage}}
+            <p style="color: red;">{{errorMessage}}</p>
+        {{/if}}
 
-    <!-- Display Orders and Invoices -->
-    {{#if orders}}
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Order Time</th>
-                    <th>Customer Name</th>
-                    <th>Customer Phone</th>
-                    <th>Invoice ID</th>
-                    <th>Total After Discount</th>
-                    <th>Invoice Status</th>
-                    <th>Order Type</th>
-                    <th>Delivery Time</th>
-                    <th>Delivery Address</th>
-                    <th>Table Number</th>
-                    <th>Branch</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each orders}}
+        <!-- Display Orders and Invoices -->
+        {{#if orders}}
+            <table border="1">
+                <thead>
                     <tr>
-                        <td>{{this.MaDonHang}}</td>
-                        <td>{{this.GioDatHang}}</td>
-                        <td>{{this.TenKhachHang}}</td>
-                        <td>{{this.SoDienThoai}}</td>
-                        <td>{{this.MaHoaDon}}</td>
-                        <td>{{this.ThanhTien}}</td>
-                        <td>{{this.TrangThaiHoaDon}}</td>
-                        <td>{{this.LoaiDonHang}}</td>
-                        <td>{{this.ThoiGianGiaoHang}}</td>
-                        <td>{{this.DiaChiGiaoHang}}</td>
-                        <td>{{this.SoBanTaiCho}}</td>
-                        <td>{{this.ChiNhanhTaiCho}}</td>
+                        <th>Order ID</th>
+                        <th>Order Time</th>
+                        <th>Customer Name</th>
+                        <th>Customer Phone</th>
+                        <th>Invoice ID</th>
+                        <th>Total After Discount</th>
+                        <th>Invoice Status</th>
+                        <th>Order Type</th>
+                        <th>Delivery Time</th>
+                        <th>Delivery Address</th>
+                        <th>Table Number</th>
+                        <th>Branch</th>
                     </tr>
-                {{/each}}
-            </tbody>
-        </table>
-    {{/if}}
+                </thead>
+                <tbody>
+                    {{#each orders}}
+                        <tr>
+                            <td>{{this.MaDonHang}}</td>
+                            <td>{{this.GioDatHang}}</td>
+                            <td>{{this.TenKhachHang}}</td>
+                            <td>{{this.SoDienThoai}}</td>
+                            <td>{{this.MaHoaDon}}</td>
+                            <td>{{this.ThanhTien}}</td>
+                            <td>{{this.TrangThaiHoaDon}}</td>
+                            <td>{{this.LoaiDonHang}}</td>
+                            <td>{{this.ThoiGianGiaoHang}}</td>
+                            <td>{{this.DiaChiGiaoHang}}</td>
+                            <td>{{this.SoBanTaiCho}}</td>
+                            <td>{{this.ChiNhanhTaiCho}}</td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        {{/if}}
+    </div>
 </body>
 </html>

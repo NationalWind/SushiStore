@@ -1,56 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
+    <title>Staff and Corresponding Reviews - Truy vấn E</title>
+
+    <link rel="stylesheet" href="../public/statistics.css">
 </head>
+
 <body>
-    <h1>{{title}}</h1>
+    <div class="statistics_container">
+        <div class="medium-title-deli">Staff and Corresponding Reviews</div>
+        <!-- Button to fetch staff and reviews -->
+        <form method="POST" action="/staff/staff-reviews-form">
+            <div class="statistics_setup-input">
+                <button type="submit" class="button-red">See Reviews</button>
+                <a class="button-gray" href="/staff/statistics">Back to Statistics</a>
+            </div>
+        </form>
 
-    <!-- Button to fetch staff and reviews -->
-    <form method="POST" action="/staff/staff-reviews-form">
-        <button type="submit">Fetch Staff Reviews</button>
-    </form>
+        {{#if errorMessage}}
+            <div style="color: red;">
+                <p>{{errorMessage}}</p>
+            </div>
+        {{/if}}
 
-    {{#if errorMessage}}
-        <div style="color: red;">
-            <p>{{errorMessage}}</p>
-        </div>
-    {{/if}}
-
-    {{#if statisticsItems}}
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Employee ID</th>
-                    <th>Name</th>
-                    <th>Branch Name</th>
-                    <th>Average Service Rating</th>
-                    <th>Average Branch Position Rating</th>
-                    <th>Average Ambience Rating</th>
-                    <th>Number of Reviews</th>
-                    <th>Comments</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each statisticsItems}}
+        {{#if statisticsItems}}
+            <table border="1">
+                <thead>
                     <tr>
-                        <td>{{this.MaNhanVien}}</td>
-                        <td>{{this.HoTen}}</td>
-                        <td>{{this.TenChiNhanh}}</td>
-                        <td>{{this.DiemPhucVuTB}}</td>
-                        <td>{{this.DiemViTriChiNhanhTB}}</td>
-                        <td>{{this.DiemKhongGianTB}}</td>
-                        <td>{{this.SoLuotDanhGia}}</td>
-                        <td>{{this.BinhLuan}}</td>
+                        <th>Employee ID</th>
+                        <th>Name</th>
+                        <th>Branch Name</th>
+                        <th>Average Service Rating</th>
+                        <th>Average Branch Position Rating</th>
+                        <th>Average Ambience Rating</th>
+                        <th>Number of Reviews</th>
+                        <th>Comments</th>
                     </tr>
-                {{/each}}
-            </tbody>
-        </table>
-    {{else}}
-        <p>No data available.</p>
-    {{/if}}
-
+                </thead>
+                <tbody>
+                    {{#each statisticsItems}}
+                        <tr>
+                            <td>{{this.MaNhanVien}}</td>
+                            <td>{{this.HoTen}}</td>
+                            <td>{{this.TenChiNhanh}}</td>
+                            <td>{{this.DiemPhucVuTB}}</td>
+                            <td>{{this.DiemViTriChiNhanhTB}}</td>
+                            <td>{{this.DiemKhongGianTB}}</td>
+                            <td>{{this.SoLuotDanhGia}}</td>
+                            <td>{{this.BinhLuan}}</td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        {{else}}
+            <p>No data available.</p>
+        {{/if}}
+    </div>
 </body>
+
 </html>

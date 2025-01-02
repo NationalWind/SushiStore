@@ -24,7 +24,8 @@ import {
 	updateMembershipStatus,
 	showPayment,
 	addPayment,
-	displayAllPayment
+	displayAllPayment,
+	createMembershipCard
 } from "../controller/staff_controller.js";
 import * as auth from "../middleware/auth_middleware.js";
 
@@ -73,9 +74,14 @@ router.post("/order/add-payment", auth.authenticateToken, auth.authorizeRole("St
 router.get("/payment", auth.authenticateToken, auth.authorizeRole("Staff"), displayAllPayment);
 
 // Truy vấn A - Tạo khách hàng - Staff Dashboard
-router.get("/membership", (req, res) => {
-	res.render("truyvana", { title: "Create Membership" });
+// Membership Card creation route
+router.get("/create-membership", auth.authenticateToken, auth.authorizeRole("Staff"), (req, res) => {
+	res.render("create-membership", { title: "Create Membership" });
 });
+
+// POST route for creating/updating a membership card
+router.post("/create-membership", auth.authenticateToken, auth.authorizeRole("Staff"), createMembershipCard);
+
 
 // Truy vấn B - Cập nhật phân hạng - Staff Dashboard
 // Route for triggering the membership status update
