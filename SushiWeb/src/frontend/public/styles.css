@@ -295,6 +295,7 @@ footer {
     font-weight: 700;
     text-decoration: none;
     transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+    position: relative;
     z-index: 2;
 }
 
@@ -386,7 +387,6 @@ footer {
 .logo-text-tokyo {
     color: #353535;
     font-size: 25px;
-    font-weight: light;
     text-decoration: none;
     z-index: 2;
 }
@@ -402,7 +402,6 @@ footer {
 .logo-text-white {
     color: #ffffff;
     font-size: 25px;
-    font-weight: light;
     text-decoration: none;
     z-index: 2;
 }
@@ -410,7 +409,6 @@ footer {
 .large-title-tokyo {
     color: #353535;
     font-size: 100px;
-    font-weight: light;
     text-decoration: none;
     z-index: 2;
 }

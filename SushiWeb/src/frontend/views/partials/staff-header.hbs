@@ -8,8 +8,9 @@
                 src="https://scontent.fsgn2-3.fna.fbcdn.net/v/t39.30808-6/448201804_845814457576232_3022944095576243187_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=kj0IUBtdNS4Q7kNvgHcLg8y&_nc_oc=Adi9JRyTbz1sXiIeTsNbFImYb-RIlvu33nwwak5ESn9lIXCUxJ36ocknALOSN8YEYW7o9bADeam6F_udEpGWojym&_nc_zt=23&_nc_ht=scontent.fsgn2-3.fna&_nc_gid=ADFrxNedtgJ7_KHknC2zN3F&oh=00_AYDQtxwv4jkBIhyFHp0Er-TjMk8asdV5aW36_1T0wI5sLg&oe=67773453"
                 alt="Sushi Logo" />
             <div>
-                <a class="header_left-text" href="/">
-                    <span class="logo-text-white">TOKYO</span><span class="logo-text-deli">DELI</span>
+                <a class="header_left-text" href="/staff">
+                    <span class="logo-text-white">TOKYO</span><span class="logo-text-deli">DELI</span>  
+                    <strong class="logo-text-white">STAFF</strong>
                 </a>
             </div>
         </div>
@@ -19,6 +20,9 @@
             <a href="/staff/create-dish">CREATE DISH</a>
             <a href="/stafforder">ORDER</a>
             <a href="/staffstatistics">STATISTICS</a>
+            <a href="/logout">
+                <div class="staff-button-logout">LOGOUT</div>
+            </a>
         </ul>
     </nav>
 </header>
@@ -87,6 +91,37 @@
         align-items: center;
         background-color: #1b1b1b;
     }
+
+    .staff-button-logout {
+        border-color: #ffffff;
+        border-width: 2px;
+        border-style: solid;
+        border-radius: 8px;
+        background-color: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-weight: 700;
+        text-decoration: none;
+        transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+        position: relative;
+        z-index: 2;
+        padding: 10px 20px;
+    }
+
+    .staff-button-logout:hover {
+        border-color: #ffffff;
+        background-color: #ffffff;
+        color: #353535;
+    }
+
+    .staff-button-logout:active {
+        border-color: #ffffff;
+        background-color: transparent;
+        color: #ffffff;
+    }
+
 </style>
 
 </html>

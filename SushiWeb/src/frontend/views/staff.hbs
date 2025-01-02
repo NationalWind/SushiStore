@@ -2,22 +2,93 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Staff Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard</title>
+
+    <style>
+      .staff-dashboard_main-homepage {
+        padding: 100px 100px 100px 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 100px;
+        background-image: url('https://images.unsplash.com/photo-1455279032140-49a4bf46f343?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+        background-size: cover;
+        background-position: bottom;
+        background-repeat: no-repeat;
+        position: relative;
+        min-height: 100vh;
+      }
+
+      .staff-dashboard_main-homepage-transparent {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 0;
+      }
+
+      .staff-dashboard_button-transparent {
+        width: 300px;
+        height: 100px;
+        border-color: #ffffff;
+        border-width: 2px;
+        border-style: solid;
+        border-radius: 10px;
+        background-color: transparent;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-weight: 700;
+        text-decoration: none;
+        transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+        position: relative;
+        z-index: 2;
+      }
+
+      .staff-dashboard_button-transparent:hover {
+          border-color: #ffffff;
+          background-color: #ffffff;
+          color: #353535;
+      }
+
+      .staff-dashboard_button-transparent:active {
+          border-color: #ffffff;
+          background-color: transparent;
+          color: #ffffff;
+      }
+
+      .staff-dashboard_buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 50px;
+        z-index: 4;
+        position: relative;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
 </head>
 
 <body>
-  <h1>Welcome to the Staff Dashboard</h1>
-
-  <!-- Button to navigate to the create-dish form -->
-  <a href="/staff/create-dish">
-    <button>Create Dish</button>
-  </a>
-
-  <a href="/staff/update-dish-status">
-    <button>update-dish-status</button>
-  </a>
+  <div class="staff-dashboard_main-homepage">
+    <div class="staff-dashboard_main-homepage-transparent"></div>
+    <div class="medium-title-white">
+      Your Staff Dashboard, {{name}}!
+    </div>
+    <div class="staff-dashboard_buttons">
+      <a class="staff-dashboard_button-transparent" href="/staff/create-dish">Create Dish</a>
+      <a class="staff-dashboard_button-transparent" href="/staff/update-dish-status">Update Dish Status</a>
+      <a class="staff-dashboard_button-transparent" href="/staff/create-dish">See Menu</a>
+      <a class="staff-dashboard_button-transparent" href="/staff/update-dish-status">Make Orders</a>
+      <a class="staff-dashboard_button-transparent" href="/staff/update-dish-status">See Statistics</a>
+    </div>
+  </div>
 </body>
 
 </html>
