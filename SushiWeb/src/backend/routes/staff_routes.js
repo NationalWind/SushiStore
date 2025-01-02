@@ -34,4 +34,16 @@ router.post("/update-dish-status", updateDishStatus);  // Call the updateDishSta
 // route to get staff menu
 router.get("/menu", getStaffMenu);
 
+
+// TEMP
+// Membership Route
+router.get("/membership", (req, res) => {
+    res.render("capThe", { title: "Create Membership" });
+});
+
+// Statistics Route
+router.get("/statistics", (req, res) => {
+    res.render("statistics", { title: "Statistics" });
+});
+
 export default router;
