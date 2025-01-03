@@ -10,9 +10,34 @@
 </head>
 
 <body>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const searchButton = document.querySelector(".frm-btn input[type='submit']");
+            const errorContainer = document.getElementById("error-message");
+
+            // Check if there's an error message passed from the server
+            const urlParams = new URLSearchParams(window.location.search);
+            const errorMessage = urlParams.get("error");
+            if (errorMessage) {
+                errorContainer.textContent = errorMessage;
+                errorContainer.style.display = "block";
+            }
+
+            searchButton.addEventListener("click", (event) => {
+                event.preventDefault();
+                const customerIdInput = document.querySelector("input[placeholder='Customer ID']").value.trim();
+                if (customerIdInput) {
+                    window.location.href = `/membership/search?MAKHACHHANG=${encodeURIComponent(customerIdInput)}`;
+                } else {
+                    alert("Please enter a valid Customer ID.");
+                }
+            });
+        });
+    </script>
+
     <div class="membership_container">
         <div class="wrap">
-            <!-- Tiêu đề -->
+            <!-- Header -->
             <div class="head-title">
                 <h1>Membership</h1>
                 <div class="head-title-zone">
@@ -23,15 +48,24 @@
                 </div>
             </div>
 
+            <!-- Display User MAKH -->
+            <div class="user-info">
+                <h2>Welcome, {{username}}
+                </h2>
+                <p>Your Customer ID: <strong>
+                        {{MAKH}}
+                    </strong></p>
+            </div>
+
+            <!-- Error Message -->
+            <div id="error-message" style="display: none; color: red; margin-bottom: 1rem;"></div>
+
             <!-- Form -->
             <div class="container">
                 <div class="wrap-form">
-                    <div class="text">
-                        <p class="wrap-form-note">Please log in to access your membership.</p>
-                    </div>
                     <div class="form-group">
                         <span class="material-icons">group</span>
-                        <input type="text" placeholder="Username">
+                        <input type="text" placeholder="Customer ID">
                     </div>
                     <div class="form-group">
                         <span class="material-icons">credit_card</span>
@@ -47,6 +81,5 @@
         </div>
     </div>
 </body>
-
 
 </html>

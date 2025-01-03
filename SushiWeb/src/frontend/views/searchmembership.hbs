@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Membership</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/public/membership.css">
+</head>
+
+<body>
+    <div class="membership_container">
+        <div class="wrap">
+            <div class="head-title">
+                <h1>Search Membership</h1>
+            </div>
+
+            {{#if error}}
+            <div class="error-message">
+                <p>{{error}}</p>
+            </div>
+            {{else}}
+            <div class="membership-details">
+                <p><strong>Customer ID:</strong> {{data.MAKHACHHANG}}</p>
+                <p><strong>Card ID:</strong> {{data.MATHE}}</p>
+                <p><strong>Card Type:</strong> {{data.LOAITHE}}</p>
+                <p><strong>Registration Date:</strong> {{data.NGAYDK}}</p>
+                <p><strong>Points Accumulated:</strong> {{data.DIEMTICHLUY}}</p>
+                <p><strong>Last Upgrade Date:</strong> {{data.NGAYNANGHANG}}</p>
+                <p><strong>Account Status:</strong> {{data.TRANGTHAITAIKHOAN}}</p>
+                <p><strong>Created By Employee:</strong> {{data.NHANVIENTAOLAP}}</p>
+            </div>
+            {{/if}}
+
+            <div class="frm-btnwrap">
+                <a href="/" class="frm-btn">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
