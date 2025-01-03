@@ -2,6 +2,7 @@
 <html lang="vi">
 
 <header>
+    
     <nav class="header_container">
         <div class="header_left">
             <img class="logo"
@@ -21,7 +22,6 @@
             <a href="/membership">MEMBERSHIP</a>
             <a href="/booking">BOOKING</a>
             <a href="/stores">STORES</a>
-            <a href="/recruitment">RECRUITMENT</a>
             <a href="/contact">CONTACT</a>
             <a href="/cart">
                 <button class="cart-button">
@@ -42,6 +42,33 @@
             </a>
         </ul>
     </nav>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const membershipLink = document.querySelector('a[href="/membership"]'); // Adjust selector as needed
+
+        if (membershipLink) {
+            membershipLink.addEventListener("click", async (event) => {
+                event.preventDefault(); // Prevent the default navigation behavior
+
+                try {
+                    const response = await fetch("/membership", { method: "GET" });
+
+                    if (response.status === 401) {
+                        const data = await response.json();
+                        alert(data.message);
+                        window.location.href = data.redirectUrl; // Redirect to the login page
+                    } else if (response.status === 200) {
+                        window.location.href = "/membership"; // Navigate to membership page if authorized
+                    } else {
+                        throw new Error("Unexpected error occurred.");
+                    }
+                } catch (error) {
+                    console.error("Error accessing membership page:", error);
+                }
+            });
+        }
+    });
+</script>
 </header>
 
 <style>

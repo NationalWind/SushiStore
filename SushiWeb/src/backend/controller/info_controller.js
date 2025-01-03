@@ -28,18 +28,24 @@ export const getMembership = async (req, res) => {
     const token = req.cookies.authToken;
 
     if (!token) {
-        return res.status(401).json({ message: "No token provided. Please login" });
-    }
-    try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        const MAKH = decoded.MAKH
-        const username = decoded.username
-        res.render("membership", {
-            title: "Membership",
-            name: req.username || null, role: req.role, username, MAKH
+        return res.status(401).json({
+            message: "No token provided. Please login",
+            redirectUrl: "/login",
         });
     }
-    catch (error) {
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const MAKH = decoded.MAKH;
+        const username = decoded.username;
+        res.render("membership", {
+            title: "Membership",
+            name: req.username || null,
+            role: req.role,
+            username,
+            MAKH,
+        });
+    } catch (error) {
         console.error("Error:", error);
         res.status(500).json({ message: "Internal server error." });
     }
