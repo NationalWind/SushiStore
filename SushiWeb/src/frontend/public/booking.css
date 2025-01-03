@@ -128,3 +128,29 @@
     margin-bottom: 20px;
     font-style: italic;
 }
+
+.member-submit-btn:hover {
+    background-color: #ffffff;
+    color: #EA252C;
+    border-color: #EA252C;
+}
+
+.member-submit-btn:active {
+    background-color: #EA252C;
+    color: #ffffff;
+    border-color: #ffffff;
+}
+
+.member-submit-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #EA252C;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border-color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+    margin-top: 20px;
+}
