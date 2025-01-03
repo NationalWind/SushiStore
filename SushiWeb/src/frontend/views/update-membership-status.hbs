@@ -1,13 +1,60 @@
-<h1>Update Membership Status</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Membership Status - Truy vấn B</title>
+    <link rel="stylesheet" href="../public/statistics.css">
 
-{{#if successMessage}}
-    <div class="alert alert-success">{{successMessage}}</div>
-{{/if}}
+    <style>
+        .update-membership_button {
+            width: 400px;
+            height: 70px;
+            border-color: #ffffff;
+            border-width: 2px;
+            border-style: solid;
+            border-radius: 10px;
+            background-color: #EA252C;
+            font-size: 20px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            text-decoration: none;
+            transition: border-color 0.5s, background-color 0.5s, color 0.5s;
+            z-index: 2;
+        }
 
-{{#if errorMessage}}
-    <div class="alert alert-danger">{{errorMessage}}</div>
-{{/if}}
+        .update-membership_button:hover {
+            border-color: #EA252C;
+            background-color: white;
+            color: #EA252C;
+        }
 
-<form action="/staff/update-membership-status" method="POST">
-    <button type="submit" class="button-red">Update Membership Status</button>
-</form>
+        .update-membership_button:active {
+            border-color: white;
+            background-color: #EA252C;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="statistics_container">
+        <div class="medium-title-deli">Update Membership Status</div>
+
+        <form action="/staff/update-membership-status" method="POST">
+            <button type="submit" class="update-membership_button">Update Membership Status</button>
+        </form>
+
+        {{#if successMessage}}
+            <div class="alert alert-success">{{successMessage}}</div>
+        {{/if}}
+
+        {{#if errorMessage}}
+            <div class="alert alert-danger">{{errorMessage}}</div>
+        {{/if}}
+    </div>
+</body>
